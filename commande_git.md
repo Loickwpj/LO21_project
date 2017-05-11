@@ -21,3 +21,9 @@ pas de commit encore, annuler tous les changements pas encore commit : git reset
 git branch nouvelle-branche
 git checkout nouvelle-branche
 git checkout -b ma-branche  -> combinaison des deux precedentes 
+
+qui a fait les modifs sur ce fichier : git blame nomdufichier.extension
+renvoie directement les détails du commit recherché en saisissant le début de son sha  : git show 05b1233 
+
+mettre en attentes des modifs sur une branche :git stash
+recuperer les modifs : git stash pop 
