@@ -18,3 +18,6 @@ git commit --amend -m "Votre nouveau message"
 
 pas de commit encore, annuler tous les changements pas encore commit : git reset --hard‌
 
+git branch nouvelle-branche
+git checkout nouvelle-branche
+git checkout -b ma-branche  -> combinaison des deux precedentes 
