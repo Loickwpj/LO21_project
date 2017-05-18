@@ -81,4 +81,4 @@
 
 ## ENSEMBLE DES DESIGN PATERNEL A EXPLOTIER POTENTIELLEMENT 
 
-* ** decorator, factory, abstract factory, builder, bridge, composite, iterator, template method, adapter, visitor, strategy, facade, memento **
+* **decorator, factory, abstract factory, builder, bridge, composite, iterator, template method, adapter, visitor, strategy, facade, memento**
