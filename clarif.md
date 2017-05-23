@@ -3,7 +3,7 @@
 * **note** : *identificateur*, *titre*, *date_creation*, *date_derniere_modif*, *archive* (booléen).
 * les classes **article**, **tache** , **image**, **audio**, **video** dérivent de la classe **note**
 
-* **article** : **text**
+* **article** : *text*
 * **image** : *description*, *fichier image*
 * **audio** : *description*, *fichier image*
 * **video** : *description*, *fichier image*
