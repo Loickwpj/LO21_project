@@ -51,3 +51,16 @@
 		* A chaque sortie d'application, l'application propose à l'utilisateur de vider la corbeille
 		* Ce vidage peut être effectué par défaut à chaque sortie d'application via les paramètres
 
+
+
+
+##Design Pattern à utiliser
+
+* Builder (fabrique) (? est ce la même chose que NotesManager ?)
+	*méthode Create prenant en paramètre le type d'objet à créer 
+	*méthode Register pour associer à chaque type à créer une "action"
+
+*decorator (decorateur) -> souvent couplé avec Builder
+	*permet d'ajouter les unes après les autres des fonctions sur un objet (gauffe+sucre+nutella+chatilly+...)
+
+
