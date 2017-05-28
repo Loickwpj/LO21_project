@@ -34,7 +34,6 @@ class NotesException{
 **********************************************************************/
 
 class Note {
-    friend class NotesManager;
 private:
     string id ;
     string title ;
@@ -42,11 +41,9 @@ private:
     Date dateLastModif;
     bool archive;
     
-    ///Constructor privé (Les notes sont construites via un objet NotesManager )
-    Note(const string i, const string t, Date d_c, Date d_lm): id(i), title(t), dateCreation(d_c), dateLastModif(d_lm){}
-
 public:
-
+    ///Constructor
+    Note(const string i, const string t, Date d_c, Date d_lm): id(i), title(t), dateCreation(d_c), dateLastModif(d_lm), archive(false){}
 
     ///Memento
         //Memento createMemento();
@@ -60,7 +57,7 @@ public:
     const bool GetArchive() const {return archive ;}
 
     ///Modify attribute
-    void SetTitle(string& newTitle) {title=newTitle ;}
+    void SetTitle(const string& newTitle) {title=newTitle ;}
     void SetDateCreation(Date& newDate) {dateCreation=newDate ;}
     void setDateLastCreation(Date& newDate) {dateLastModif=newDate;}
     void SetArchive() {archive=!archive ;}
@@ -70,7 +67,7 @@ public:
     void getRelDesc(const string&);
     
     virtual Note* clone()=0 ;
-    virtual ~Note(); // implement to delete in all relation
+    virtual ~Note() {} // implement to delete in all relation
 };
 
 /*********************************************************************/
@@ -98,6 +95,8 @@ public :
 
     ///Modify attribute
     void setText(string& newTxt) {text=newTxt ;}
+    
+    ~Article() {}
 
 };
 
@@ -121,7 +120,8 @@ state status;
 
 public :
 ///Constructor (how to put deadline optional)
-Tache(const string i, const string t, Date d_c, Date d_lm, const string txt, const string a, unsigned int p=0, Date dl, state s=Waiting): Note(i,t,d_c,d_lm), action(a), priority(p), deadline(dl), status(s) {}
+Tache(const string i, const string t, Date d_c, Date d_lm, const string a, unsigned int p=0, Date dl=Date(1,1,1), state s=Waiting):
+    Note(i,t,d_c,d_lm), action(a), priority(p), deadline(dl), status(s) {}
 
 ///clone
 virtual Tache* clone();
@@ -139,6 +139,7 @@ void setPriority (unsigned int p) {priority = p ;}
 void setDeadline (Date newDl) {deadline=newDl ;}
 //void setSatus()
 
+    ~Tache() {}
 };
 
 /*********************************************************************/
@@ -161,10 +162,12 @@ public:
     //Accessor
     const string& getDescription() const {return description;}
     const string& getImage() {return image;}
-    
+
     //clone virtual pure
     virtual Multimedia* clone()=0;
 
+    
+    ~Multimedia(){}
 };
 
 /*********************************************************************/
@@ -177,7 +180,10 @@ public:
 
 class Image : public Multimedia{
 public:
+    Image(const string i, const string t, Date d_c, Date d_lm, const string& d, const string& f):
+    Multimedia(i,t,d_c,d_lm,d,f) {}
     virtual Image * clone ();
+    ~Image() {}
 };
 
 /*********************************************************************/
@@ -189,7 +195,10 @@ public:
 
 class Audio : public Multimedia{
 public:
+    Audio(const string i, const string t, Date d_c, Date d_lm, const string& d, const string& f):
+    Multimedia(i,t,d_c,d_lm,d,f) {}
     virtual Audio* clone ();
+    ~Audio() {}
 };
 
 /*********************************************************************/
@@ -201,7 +210,10 @@ public:
 
 class Video : public Multimedia{
 public:
+    Video(const string i, const string t, Date d_c, Date d_lm, const string& d, const string& f):
+    Multimedia(i,t,d_c,d_lm,d,f) {}
     virtual Video * clone ();
+    ~Video() {}
 };
 
 
@@ -220,9 +232,9 @@ private:
     Note* note2;
 public:
     Couple(const string& l,Note* n1, Note* n2) :label(l), note1(n1), note2(n2) {}
-    Note& getNote1() const {return note1;}
-    Note& getNote2() const {return note2;}
-    const string& getLavel() const {return label;}
+    Note* getNote1() const  {return note1;}
+    Note* getNote2() const {return note2;}
+    const string& getLabel() const {return label;}
     void setLabel(const string & l) {label =l;}
     
 };
@@ -241,15 +253,16 @@ private:
     unsigned int nbCouple, nbMaxCouple;
     bool oriented;
 public:
-    Relation(const string & t, cont string& d) : title(t), description(d), couples(nullptr), nbCouple(0), nbMaxCouple(0), oriented(false) {}
+    Relation(const string & t, const string& d) : title(t), description(d), couples(nullptr), nbCouple(0), nbMaxCouple(0), oriented(false) {}
     const string& getTitle() const {return title;}
     const string& getDescription() const {return description;}
     void addCouple(Note* n1, Note* n2); //add a couple without label
     void removeCouple(const string&,Note* n1, Note* n2); //looks for a couple with this label & notes
     void setOriented(){oriented= !oriented;};
-    ~Relation();
-    
+    ~Relation() {for (unsigned int i=0; i<nbCouple;i++) delete couples[i]; delete [] couples;}
 };
+
+
 
 
 #endif // NOTES_H_INCLUDED

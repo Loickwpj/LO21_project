@@ -31,12 +31,13 @@ void Relation::addCouple(Note* n1, Note* n2){
 
 void Relation::removeCouple(const string& label, Note* n1, Note* n2){
     unsigned int i=0;
-    while(i<nbCouple && !(couples[i]->getLabel() == label) && couples[i]->getNote1() == *n1  && couples[i]->getNote1() == *n1) ){
+    while(i<nbCouple && !(couples[i]->getLabel() == label && couples[i]->getNote1() == n1  && couples[i]->getNote2() == n2)){
         i++;
     }
     if (i == nbCouple) throw NotesException("Couple inexistant...");
     
     delete couples [i];
-    if(i != nbCouple) tags[i]=tags[nbCouple-1];
+    if(i != nbCouple) couples[i]=couples[nbCouple-1];
     nbCouple--;
 }
+
