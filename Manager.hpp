@@ -1,10 +1,10 @@
-#ifndef notesmanager_hpp
+s#ifndef notesmanager_hpp
 #define notesmanager_hpp
 #include "Singleton.hpp"
 
 /***************************************
-**          NOTESMANAGER              **
-***************************************/
+ **          NOTESMANAGER              **
+ ***************************************/
 
 class NotesManager : public Singleton<NotesManager>{
     friend class Singleton<NotesManager>;
@@ -18,11 +18,18 @@ private:
     NotesManager() : Singleton<NotesManager>(), notes(nullptr), nbNote(0), nbMaxNote(0), filename("tmp.dat") {}
     
 public:
+    
+    //Factory
+    static std::map<std::string,Note*> m_map;
+    //Fonction qui associe clé <=> prototype
+    static void Register(const std::string& key,Note* obj);
+    //Celle qui va créer les objets
+    Note* Create(const std::string& key) const;
+    
     //Accessor
     unsigned int getNbNote() const {return nbNote;}
     
-    //Methods
-    Note& getNewNote(const string& id);
+    //methods
     Note& getNote(const string& id);
 };
 

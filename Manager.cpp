@@ -7,11 +7,32 @@
 #endif
 
 
-/**********************************************
-**               NOTESMANAGER                **
-***********************************************/
+std::map<string,Note*> NotesManager::m_map= std::map<string,Note*>();
 
+void NotesManager::Register(const string& key,Note* obj)
+{
+    //si la clé n'est pas déjà présente
+    if(m_map.find(key)==m_map.end())
+    {
+        //on ajoute le type d'objet dans le map
+        m_map[key]=obj;
+    }
 
+}
+
+Note* NotesManager::Create(const std::string& key) const
+{
+    Note* tmp=0;
+    std::map<string, Note*>::const_iterator it=m_map.find(key);
+    
+    //si l'itérateur ne vaut pas map.end(), cela signifie que que la clé à été trouvée
+    if(it!=m_map.end())
+    {
+        tmp=((*it).second)->clone();
+    }
+    
+    return tmp;
+}
 
 /**********************************************
 **             RELATIONSMAANGER              **
