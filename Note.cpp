@@ -17,7 +17,7 @@ Video* Video::clone(){return new Video(*this);}
 void Relation::addCouple(Note* n1, Note* n2){
     if (nbCouple == nbMaxCouple ){
         Couple** newCouples = new Couple* [nbMaxCouple+5];
-        for (unsigned int i=0; i<nbMaxCouple; i++){
+        for (unsigned int i=0; i<nbCouple; i++){
             newCouples[i]= new Couple (*couples[i]);
         }
         nbMaxCouple+=5;

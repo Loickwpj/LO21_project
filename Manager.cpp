@@ -1,7 +1,7 @@
 #ifndef notesmanager_cpp
 #define notesmanager_cpp
 
-#include "NotesManager.hpp"
+#include "Manager.hpp"
 
 
 #endif

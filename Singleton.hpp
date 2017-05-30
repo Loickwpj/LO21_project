@@ -8,7 +8,7 @@
 template<class T> class Singleton{
     
     T& operator= (const T&) {}
-   
+    
     //HANDLER
     
     struct Handler{
@@ -21,7 +21,7 @@ template<class T> class Singleton{
 protected:
     
     static struct Handler handler;
-
+    
 public:
     static T& getInstance();
     static void removeInstance();
