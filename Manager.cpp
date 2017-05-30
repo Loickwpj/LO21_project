@@ -7,20 +7,6 @@
 #endif
 
 
-/***********************************************
-**                SINGLETON                   **
-***********************************************/
-
-template<class T> T& Singleton<T>::getInstance(){
-    if(!handler.instance) handler.instance = new T();
-    return *handler.instance;
-}
-
-template<class T> void Singleton<T>::libererInstance(){
-    if(handler.instance) delete handler.instance;
-    handler.instance = nullptr;
-}
-
 /**********************************************
 **               NOTESMANAGER                **
 ***********************************************/
@@ -87,8 +73,8 @@ void Corbeille::delete_all(){
     delete [] notesSuppr;
     notesSuppr = nullptr;
 }
-
-/*void Corbeille::restore(const string& id){
+/*
+void Corbeille::restore(const string& id){
     for (unsigned int i =0;i<nbNote; i++){
         if (notesSuppr[i]->getId() == id ){
             ..
@@ -98,19 +84,3 @@ void Corbeille::delete_all(){
 */
 
 
-
-
-
-
-/*
-NotesManager::Handler NotesManager::handler = Handler();
-
-NotesManager& NotesManager::getInstance(){
-    if(!handler.instance) handler.instance = new NotesManager();
-    return *handler.instance;
-}
-void NotesManager::libererInstance(){
-    if(handler.instance) delete handler.instance;
-    handler.instance = nullptr;
-}
-*/
