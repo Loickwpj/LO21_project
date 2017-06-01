@@ -41,9 +41,14 @@ private:
     Date dateLastModif;
     bool archive;
     
+    //attributs statiques réunissant l'ensemble des ids de toutes les notes
+    static string* ids;
+    static unsigned int nbId, nbMaxId;
+    
+    
 public:
     ///Constructor
-    Note(const string i, const string t, Date d_c, Date d_lm): id(i), title(t), dateCreation(d_c), dateLastModif(d_lm), archive(false){}
+    Note(const string i, const string t, Date d_c, Date d_lm): id(i), title(t), dateCreation(d_c), dateLastModif(d_lm), archive(false){addID(i);}
 
     ///Memento
         //Memento createMemento();
@@ -61,6 +66,8 @@ public:
     void SetDateCreation(Date& newDate) {dateCreation=newDate ;}
     void setDateLastCreation(Date& newDate) {dateLastModif=newDate;}
     void SetArchive() {archive=!archive ;}
+    Note& setId(const string& i) {id = i; addID(i); return *this;}
+    void addID(const string & id);
     
     //Get Ascendant/Descendant in all differents Relations
     void getRelAsc(const string& /*titre de la note à obtenir*/);
@@ -68,7 +75,27 @@ public:
     
     virtual Note* clone()=0 ;
     virtual ~Note() {} // implement to delete in all relation
-};
+
+    /// Class Iterator
+    class Iterator{
+        friend class Note;
+        string* currentI;
+        int nbRemain;
+        Iterator(string*a, int nb): currentA(a), nbRemain(nb){}
+    public:
+        bool isDone()const {return nbRemain == 0;}
+        Article& current() const{ return *currentI;}
+        void next(){
+            if(isDone())
+                throw NotesException("ERROR : fin de la collection");
+            currentI++;
+            nbRemain--;
+        }
+        
+    };
+    
+    //Méthode static car on itère sur l'attribut static ids (ensemble des IDs de toutes les notes)
+    static Iterator getIterator() const;
 
 /*********************************************************************/
 

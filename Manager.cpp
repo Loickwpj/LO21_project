@@ -6,6 +6,9 @@
 
 #endif
 
+/**********************************************
+ **             NOTESMANAGER                 **
+ **********************************************/
 
 std::map<string,Note*> NotesManager::m_map= std::map<string,Note*>();
 
@@ -33,6 +36,32 @@ Note* NotesManager::Create(const std::string& key) const
     
     return tmp;
 }
+
+Note* NotesManager::getNewNote(const string& type){
+    Note* n = Create(type);
+    addNote(n);
+    return n;
+}
+
+void NotesManager::addNote(Note* n){
+    for(int i = 0; i < nbNote; i++){
+        if(notes[i]->getId() == n->getId())
+            throw NotesException("Article existe deja");
+    }
+    if(nbNote == nbMaxNote){
+        Note ** old_notes = notes;
+        notes = new Note*[nbMaxNote+5];
+        for(int i = 0; i < nbNote; i++){
+            notes[i] = old_notes[i];
+        }
+        nbMaxNote += 5;
+        delete[] old_notes;
+    }
+    
+    notes[nbNote++] = n;
+}
+
+
 
 /**********************************************
 **             RELATIONSMAANGER              **

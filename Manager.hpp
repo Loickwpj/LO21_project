@@ -16,6 +16,7 @@ private:
     NotesManager(const NotesManager&);
     ~NotesManager() {for (unsigned int i=0; i<nbNote; i++) delete notes[i]; delete [] notes;};
     NotesManager() : Singleton<NotesManager>(), notes(nullptr), nbNote(0), nbMaxNote(0), filename("tmp.dat") {}
+    void addNote(Note*);
     
 public:
     
@@ -30,7 +31,42 @@ public:
     unsigned int getNbNote() const {return nbNote;}
     
     //methods
+    Note* getNewNote(const string&);
     Note& getNote(const string& id);
+    
+    /// Class SearchIterator
+    class SearchIterator{
+        friend class NotesManager;
+        Note** currentN;
+        int nbRemain;
+        string toFind;
+        SearchIterator(Note** n, int nb, string tf): currentN(n), nbRemain(nb), toFind(tf){
+            while(nbRemain > 0 && (**currentN).getTitle().find(toFind) == string::npos){
+                currentN++;
+                nbRemain--;
+            }
+        }
+    public:
+        bool isDone()const {return nbRemain == 0;}
+        const Note& current() const{ return **currentN;}
+        void next(){
+            if(isDone())
+                throw NotesException("ERROR : fin de la collection");
+            currentN++;
+            nbRemain--;
+            while(nbRemain > 0 && (**currentN).getTitle().find(toFind) == string::npos){
+                currentN++;
+                nbRemain--;
+            }
+        }
+    };
+    
+    SearchIterator getSearchIterator(string tf) const{
+        return SearchIterator(notes, nbNote, tf);
+    }
+
+    
+    
 };
 
 
