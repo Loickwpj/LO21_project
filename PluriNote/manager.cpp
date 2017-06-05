@@ -198,8 +198,20 @@ void Corbeille::deleteAll(){
 }
 
 void Corbeille::supprimerNote(int id){
-    if (nbNote == 1 || id == nbNote ) notesSuppr[--nbNote] = nullptr;
-    if (nbNote != 1 && nbNote != id )notesSuppr[id]=notesSuppr[--nbNote];
+    /*if (nbNote == 1 || id == nbNote-1 ) notesSuppr[--nbNote] = nullptr;
+    else{*/
+
+
+        for (unsigned int i =0; i<nbNote;i++){
+           if (notesSuppr[i]->getId() == id){
+
+               if (nbNote-1 == i){ notesSuppr[i]=nullptr; nbNote--;}
+               else{
+                   if (nbNote == 1) {notesSuppr[--nbNote]=nullptr;}
+                   else {notesSuppr[i]=notesSuppr[--nbNote];}
+               }
+        }
+    }
 }
 
 
