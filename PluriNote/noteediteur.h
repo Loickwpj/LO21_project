@@ -3,17 +3,27 @@
 #include <QWidget>
 #include <QFormLayout>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QDate>
 #include <QPushButton>
 #include <QLineEdit>
 #include "note.h"
 #include <QComboBox>
+#include <QRadioButton>
+#include "manager.h"
+#include "singleton.h"
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QDateEdit>
+#include <QSpinBox>
+
 
 /*********************************************************************
  ***                         Note Editeur                           **
  *********************************************************************/
 
 class NoteEditeur : public QWidget{
+
 private:
     Q_OBJECT
 protected:
@@ -22,10 +32,14 @@ protected:
 
     QLineEdit* id;
     QLineEdit* title;
-    QLineEdit* dateC;
-    QLineEdit* dateM;
+    QDateEdit* dateC;
+    QDateEdit* dateM;
 
     QPushButton* sauver;
+    QPushButton* bsupprimer;
+
+
+
 
    // Note* note;
 
@@ -33,13 +47,18 @@ public:
     NoteEditeur(QWidget *parent = 0);
     virtual ~NoteEditeur() {}
 
+
 signals:
 
 
 public slots:
     virtual void saveModifications()=0;
+    virtual void supprimer()=0;
 private slots:
     void afficherBouton(QString str="");
+    void afficherBouton(int);
+    void afficherBouton(QDate);
+
 };
 
 
@@ -64,7 +83,9 @@ public:
 signals:
 
 public slots:
-    virtual void saveModifications();
+   virtual void saveModifications();
+   virtual void supprimer();
+
 
 private slots:
 };
@@ -80,22 +101,30 @@ class TaskEditeur : public NoteEditeur{
 private:
     Q_OBJECT
     QLineEdit* action;
-    QLineEdit* priority;
-    QLineEdit* deadline;
+    QSpinBox* priority;
+    QDateEdit* deadline;
     //QLineEdit* state;
     QComboBox* state;
     Task* task;
+    QCheckBox* priorite;
+    QCheckBox* bdeadline;
+    QGroupBox* option;
+    QHBoxLayout* lay;
 
 public:
     TaskEditeur(Task* a, QWidget *parent=0);
     ~TaskEditeur() {}
 
+
 signals:
 
 public slots:
     virtual void saveModifications();
+    virtual void supprimer();
 
 private slots:
+    void afficherPriorite();
+    void afficherDeadline();
 };
 
 
@@ -117,6 +146,7 @@ public:
 signals:
 public slots:
     virtual void saveModifications() = 0;
+    virtual void supprimer() = 0;
 private slots:
 };
 
@@ -133,8 +163,10 @@ private:
 public:
     ImageEditeur(Image*, QWidget*parent=0);
     ~ImageEditeur() {}
+
 public slots :
     void saveModifications();
+    virtual void supprimer();
 };
 
 /*********************************************************************/
@@ -150,8 +182,10 @@ private:
 public:
     AudioEditeur(Audio*, QWidget*parent=0);
     ~AudioEditeur() {}
+
 public slots :
     void saveModifications();
+    virtual void supprimer();
 };
 
 /*********************************************************************/
@@ -167,8 +201,10 @@ private:
 public:
     VideoEditeur(Video*, QWidget*parent=0);
     ~VideoEditeur() {}
+
 public slots :
     void saveModifications();
+    virtual void supprimer();
 };
 
 #endif

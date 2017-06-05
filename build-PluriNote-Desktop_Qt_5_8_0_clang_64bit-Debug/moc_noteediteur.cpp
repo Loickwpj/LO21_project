@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_NoteEditeur_t {
-    QByteArrayData data[5];
-    char stringdata0[50];
+    QByteArrayData data[6];
+    char stringdata0[60];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,11 +34,12 @@ static const qt_meta_stringdata_NoteEditeur_t qt_meta_stringdata_NoteEditeur = {
 QT_MOC_LITERAL(0, 0, 11), // "NoteEditeur"
 QT_MOC_LITERAL(1, 12, 17), // "saveModifications"
 QT_MOC_LITERAL(2, 30, 0), // ""
-QT_MOC_LITERAL(3, 31, 14), // "afficherBouton"
-QT_MOC_LITERAL(4, 46, 3) // "str"
+QT_MOC_LITERAL(3, 31, 9), // "supprimer"
+QT_MOC_LITERAL(4, 41, 14), // "afficherBouton"
+QT_MOC_LITERAL(5, 56, 3) // "str"
 
     },
-    "NoteEditeur\0saveModifications\0\0"
+    "NoteEditeur\0saveModifications\0\0supprimer\0"
     "afficherBouton\0str"
 };
 #undef QT_MOC_LITERAL
@@ -49,7 +50,7 @@ static const uint qt_meta_data_NoteEditeur[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       6,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -57,14 +58,20 @@ static const uint qt_meta_data_NoteEditeur[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   29,    2, 0x0a /* Public */,
-       3,    1,   30,    2, 0x08 /* Private */,
-       3,    0,   33,    2, 0x28 /* Private | MethodCloned */,
+       1,    0,   44,    2, 0x0a /* Public */,
+       3,    0,   45,    2, 0x0a /* Public */,
+       4,    1,   46,    2, 0x08 /* Private */,
+       4,    0,   49,    2, 0x28 /* Private | MethodCloned */,
+       4,    1,   50,    2, 0x08 /* Private */,
+       4,    1,   53,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QString,    4,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,    5,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,    2,
+    QMetaType::Void, QMetaType::QDate,    2,
 
        0        // eod
 };
@@ -76,8 +83,11 @@ void NoteEditeur::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->saveModifications(); break;
-        case 1: _t->afficherBouton((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 2: _t->afficherBouton(); break;
+        case 1: _t->supprimer(); break;
+        case 2: _t->afficherBouton((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 3: _t->afficherBouton(); break;
+        case 4: _t->afficherBouton((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 5: _t->afficherBouton((*reinterpret_cast< QDate(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -108,19 +118,19 @@ int NoteEditeur::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 6;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 6)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 3;
+        _id -= 6;
     }
     return _id;
 }
 struct qt_meta_stringdata_ArticleEditeur_t {
-    QByteArrayData data[3];
-    char stringdata0[34];
+    QByteArrayData data[4];
+    char stringdata0[44];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -131,10 +141,12 @@ static const qt_meta_stringdata_ArticleEditeur_t qt_meta_stringdata_ArticleEdite
     {
 QT_MOC_LITERAL(0, 0, 14), // "ArticleEditeur"
 QT_MOC_LITERAL(1, 15, 17), // "saveModifications"
-QT_MOC_LITERAL(2, 33, 0) // ""
+QT_MOC_LITERAL(2, 33, 0), // ""
+QT_MOC_LITERAL(3, 34, 9) // "supprimer"
 
     },
-    "ArticleEditeur\0saveModifications\0"
+    "ArticleEditeur\0saveModifications\0\0"
+    "supprimer"
 };
 #undef QT_MOC_LITERAL
 
@@ -144,7 +156,7 @@ static const uint qt_meta_data_ArticleEditeur[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       1,   14, // methods
+       2,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -152,9 +164,11 @@ static const uint qt_meta_data_ArticleEditeur[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   19,    2, 0x0a /* Public */,
+       1,    0,   24,    2, 0x0a /* Public */,
+       3,    0,   25,    2, 0x0a /* Public */,
 
  // slots: parameters
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -167,6 +181,7 @@ void ArticleEditeur::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->saveModifications(); break;
+        case 1: _t->supprimer(); break;
         default: ;
         }
     }
@@ -198,19 +213,19 @@ int ArticleEditeur::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
+        if (_id < 2)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
+        _id -= 2;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 1)
+        if (_id < 2)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 1;
+        _id -= 2;
     }
     return _id;
 }
 struct qt_meta_stringdata_TaskEditeur_t {
-    QByteArrayData data[3];
-    char stringdata0[31];
+    QByteArrayData data[6];
+    char stringdata0[75];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -221,10 +236,14 @@ static const qt_meta_stringdata_TaskEditeur_t qt_meta_stringdata_TaskEditeur = {
     {
 QT_MOC_LITERAL(0, 0, 11), // "TaskEditeur"
 QT_MOC_LITERAL(1, 12, 17), // "saveModifications"
-QT_MOC_LITERAL(2, 30, 0) // ""
+QT_MOC_LITERAL(2, 30, 0), // ""
+QT_MOC_LITERAL(3, 31, 9), // "supprimer"
+QT_MOC_LITERAL(4, 41, 16), // "afficherPriorite"
+QT_MOC_LITERAL(5, 58, 16) // "afficherDeadline"
 
     },
-    "TaskEditeur\0saveModifications\0"
+    "TaskEditeur\0saveModifications\0\0supprimer\0"
+    "afficherPriorite\0afficherDeadline"
 };
 #undef QT_MOC_LITERAL
 
@@ -234,7 +253,7 @@ static const uint qt_meta_data_TaskEditeur[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       1,   14, // methods
+       4,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -242,9 +261,15 @@ static const uint qt_meta_data_TaskEditeur[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   19,    2, 0x0a /* Public */,
+       1,    0,   34,    2, 0x0a /* Public */,
+       3,    0,   35,    2, 0x0a /* Public */,
+       4,    0,   36,    2, 0x08 /* Private */,
+       5,    0,   37,    2, 0x08 /* Private */,
 
  // slots: parameters
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -257,6 +282,9 @@ void TaskEditeur::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->saveModifications(); break;
+        case 1: _t->supprimer(); break;
+        case 2: _t->afficherPriorite(); break;
+        case 3: _t->afficherDeadline(); break;
         default: ;
         }
     }
@@ -288,19 +316,19 @@ int TaskEditeur::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
+        _id -= 4;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 1)
+        if (_id < 4)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 1;
+        _id -= 4;
     }
     return _id;
 }
 struct qt_meta_stringdata_MultimediaEditeur_t {
-    QByteArrayData data[3];
-    char stringdata0[37];
+    QByteArrayData data[4];
+    char stringdata0[47];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -311,11 +339,12 @@ static const qt_meta_stringdata_MultimediaEditeur_t qt_meta_stringdata_Multimedi
     {
 QT_MOC_LITERAL(0, 0, 17), // "MultimediaEditeur"
 QT_MOC_LITERAL(1, 18, 17), // "saveModifications"
-QT_MOC_LITERAL(2, 36, 0) // ""
+QT_MOC_LITERAL(2, 36, 0), // ""
+QT_MOC_LITERAL(3, 37, 9) // "supprimer"
 
     },
     "MultimediaEditeur\0saveModifications\0"
-    ""
+    "\0supprimer"
 };
 #undef QT_MOC_LITERAL
 
@@ -325,7 +354,7 @@ static const uint qt_meta_data_MultimediaEditeur[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       1,   14, // methods
+       2,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -333,9 +362,11 @@ static const uint qt_meta_data_MultimediaEditeur[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   19,    2, 0x0a /* Public */,
+       1,    0,   24,    2, 0x0a /* Public */,
+       3,    0,   25,    2, 0x0a /* Public */,
 
  // slots: parameters
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -348,6 +379,7 @@ void MultimediaEditeur::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->saveModifications(); break;
+        case 1: _t->supprimer(); break;
         default: ;
         }
     }
@@ -379,19 +411,19 @@ int MultimediaEditeur::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
+        if (_id < 2)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
+        _id -= 2;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 1)
+        if (_id < 2)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 1;
+        _id -= 2;
     }
     return _id;
 }
 struct qt_meta_stringdata_ImageEditeur_t {
-    QByteArrayData data[3];
-    char stringdata0[32];
+    QByteArrayData data[4];
+    char stringdata0[42];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -402,10 +434,12 @@ static const qt_meta_stringdata_ImageEditeur_t qt_meta_stringdata_ImageEditeur =
     {
 QT_MOC_LITERAL(0, 0, 12), // "ImageEditeur"
 QT_MOC_LITERAL(1, 13, 17), // "saveModifications"
-QT_MOC_LITERAL(2, 31, 0) // ""
+QT_MOC_LITERAL(2, 31, 0), // ""
+QT_MOC_LITERAL(3, 32, 9) // "supprimer"
 
     },
-    "ImageEditeur\0saveModifications\0"
+    "ImageEditeur\0saveModifications\0\0"
+    "supprimer"
 };
 #undef QT_MOC_LITERAL
 
@@ -415,7 +449,7 @@ static const uint qt_meta_data_ImageEditeur[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       1,   14, // methods
+       2,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -423,9 +457,11 @@ static const uint qt_meta_data_ImageEditeur[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   19,    2, 0x0a /* Public */,
+       1,    0,   24,    2, 0x0a /* Public */,
+       3,    0,   25,    2, 0x0a /* Public */,
 
  // slots: parameters
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -438,6 +474,7 @@ void ImageEditeur::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->saveModifications(); break;
+        case 1: _t->supprimer(); break;
         default: ;
         }
     }
@@ -469,19 +506,19 @@ int ImageEditeur::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
+        if (_id < 2)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
+        _id -= 2;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 1)
+        if (_id < 2)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 1;
+        _id -= 2;
     }
     return _id;
 }
 struct qt_meta_stringdata_AudioEditeur_t {
-    QByteArrayData data[3];
-    char stringdata0[32];
+    QByteArrayData data[4];
+    char stringdata0[42];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -492,10 +529,12 @@ static const qt_meta_stringdata_AudioEditeur_t qt_meta_stringdata_AudioEditeur =
     {
 QT_MOC_LITERAL(0, 0, 12), // "AudioEditeur"
 QT_MOC_LITERAL(1, 13, 17), // "saveModifications"
-QT_MOC_LITERAL(2, 31, 0) // ""
+QT_MOC_LITERAL(2, 31, 0), // ""
+QT_MOC_LITERAL(3, 32, 9) // "supprimer"
 
     },
-    "AudioEditeur\0saveModifications\0"
+    "AudioEditeur\0saveModifications\0\0"
+    "supprimer"
 };
 #undef QT_MOC_LITERAL
 
@@ -505,7 +544,7 @@ static const uint qt_meta_data_AudioEditeur[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       1,   14, // methods
+       2,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -513,9 +552,11 @@ static const uint qt_meta_data_AudioEditeur[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   19,    2, 0x0a /* Public */,
+       1,    0,   24,    2, 0x0a /* Public */,
+       3,    0,   25,    2, 0x0a /* Public */,
 
  // slots: parameters
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -528,6 +569,7 @@ void AudioEditeur::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->saveModifications(); break;
+        case 1: _t->supprimer(); break;
         default: ;
         }
     }
@@ -559,19 +601,19 @@ int AudioEditeur::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
+        if (_id < 2)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
+        _id -= 2;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 1)
+        if (_id < 2)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 1;
+        _id -= 2;
     }
     return _id;
 }
 struct qt_meta_stringdata_VideoEditeur_t {
-    QByteArrayData data[3];
-    char stringdata0[32];
+    QByteArrayData data[4];
+    char stringdata0[42];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -582,10 +624,12 @@ static const qt_meta_stringdata_VideoEditeur_t qt_meta_stringdata_VideoEditeur =
     {
 QT_MOC_LITERAL(0, 0, 12), // "VideoEditeur"
 QT_MOC_LITERAL(1, 13, 17), // "saveModifications"
-QT_MOC_LITERAL(2, 31, 0) // ""
+QT_MOC_LITERAL(2, 31, 0), // ""
+QT_MOC_LITERAL(3, 32, 9) // "supprimer"
 
     },
-    "VideoEditeur\0saveModifications\0"
+    "VideoEditeur\0saveModifications\0\0"
+    "supprimer"
 };
 #undef QT_MOC_LITERAL
 
@@ -595,7 +639,7 @@ static const uint qt_meta_data_VideoEditeur[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       1,   14, // methods
+       2,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -603,9 +647,11 @@ static const uint qt_meta_data_VideoEditeur[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   19,    2, 0x0a /* Public */,
+       1,    0,   24,    2, 0x0a /* Public */,
+       3,    0,   25,    2, 0x0a /* Public */,
 
  // slots: parameters
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -618,6 +664,7 @@ void VideoEditeur::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->saveModifications(); break;
+        case 1: _t->supprimer(); break;
         default: ;
         }
     }
@@ -649,13 +696,13 @@ int VideoEditeur::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
+        if (_id < 2)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
+        _id -= 2;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 1)
+        if (_id < 2)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 1;
+        _id -= 2;
     }
     return _id;
 }

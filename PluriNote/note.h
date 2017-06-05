@@ -28,7 +28,7 @@ class NotesException{
 
 class Note {
 protected:
-    QString id ;
+    int id ;
     QString title ;
     QDate dateC;
     QDate dateM;
@@ -36,13 +36,17 @@ protected:
 
 
 public:
+
+        static int idIterator;
+
     ///Constructor
-    Note(const QString i, const QString t):
-        id(i), title(t), dateC(QDate::currentDate()), dateM(QDate::currentDate()), archive(false) {}
+    Note(): id(), title(""), dateC(QDate::currentDate()), dateM(QDate::currentDate()), archive(false) {}
     virtual ~Note() {}
 
+    virtual Note* clone() =0;
+
     ///Accessor
-    const QString& getId() const {return id;}
+    int getId() const {return id;}
     const QString& getTitle() const {return title;}
     const QDate& getDateC() const  {return dateC;}
     const QDate& getDateM() const  {return dateM;}
@@ -52,8 +56,7 @@ public:
     void setTitle(const QString& newTitle) {title=newTitle ;}
     void setDateLastModification() {dateM=QDate::currentDate();}
     void setArchive() {archive=!archive ;}
-    void setId(const QString& i) {id = i;}
-
+    void setId() {id = idIterator++;}
 
 };
 
@@ -73,11 +76,12 @@ private:
 
 public :
     ///Constructor
-    Article(const QString i, const QString t, const QString txt): Note(i,t), text(txt) {}
-/*
+    //Article(const QString i, const QString t, const QString txt): Note(i,t), text(txt) {}
+    Article() : Note(), text("") {}
+
     ///clone
     virtual Article* clone();
-*/
+
     ///Accessor
     const QString& getText() const {return text ;}
     const QDate& getDateC() const {return dateC;}
@@ -103,9 +107,9 @@ enum state {Waiting,Ongoing,Done};
 
 inline QString toString(state s){
     switch (s){
-        case Waiting:   return "En attente";
-        case Ongoing:   return "En cours";
-        case Done: return "Termine";
+        case Waiting:   return "Waiting";
+        case Ongoing:   return "Ongoing";
+        case Done:      return "Done";
         default:      return "[Unknown status]";
     }
 }
@@ -126,12 +130,12 @@ state status;
 
 public :
 ///Constructor (how to put deadline optional)
-Task(const QString i, const QString t, const QString a, unsigned int p=0, QDate dl=QDate(0000,00,00), state s=Waiting):
-    Note(i,t), action(a), priority(p), deadline(dl), status(s) {}
-/*
+//Task(const QString i, const QString t, const QString a, unsigned int p=0, QDate dl=QDate(0000,00,00), state s=Waiting):
+  //  Note(i,t), action(a), priority(p), deadline(dl), status(s) {}
+Task() : Note(), action(""), priority(0), deadline(QDate::currentDate()), status(Waiting) {}
+
 ///clone
-virtual Tache* clone();
-*/
+virtual Task* clone();
 
 ///Accessor
 const QString& getAction() const  {return action ;}
@@ -162,8 +166,8 @@ private:
     QString image;
 public:
     //Constructor
-    Multimedia (const QString i, const QString t, const QString& d, const QString& f) : Note(i,t), description(d), image(f) {}
-
+  //  Multimedia (const QString i, const QString t, const QString& d, const QString& f) : Note(i,t), description(d), image(f) {}
+Multimedia() : Note(), description(""), image("") {}
     //Accessor
     const QString& getDescription() const {return description;}
     const QString& getImage() {return image;}
@@ -172,10 +176,10 @@ public:
     void setDescription(const QString& d) { description=d;}
     void setImage(const QString & i) { image = i;}
 
-/*
+
     //clone virtual pure
     virtual Multimedia* clone()=0;
-*/
+
 
     ~Multimedia(){}
 };
@@ -190,9 +194,10 @@ public:
 
 class Image : public Multimedia{
 public:
-    Image(const QString i, const QString t, const QString& d, const QString& f):
-    Multimedia(i,t,d,f) {}
-   // virtual Image * clone ();
+   // Image(const QString i, const QString t, const QString& d, const QString& f):
+   // Multimedia(i,t,d,f) {}
+    Image() : Multimedia() {}
+    virtual Image * clone ();
     ~Image() {}
 };
 
@@ -205,9 +210,10 @@ public:
 
 class Audio : public Multimedia{
 public:
-    Audio(const QString i, const QString t, const QString& d, const QString& f):
-    Multimedia(i,t,d,f) {}
-    //virtual Audio* clone ();
+   // Audio(const QString i, const QString t, const QString& d, const QString& f):
+    //Multimedia(i,t,d,f) {}
+    Audio(): Multimedia() {}
+    virtual Audio* clone ();
     ~Audio() {}
 };
 
@@ -220,9 +226,11 @@ public:
 
 class Video : public Multimedia{
 public:
-    Video(const QString i, const QString t, const QString& d, const QString& f):
-    Multimedia(i,t,d,f) {}
-    //virtual Video * clone ();
+   // Video(const QString i, const QString t, const QString& d, const QString& f):
+    //Multimedia(i,t,d,f) {}
+
+    Video() : Multimedia() {}
+    virtual Video * clone ();
     ~Video() {}
 };
 
