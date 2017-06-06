@@ -6,6 +6,7 @@
 #endif
 
 CorbeilleEditeur::CorbeilleEditeur( Corbeille* c, QWidget *) : corbeille(c){
+
     list = new QListWidget();
     layout = new QVBoxLayout();
     scroller = new QScrollArea();
@@ -50,18 +51,18 @@ void CorbeilleEditeur::setList(){
 
 
 void CorbeilleEditeur::restaurerNote(){
-   // if(!list->currentItem() == 0){
-        QListWidgetItem* item = list->currentItem();
-        QString id = item->text().section("-",0,0);
-        unsigned int idint = id.toInt();
-        //Note* n = NoteManager::getNoteManager().getNoteWithTitle(titleNote, "Trash");
-        //Note* n = Corbeille::getInstance().getNote(id.toInt());
-        Corbeille::getInstance().restaurer(idint);
-        QMessageBox::information(this, "Restauration", "Note restaurée !");
-        list->takeItem(list->currentRow());
-        setList();
-   // }
-   // throw NotesException("ERROR");
+    // if(!list->currentItem() == 0){
+    QListWidgetItem* item = list->currentItem();
+    QString id = item->text().section("-",0,0);
+    unsigned int idint = id.toInt();
+    //Note* n = NoteManager::getNoteManager().getNoteWithTitle(titleNote, "Trash");
+    //Note* n = Corbeille::getInstance().getNote(id.toInt());
+    Corbeille::getInstance().restaurer(idint);
+    QMessageBox::information(this, "Restauration", "Note restaurée !");
+    list->takeItem(list->currentRow());
+    setList();
+    // }
+    // throw NotesException("ERROR");
 }
 
 

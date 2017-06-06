@@ -1,10 +1,9 @@
 #ifndef manager_hpp
 #define manager_hpp
 #include "singleton.h"
-#include "note.h"
 #include "noteediteur.h"
 #include "relation.h"
-#include <map>
+#include <QXmlStreamReader>
 
 /***************************************
 **          NOTESMANAGER              **
@@ -15,10 +14,12 @@ class NotesManager : public Singleton<NotesManager>{
 private:
     Note** notes;
     unsigned int nbNote, nbMaxNote;
-    QString filename;
+    mutable QString filename; // mutable indique qu'on peut modifier l'attribut en tout temps
     //Duplication forbidden
     NotesManager(const NotesManager&);
-    ~NotesManager() {for (unsigned int i=0; i<nbNote; i++) delete notes[i]; delete [] notes;};
+    ~NotesManager() {
+        for (unsigned int i=0; i<nbNote; i++) delete notes[i]; delete [] notes;
+    };
     NotesManager() : Singleton<NotesManager>(), notes(nullptr), nbNote(0), nbMaxNote(0), filename("tmp.dat") {}
 
 
@@ -34,7 +35,7 @@ public:
     Note* Create(const QString& key) const;
 
     //Accessor
-    unsigned int getNbNote() const {return nbNote;}
+    unsigned int getNbNote() {return nbNote;}
 
     //methods
     virtual Note* getNewNote(const QString&);
@@ -42,7 +43,19 @@ public:
     void editNote(Note*,const QString&);
     void supprimerNote(int);
     void addNote(Note*);
-/*
+    Note* getNote( int i);
+    
+    
+    //method fichier
+    QString getFilename() const { return filename; }
+    void setFilename(const QString& f) { filename=f; }
+    void load(); // load notes from file filename
+    void loadArticle(QXmlStreamReader &xml);
+    void loadTask(QXmlStreamReader &xml);
+    void loadMultimedia(QXmlStreamReader &xml, QString type);
+    void save() const; // save notes in file filename
+    
+    /*
     /// Class SearchIterator
     class SearchIterator{
         friend class NotesManager;
@@ -86,7 +99,7 @@ public:
  ***************************************/
 
 class RelationsManager : public Singleton<RelationsManager>{
-        friend class Singleton<RelationsManager>;
+    friend class Singleton<RelationsManager>;
 private:
     Relation** relations;
     unsigned int nbRelation, nbMaxRelation;
@@ -103,6 +116,7 @@ public:
     Relation& getNewRelation(const QString&, const QString&);
     void addRelation(Relation*);
     Relation& getRelation(const QString&);
+    void chercherCouple(Note*);
 };
 
 
@@ -128,9 +142,10 @@ public:
     void addNoteCorbeille(Note*);
     void deleteNote(const QString&);
     void deleteAll();
-    void restaurer(int);
+    void restaurer(unsigned int);
     unsigned int getNbNote(){return nbNote;}
-    void supprimerNote(int id);
+
+    void supprimerNote(unsigned int id);
 };
 
 

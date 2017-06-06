@@ -41,7 +41,7 @@ protected:
 
 
 
-   // Note* note;
+    // Note* note;
 
 public:
     NoteEditeur(QWidget *parent = 0);
@@ -83,8 +83,8 @@ public:
 signals:
 
 public slots:
-   virtual void saveModifications();
-   virtual void supprimer();
+    virtual void saveModifications();
+    virtual void supprimer();
 
 
 private slots:

@@ -12,7 +12,7 @@
  ***                       Note Editeur                             **
  *********************************************************************/
 
-     NoteEditeur::NoteEditeur(QWidget *){
+NoteEditeur::NoteEditeur(QWidget *){
     formulaire = new QFormLayout;
     layout = new QVBoxLayout;
 
@@ -63,27 +63,27 @@ void NoteEditeur::afficherBouton(QDate){
 /*********************************************************************
  ***                      Article Editeur                           **
  *********************************************************************/
- ArticleEditeur::ArticleEditeur(Article* a, QWidget *parent) : NoteEditeur(parent), article(a){
-        text = new QLineEdit(this);
-        formulaire->addRow("Texte :", text);
+ArticleEditeur::ArticleEditeur(Article* a, QWidget *parent) : NoteEditeur(parent), article(a){
+    text = new QLineEdit(this);
+    formulaire->addRow("Texte :", text);
 
-        dateC->setDate(a->getDateC());
-        dateM->setDate(a->getDateM());
-        id->setText(QString::number(a->getId()));
-        title->setText(a->getTitle());
-        text->setText(a->getText());
-
-
-        layout->addWidget(sauver);
-        layout->addWidget(bsupprimer);
+    dateC->setDate(a->getDateC());
+    dateM->setDate(a->getDateM());
+    id->setText(QString::number(a->getId()));
+    title->setText(a->getTitle());
+    text->setText(a->getText());
 
 
-        setLayout(layout);
+    layout->addWidget(sauver);
+    layout->addWidget(bsupprimer);
 
-        QObject::connect(sauver, SIGNAL(clicked()), this, SLOT(saveModifications()));
-        QObject::connect(title , SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
-        QObject::connect(text , SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
-        QObject::connect(bsupprimer, SIGNAL(clicked()), this, SLOT(supprimer()));
+
+    setLayout(layout);
+
+    QObject::connect(sauver, SIGNAL(clicked()), this, SLOT(saveModifications()));
+    QObject::connect(title , SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
+    QObject::connect(text , SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
+    QObject::connect(bsupprimer, SIGNAL(clicked()), this, SLOT(supprimer()));
 }
 
 
@@ -92,6 +92,7 @@ void ArticleEditeur::saveModifications(){
     article->setText(text->text());
     article->setDateLastModification();
     sauver->setDisabled(true);
+    if (NotesManager::getInstance().getFilename() !="tmp.dat") NotesManager::getInstance().save();
     QMessageBox::information(this, "Sauvegarde", "Article sauvegardé !");
 }
 
@@ -101,6 +102,7 @@ void ArticleEditeur::supprimer(){
     Singleton<NotesManager>::getInstance().supprimerNote(article->getId());
     QMessageBox::information(this, "Suppression", "Article supprimé !");
     CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
+    RelationsManager::getInstance().chercherCouple(article);
     c->show();
     this->close();
 
@@ -109,63 +111,63 @@ void ArticleEditeur::supprimer(){
 /*********************************************************************
  ***                         Task Editeur                           **
  *********************************************************************/
- TaskEditeur::TaskEditeur(Task* t, QWidget *parent) : NoteEditeur(parent), task(t) {
+TaskEditeur::TaskEditeur(Task* t, QWidget *parent) : NoteEditeur(parent), task(t) {
 
-        state = new QComboBox;
-        state->addItem("Waiting");
-        state->addItem("Ongoing");
-        state->addItem("Done");
+    state = new QComboBox;
+    state->addItem("Waiting");
+    state->addItem("Ongoing");
+    state->addItem("Done");
 
-        action = new QLineEdit(this);
-        priority = new QSpinBox(this);
-        deadline = new QDateEdit(this);
-        //state = new QLineEdit(this);
-        priorite = new QCheckBox("priorité");
-        bdeadline = new QCheckBox("deadline");
-        option = new QGroupBox("Options",this);
-        lay = new QHBoxLayout;
+    action = new QLineEdit(this);
+    priority = new QSpinBox(this);
+    deadline = new QDateEdit(this);
+    //state = new QLineEdit(this);
+    priorite = new QCheckBox("priorité");
+    bdeadline = new QCheckBox("deadline");
+    option = new QGroupBox("Options",this);
+    lay = new QHBoxLayout;
 
-        priority->setMaximum(5);
-        priority->setMinimum(0);
-        //priority->setValue(0);
+    priority->setMaximum(5);
+    priority->setMinimum(0);
+    //priority->setValue(0);
 
-        formulaire->addRow("Texte :", action);
-        formulaire->addRow("Priorité :", priority);
-        formulaire->addRow("Deadline :", deadline);
-        formulaire->addRow("Etat :", state);
+    formulaire->addRow("Texte :", action);
+    formulaire->addRow("Priorité :", priority);
+    formulaire->addRow("Deadline :", deadline);
+    formulaire->addRow("Etat :", state);
 
-        deadline->setDisabled(true);
-        priority->setDisabled(true);
+    deadline->setDisabled(true);
+    priority->setDisabled(true);
 
-        lay->addWidget(priorite);
-        lay->addWidget(bdeadline);
-        option->setLayout(lay);
+    lay->addWidget(priorite);
+    lay->addWidget(bdeadline);
+    option->setLayout(lay);
 
 
-        dateC->setDate(t->getDateC());
-        dateM->setDate(t->getDateM());
-        id->setText(QString::number(t->getId()));
-        title->setText(t->getTitle());
-        action->setText(t->getAction());
-        priority->setValue(t->getPriority());
-        deadline->setDate(t->getDeadline());
-        state->setCurrentText(toString(t->getState()));
+    dateC->setDate(t->getDateC());
+    dateM->setDate(t->getDateM());
+    id->setText(QString::number(t->getId()));
+    title->setText(t->getTitle());
+    action->setText(t->getAction());
+    priority->setValue(t->getPriority());
+    deadline->setDate(t->getDeadline());
+    state->setCurrentText(toString(t->getState()));
 
-        layout->addWidget(option);
-        layout->addWidget(sauver);
-        layout->addWidget(bsupprimer);
+    layout->addWidget(option);
+    layout->addWidget(sauver);
+    layout->addWidget(bsupprimer);
 
-        setLayout(layout);
+    setLayout(layout);
 
-        QObject::connect(sauver, SIGNAL(clicked()), this, SLOT(saveModifications()));
-        QObject::connect(title , SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
-        QObject::connect(action , SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
-        QObject::connect(priority , SIGNAL(valueChanged(int)), this, SLOT(afficherBouton(int)));
-        QObject::connect(deadline , SIGNAL(dateChanged(QDate)), this, SLOT(afficherBouton(QDate)));
-        QObject::connect(state,SIGNAL(currentIndexChanged(QString)),this,SLOT(afficherBouton(QString)));
-        QObject::connect(bsupprimer, SIGNAL(clicked()), this, SLOT(supprimer()));
-        QObject::connect(bdeadline,SIGNAL(clicked()), this, SLOT(afficherDeadline()));
-        QObject::connect(priorite,SIGNAL(clicked()), this, SLOT(afficherPriorite()));
+    QObject::connect(sauver, SIGNAL(clicked()), this, SLOT(saveModifications()));
+    QObject::connect(title , SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
+    QObject::connect(action , SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
+    QObject::connect(priority , SIGNAL(valueChanged(int)), this, SLOT(afficherBouton(int)));
+    QObject::connect(deadline , SIGNAL(dateChanged(QDate)), this, SLOT(afficherBouton(QDate)));
+    QObject::connect(state,SIGNAL(currentIndexChanged(QString)),this,SLOT(afficherBouton(QString)));
+    QObject::connect(bsupprimer, SIGNAL(clicked()), this, SLOT(supprimer()));
+    QObject::connect(bdeadline,SIGNAL(clicked()), this, SLOT(afficherDeadline()));
+    QObject::connect(priorite,SIGNAL(clicked()), this, SLOT(afficherPriorite()));
 }
 void TaskEditeur::saveModifications(){
     task->setTitle(title->text());
@@ -184,6 +186,7 @@ void TaskEditeur::supprimer(){
     Singleton<NotesManager>::getInstance().supprimerNote(task->getId());
     QMessageBox::information(this, "Suppression", "Article supprimé !");
     CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
+    RelationsManager::getInstance().chercherCouple(task);
     c->show();
     this->close();
 }
@@ -239,7 +242,7 @@ ImageEditeur::ImageEditeur(Image*i, QWidget*parent) : MultimediaEditeur(parent),
     sauver->setDisabled(true);
     layout->addWidget(sauver);
     layout->addWidget(bsupprimer);
-     setLayout(layout);
+    setLayout(layout);
 
     id->setText(QString::number(fichierImage->getId()));
     dateC->setDate(fichierImage->getDateC());
@@ -273,6 +276,7 @@ void ImageEditeur::supprimer(){
     NotesManager::getInstance().supprimerNote(fichierImage->getId());
     QMessageBox::information(this, "Suppression", "Article supprimé !");
     CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
+    RelationsManager::getInstance().chercherCouple(fichierImage);
     c->show();
     this->close();
 }
@@ -305,7 +309,7 @@ VideoEditeur::VideoEditeur(Video*i, QWidget*parent) : MultimediaEditeur(parent),
     QObject::connect(title , SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
     QObject::connect(description, SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
     QObject::connect(image, SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
-     QObject::connect(bsupprimer, SIGNAL(clicked()), this, SLOT(supprimer()));
+    QObject::connect(bsupprimer, SIGNAL(clicked()), this, SLOT(supprimer()));
 
 }
 
@@ -326,6 +330,7 @@ void VideoEditeur::supprimer(){
     NotesManager::getInstance().supprimerNote(fichierVideo->getId());
     QMessageBox::information(this, "Suppression", "Article supprimé !");
     CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
+    RelationsManager::getInstance().chercherCouple(fichierVideo);
     c->show();
     this->close();
 }
@@ -376,6 +381,7 @@ void AudioEditeur::supprimer(){
     NotesManager::getInstance().supprimerNote(fichierAudio->getId());
     QMessageBox::information(this, "Suppression", "Article supprimé !");
     CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
+    RelationsManager::getInstance().chercherCouple(fichierAudio);
     c->show();
     this->close();
 }

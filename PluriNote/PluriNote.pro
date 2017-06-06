@@ -7,8 +7,12 @@ SOURCES += \
     noteediteur.cpp \
     manager.cpp \
     corbeilleEditeur.cpp \
+    relation.cpp \
+    relationedditeur.cpp \
     couple.cpp \
-    relation.cpp
+    coupleediteur.cpp \
+    labelediteur.cpp \
+    mainwindow.cpp
 
 HEADERS += \
     note.h \
@@ -17,4 +21,11 @@ HEADERS += \
     manager.h \
     corbeilleediteur.h \
     couple.h \
-    relation.h
+    relation.h \
+    relationediteur.h \
+    coupleediteur.h \
+    labelediteur.h \
+    mainwindow.h
+
+FORMS += \
+    mainwindow.ui

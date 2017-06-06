@@ -1,15 +1,35 @@
 #ifndef relations_cpp
 #define relations_cpp
-
+#include <QMessageBox>
 #include "relation.h"
-
+#include "coupleediteur.h"
+#include <QDebug>
 #endif
+
+
+/**************************************************************
+ ***                     Base Relation                      ***
+ ***************************************************************/
+
+
+void BaseRelation::chercherCoupleInRelation(Note*n){
+    unsigned int j=0;
+    for (unsigned int i=0; i<nbCouple; i++){
+        if (couples[i]->getNote1() == n || couples[i]->getNote2() == n){
+            removeCouple(couples[i]->getLabel(),couples[i]->getNote1(),couples[i]->getNote2());
+            j++;
+            i--;
+        }
+    }
+    QString nbCoupleSuppr = QString::number(j);
+    QMessageBox::information(0,"Suppression", nbCoupleSuppr+" couple(s) on été supprimé dans la relation "+getTitle());
+}
 
 /**************************************************************
  ***                        Relation                        ***
  ***************************************************************/
 
-void BaseRelation::addCouple(Note* n1, Note* n2){
+/*void BaseRelation::addCouple(Note* n1, Note* n2){
     if (nbCouple == nbMaxCouple ){
         Couple** newCouples = new Couple* [nbMaxCouple+5];
         for (unsigned int i=0; i<nbCouple; i++){
@@ -21,8 +41,21 @@ void BaseRelation::addCouple(Note* n1, Note* n2){
         delete [] oldcouples;
     }
     couples[nbCouple++]= new Couple("",n1,n2);
-}
+}*/
 
+void BaseRelation::addCouple(Couple* c){
+    if (nbCouple == nbMaxCouple ){
+        Couple** newCouples = new Couple* [nbMaxCouple+5];
+        for (unsigned int i=0; i<nbCouple; i++){
+            newCouples[i]= new Couple (*couples[i]);
+        }
+        nbMaxCouple+=5;
+        Couple** oldcouples=couples;
+        couples=newCouples;
+        delete [] oldcouples;
+    }
+    couples[nbCouple++]=c;
+}
 
 void BaseRelation::removeCouple(const QString & label,Note* n1, Note* n2){
     unsigned int i=0;
@@ -34,5 +67,17 @@ void BaseRelation::removeCouple(const QString & label,Note* n1, Note* n2){
     delete couples [i];
     if(i != nbCouple) couples[i]=couples[nbCouple-1];
     nbCouple--;
+
+}
+void BaseRelation::getNewCouple(){
+    Couple* c= new Couple();
+    CoupleEdit(c);
+    //addCouple(c->getNote1(),c->getNote2());
+    addCouple(c);
+}
+
+void BaseRelation::CoupleEdit(Couple* c){
+    CoupleEditeur * ce = new CoupleEditeur(c);
+    ce->show();
 }
 

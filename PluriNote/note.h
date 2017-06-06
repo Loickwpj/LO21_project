@@ -2,6 +2,7 @@
 #define note_h
 #include <QString>
 #include <QDate>
+#include <QXmlStreamWriter>
 
 
 /*********************************************************************
@@ -9,12 +10,12 @@
 **********************************************************************/
 
 class NotesException{
-   public:
+public:
     NotesException(const QString& message):info(message) {}
     QString getInfo() const {
         return info;
     }
-   private:
+private:
     QString info;
 };
 
@@ -37,16 +38,18 @@ protected:
 
 public:
 
-        static int idIterator;
+    static int idIterator;
 
     ///Constructor
     Note(): id(), title(""), dateC(QDate::currentDate()), dateM(QDate::currentDate()), archive(false) {}
     virtual ~Note() {}
 
+    Note(int i, const QString t=(QString)"", QDate d_c=QDate::currentDate(),
+         QDate d_lm=QDate::currentDate(), bool a=false): id(i), title(t), dateC(d_c), dateM(d_lm), archive(a){}
     virtual Note* clone() =0;
 
     ///Accessor
-    int getId() const {return id;}
+    unsigned int getId() const {return id;}
     const QString& getTitle() const {return title;}
     const QDate& getDateC() const  {return dateC;}
     const QDate& getDateM() const  {return dateM;}
@@ -57,6 +60,9 @@ public:
     void setDateLastModification() {dateM=QDate::currentDate();}
     void setArchive() {archive=!archive ;}
     void setId() {id = idIterator++;}
+
+    ///Method save
+    virtual void saveNote(QXmlStreamWriter &stream) const = 0;
 
 };
 
@@ -78,6 +84,11 @@ public :
     ///Constructor
     //Article(const QString i, const QString t, const QString txt): Note(i,t), text(txt) {}
     Article() : Note(), text("") {}
+    
+    Article(int i, const QString t=(QString)"", QDate d_c=QDate::currentDate(),
+            QDate d_lm=QDate::currentDate(), bool a=false, const QString txt=(QString)""):
+        Note(i,t,d_c,d_lm,a), text(txt)/*, careTaker(new MementoA*[5]),nbMemento(0),nbMax(5)*/ {}
+
 
     ///clone
     virtual Article* clone();
@@ -91,6 +102,10 @@ public :
 
 
     ~Article() {}
+
+    ///Method save
+    void saveNote(QXmlStreamWriter &stream) const;
+
 
 };
 
@@ -107,10 +122,10 @@ enum state {Waiting,Ongoing,Done};
 
 inline QString toString(state s){
     switch (s){
-        case Waiting:   return "Waiting";
-        case Ongoing:   return "Ongoing";
-        case Done:      return "Done";
-        default:      return "[Unknown status]";
+    case Waiting:   return "Waiting";
+    case Ongoing:   return "Ongoing";
+    case Done:      return "Done";
+    default:      return "[Unknown status]";
     }
 }
 
@@ -123,32 +138,36 @@ inline state toState(const QString& s){
 
 class Task : public Note {
 private:
-QString action;
-unsigned int priority;
-QDate deadline;
-state status;
+    QString action;
+    unsigned int priority;
+    QDate deadline;
+    state status;
 
 public :
-///Constructor (how to put deadline optional)
-//Task(const QString i, const QString t, const QString a, unsigned int p=0, QDate dl=QDate(0000,00,00), state s=Waiting):
-  //  Note(i,t), action(a), priority(p), deadline(dl), status(s) {}
-Task() : Note(), action(""), priority(0), deadline(QDate::currentDate()), status(Waiting) {}
+    ///Constructor (how to put deadline optional)
+    Task(int i, const QString t, QDate d_c, QDate d_lm, bool a, const QString act, unsigned int p=0, QDate dl=QDate(0000,00,00), state s=Waiting):
+        Note(i,t,d_c,d_lm,a), action(act), priority(p), deadline(dl), status(s) {}
+    
+    Task() : Note(), action(""), priority(0), deadline(QDate::currentDate()), status(Waiting) {}
 
-///clone
-virtual Task* clone();
+    ///clone
+    virtual Task* clone();
 
-///Accessor
-const QString& getAction() const  {return action ;}
-const unsigned int& getPriority() const  {return priority ;}
-const QDate& getDeadline() const {return deadline ;}
-const state& getState() const {return status ;}
+    ///Accessor
+    const QString& getAction() const  {return action ;}
+    const unsigned int& getPriority() const  {return priority ;}
+    const QDate& getDeadline() const {return deadline ;}
+    const state& getState() const {return status ;}
 
-///Modify attribute
-void setAction(const QString& newAction) {action=newAction;}
-void setPriority (unsigned int p) {priority = p ;}
-void setDeadline (QDate newDl) {deadline=newDl ;}
-void setState (const QString& s) {status = toState(s);}
+    ///Modify attribute
+    void setAction(const QString& newAction) {action=newAction;}
+    void setPriority (unsigned int p) {priority = p ;}
+    void setDeadline (QDate newDl) {deadline=newDl ;}
+    void setState (const QString& s) {status = toState(s);}
 
+    ///Method save
+    void saveNote(QXmlStreamWriter &stream) const;
+    
     ~Task() {}
 };
 
@@ -166,11 +185,13 @@ private:
     QString image;
 public:
     //Constructor
-  //  Multimedia (const QString i, const QString t, const QString& d, const QString& f) : Note(i,t), description(d), image(f) {}
-Multimedia() : Note(), description(""), image("") {}
+    Multimedia (int i, const QString t, QDate d_c, QDate d_lm, bool a, const QString& d, const QString& f) :
+        Note(i,t,d_c,d_lm,a), description(d), image(f) {}
+    
+    Multimedia() : Note(), description(""), image("") {}
     //Accessor
     const QString& getDescription() const {return description;}
-    const QString& getImage() {return image;}
+    const QString& getImage() const {return image;}
 
     //setMethod
     void setDescription(const QString& d) { description=d;}
@@ -180,6 +201,9 @@ Multimedia() : Note(), description(""), image("") {}
     //clone virtual pure
     virtual Multimedia* clone()=0;
 
+    
+    ///Method save
+    void saveNote(QXmlStreamWriter &stream) const;
 
     ~Multimedia(){}
 };
@@ -194,11 +218,15 @@ Multimedia() : Note(), description(""), image("") {}
 
 class Image : public Multimedia{
 public:
-   // Image(const QString i, const QString t, const QString& d, const QString& f):
-   // Multimedia(i,t,d,f) {}
+    Image(int i, const QString t, QDate d_c ,QDate d_m ,bool a, const QString& d, const QString& f):
+        Multimedia(i,t,d_c,d_m,a,d,f) {}
+    
     Image() : Multimedia() {}
     virtual Image * clone ();
     ~Image() {}
+    
+    ///Method save
+    void saveNote(QXmlStreamWriter &stream) const;
 };
 
 /*********************************************************************/
@@ -210,11 +238,17 @@ public:
 
 class Audio : public Multimedia{
 public:
-   // Audio(const QString i, const QString t, const QString& d, const QString& f):
-    //Multimedia(i,t,d,f) {}
+    Audio(int i, const QString t, QDate d_c ,QDate d_m ,bool a, const QString& d, const QString& f):
+        Multimedia(i,t,d_c,d_m,a,d,f) {}
+    
     Audio(): Multimedia() {}
     virtual Audio* clone ();
     ~Audio() {}
+
+    
+    ///Method save
+    void saveNote(QXmlStreamWriter &stream) const;
+
 };
 
 /*********************************************************************/
@@ -226,12 +260,17 @@ public:
 
 class Video : public Multimedia{
 public:
-   // Video(const QString i, const QString t, const QString& d, const QString& f):
-    //Multimedia(i,t,d,f) {}
+    
+    Video(int i, const QString t, QDate d_c ,QDate d_m ,bool a, const QString& d, const QString& f):
+        Multimedia(i,t,d_c,d_m,a,d,f) {}
 
     Video() : Multimedia() {}
     virtual Video * clone ();
     ~Video() {}
+    
+    
+    ///Method save
+    void saveNote(QXmlStreamWriter &stream) const;
 };
 
 
