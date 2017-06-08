@@ -24,13 +24,11 @@ int main(int argc, char *argv[]) {
     QString fichier = QFileDialog::getOpenFileName();
     NotesManager::getInstance().setFilename(fichier);
     NotesManager::getInstance().load();
-*/
+
     mainWindow* mw = mainWindow::getInstance();
     mw->show();
 
-
-/*
-     Couple c1();
+*/
 
    Article* a = new Article();
     Article* b = new Article();
@@ -42,7 +40,7 @@ int main(int argc, char *argv[]) {
     RelationEditeur* r = new RelationEditeur(&re);
     r->show();
 
-*/
+
     return app.exec();
 
 }

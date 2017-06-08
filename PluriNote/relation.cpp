@@ -99,6 +99,7 @@ void BaseRelation::CoupleEdit(Couple* c){
 void Reference::chercherReference(){
     for (int i=0; i<Note::idIterator; i++){
         for(NotesManager::iterator it=NotesManager::getInstance().begin(); it!=NotesManager::getInstance().end(); ++it){
+           qDebug()<<*it.getTitle();
         }
 
      }
