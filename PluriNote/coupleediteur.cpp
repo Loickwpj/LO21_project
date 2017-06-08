@@ -1,9 +1,12 @@
 #ifndef coupleediteur_cpp
 #define coupleediteur_cpp
-#include "coupleediteur.h"
+
 #include <QMessageBox>
-#include "manager.h"
 #include <QDebug>
+
+#include "coupleediteur.h"
+//#inclde "manager.h"
+
 #endif
 
 CoupleEditeur::CoupleEditeur(Couple* c, QWidget *) : couple(c){

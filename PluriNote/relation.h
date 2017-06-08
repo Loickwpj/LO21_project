@@ -1,13 +1,16 @@
 #ifndef relation_h
 #define relation_h
-#include "couple.h"
+//#include "couple.h"
+//#include "manager.h"
+#include "coupleediteur.h"
 
-#endif
+
 
 
 /*******************************************************************
  ***                        Base Relation                        ***
  *******************************************************************/
+class Couple;
 
 class BaseRelation{
 protected:
@@ -26,24 +29,17 @@ public:
     //void addCouple(Note*, Note*);
     void addCouple(Couple*);
     void removeCouple(const QString&,Note*,Note*);
-    virtual ~BaseRelation() {}
     const QString& getTitle() const {return title;}
     Couple* getCouple(int i) const {return couples[i];}
-
-    Couple* getCouple(unsigned int id1, unsigned int id2 ) const{
-        for (unsigned int i=0; i<getNbCouple();i++){
-            if (getCouple(i)->getNote1()->getId() == id1 && getCouple(i)->getNote2()->getId() == id2){
-                return couples[i];
-            }
-        }
-        throw NotesException("Error");
-    }
+    Couple* getCouple(unsigned int id1, unsigned int id2 ) const;
 
 
     //Methods
     void chercherCoupleInRelation(Note*);
     void getNewCouple();
     void CoupleEdit(Couple*);
+
+    virtual ~BaseRelation() {}
 
 };
 
@@ -82,12 +78,24 @@ public:
 
 class Reference : public BaseRelation {
 
-public:
+private:
+
+    static Reference* instance;
+
+    Reference() : BaseRelation("Ensemble des notes référérençant d'autres notes via la notation \{id}","Référence") {}
     ~Reference() {
         for (unsigned int i=0; i<nbCouple; i++) delete couples[i];
         delete [] couples;
     }
 
+
+
+public:
+    static Reference* getInstance();
+    static void libererInstance();
+    void chercherReference();
+
 };
 
 
+#endif

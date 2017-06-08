@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_mainWindow_t {
-    QByteArrayData data[1];
-    char stringdata0[11];
+    QByteArrayData data[7];
+    char stringdata0[73];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -31,10 +31,17 @@ struct qt_meta_stringdata_mainWindow_t {
     )
 static const qt_meta_stringdata_mainWindow_t qt_meta_stringdata_mainWindow = {
     {
-QT_MOC_LITERAL(0, 0, 10) // "mainWindow"
+QT_MOC_LITERAL(0, 0, 10), // "mainWindow"
+QT_MOC_LITERAL(1, 11, 13), // "createArticle"
+QT_MOC_LITERAL(2, 25, 0), // ""
+QT_MOC_LITERAL(3, 26, 10), // "createTask"
+QT_MOC_LITERAL(4, 37, 11), // "createAudio"
+QT_MOC_LITERAL(5, 49, 11), // "createImage"
+QT_MOC_LITERAL(6, 61, 11) // "createVideo"
 
     },
-    "mainWindow"
+    "mainWindow\0createArticle\0\0createTask\0"
+    "createAudio\0createImage\0createVideo"
 };
 #undef QT_MOC_LITERAL
 
@@ -44,21 +51,44 @@ static const uint qt_meta_data_mainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       0,    0, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
        0,       // signalCount
 
+ // slots: name, argc, parameters, tag, flags
+       1,    0,   39,    2, 0x0a /* Public */,
+       3,    0,   40,    2, 0x0a /* Public */,
+       4,    0,   41,    2, 0x0a /* Public */,
+       5,    0,   42,    2, 0x0a /* Public */,
+       6,    0,   43,    2, 0x0a /* Public */,
+
+ // slots: parameters
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+
        0        // eod
 };
 
 void mainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
-    Q_UNUSED(_o);
-    Q_UNUSED(_id);
-    Q_UNUSED(_c);
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        mainWindow *_t = static_cast<mainWindow *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->createArticle(); break;
+        case 1: _t->createTask(); break;
+        case 2: _t->createAudio(); break;
+        case 3: _t->createImage(); break;
+        case 4: _t->createVideo(); break;
+        default: ;
+        }
+    }
     Q_UNUSED(_a);
 }
 
@@ -86,6 +116,15 @@ int mainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     _id = QMainWindow::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 5)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 5;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 5)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 5;
+    }
     return _id;
 }
 QT_WARNING_POP

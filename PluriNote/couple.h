@@ -1,5 +1,6 @@
 #ifndef couple_h
 #define couple_h
+
 #include "note.h"
 
 

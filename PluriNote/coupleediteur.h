@@ -8,6 +8,9 @@
 #include <QScrollArea>
 #include <QLabel>
 #include <QLineEdit>
+
+
+#include "manager.h"
 #include "couple.h"
 
 class CoupleEditeur : public QWidget{

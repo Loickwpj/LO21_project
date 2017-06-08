@@ -1,9 +1,10 @@
 #ifndef manager_hpp
 #define manager_hpp
-#include "singleton.h"
-#include "noteediteur.h"
-#include "relation.h"
 #include <QXmlStreamReader>
+
+#include "singleton.h"
+//#include "noteediteur.h"
+#include "relation.h"
 
 /***************************************
 **          NOTESMANAGER              **
@@ -40,7 +41,7 @@ public:
     //methods
     virtual Note* getNewNote(const QString&);
     Note& getNote(const QString& id);
-    void editNote(Note*,const QString&);
+    //void editNote(Note*,const QString&);
     void supprimerNote(int);
     void addNote(Note*);
     Note* getNote( int i);
@@ -55,7 +56,26 @@ public:
     void loadMultimedia(QXmlStreamReader &xml, QString type);
     void save() const; // save notes in file filename
     
-    /*
+    /// Class iterator
+    class iterator{
+        friend class NotesManager;
+        Note** currentN;
+
+        iterator(Note**n): currentN(n){}
+
+    public:
+        bool operator!=(iterator it) const {return currentN != it.currentN;}
+        Note& operator*() const {return **currentN;}
+        iterator& operator++() {currentN++; return *this;}
+
+    };
+
+    iterator begin() const{ return iterator(notes); }
+    iterator end() const{return iterator(notes + nbNote);}
+
+};
+
+/*
     /// Class SearchIterator
     class SearchIterator{
         friend class NotesManager;
@@ -88,11 +108,14 @@ public:
 
     }
 
-*/
+
 
 
 };
 
+*/
+
+class Relation;
 
 /***************************************
  **         RELATIONSMANAGER          **

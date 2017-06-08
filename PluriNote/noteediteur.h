@@ -1,5 +1,6 @@
 #ifndef noteediteur_h
 #define noteediteur_h
+
 #include <QWidget>
 #include <QFormLayout>
 #include <QVBoxLayout>
@@ -7,16 +8,17 @@
 #include <QDate>
 #include <QPushButton>
 #include <QLineEdit>
-#include "note.h"
 #include <QComboBox>
 #include <QRadioButton>
-#include "manager.h"
-#include "singleton.h"
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QDateEdit>
 #include <QSpinBox>
 
+//#include "manager.h"
+//#include "singleton.h"
+//#include "note.h"
+#include "corbeilleediteur.h"
 
 /*********************************************************************
  ***                         Note Editeur                           **

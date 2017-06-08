@@ -8,7 +8,9 @@
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QLabel>
+
 #include "manager.h"
+#include "labelediteur.h"
 
 
 class RelationEditeur : public QWidget {

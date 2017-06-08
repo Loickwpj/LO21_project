@@ -2,6 +2,7 @@
 #define manager_cpp
 
 #include "manager.h"
+
 #include <QDebug>
 #include <QTextCodec>
 #include <QTextCodec>
@@ -42,43 +43,47 @@ Note* NotesManager::Create(const QString& key) const
     return tmp;
 }
 
+/*
 void NotesManager::editNote(Note* n, const QString& type){
+
     if (type == "Task"){
         Task* t =(dynamic_cast<Task*>(n));
-        TaskEditeur* te = new TaskEditeur(t);
-        te->show();
+        TaskEditeur* e = new TaskEditeur(t);
+        e->show();
     }
 
     if (type == "Article"){
         Article* a =(dynamic_cast<Article*>(n));
-        ArticleEditeur* ae = new ArticleEditeur(a);
-        ae->show();
+        ArticleEditeur* e = new ArticleEditeur(a);
+        e->show();
     }
 
     if (type == "Image"){
         Image* i =(dynamic_cast<Image*>(n));
-        ImageEditeur* ie = new ImageEditeur(i);
-        ie->show();
+        ImageEditeur* e = new ImageEditeur(i);
+        e->show();
     }
 
     if (type == "Video"){
         Video* v =(dynamic_cast<Video*>(n));
-        VideoEditeur* ve = new VideoEditeur(v);
-        ve->show();
+        VideoEditeur* e = new VideoEditeur(v);
+        e->show();
     }
 
     if (type == "Audio"){
         Audio* au =(dynamic_cast<Audio*>(n));
-        AudioEditeur* aue = new AudioEditeur(au);
-        aue->show();
+        AudioEditeur* e = new AudioEditeur(au);
+        e->show();
     }
 
 }
 
+*/
+
 Note* NotesManager::getNewNote(const QString& type){
     Note* n = Create(type);
     addNote(n);
-    editNote(n,type);
+    //editNote(n,type);
     return n;
 }
 

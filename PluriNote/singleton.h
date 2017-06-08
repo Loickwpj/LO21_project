@@ -1,12 +1,7 @@
 #ifndef singleton_h
 #define singleton_h
 
-#ifndef NotesManager_hpp
-#define NotesManager_hpp
-
 #include "note.h"
-
-#endif
 
 template<class T> class Singleton{
 

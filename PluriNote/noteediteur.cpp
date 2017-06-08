@@ -4,7 +4,7 @@
 #include "noteediteur.h"
 #include <QMessageBox>
 #include <QDebug>
-#include "corbeilleediteur.h"
+
 
 
 #endif
@@ -105,6 +105,7 @@ void ArticleEditeur::supprimer(){
     RelationsManager::getInstance().chercherCouple(article);
     c->show();
     this->close();
+
 
 }
 

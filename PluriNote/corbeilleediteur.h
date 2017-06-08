@@ -4,6 +4,8 @@
 #include<QListWidget>
 #include<QPushButton>
 #include<QScrollArea>
+#include <QVBoxLayout>
+
 #include "manager.h"
 
 

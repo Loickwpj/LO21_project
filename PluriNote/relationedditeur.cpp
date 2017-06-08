@@ -2,7 +2,7 @@
 #define relationediteur_cpp
 #include <QDebug>
 #include "relationediteur.h"
-#include "labelediteur.h"
+
 
 #endif
 

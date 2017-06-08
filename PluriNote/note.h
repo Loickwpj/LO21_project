@@ -54,6 +54,7 @@ public:
     const QDate& getDateC() const  {return dateC;}
     const QDate& getDateM() const  {return dateM;}
     bool GetArchive() const {return archive;}
+    //static int getIdIterator() const {return idIterator;}
 
     ///Method set
     void setTitle(const QString& newTitle) {title=newTitle ;}
@@ -63,6 +64,8 @@ public:
 
     ///Method save
     virtual void saveNote(QXmlStreamWriter &stream) const = 0;
+
+
 
 };
 

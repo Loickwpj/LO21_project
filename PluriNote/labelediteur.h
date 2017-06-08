@@ -5,8 +5,9 @@
 #include <QFormLayout>
 #include <QPushButton>
 #include <QVBoxLayout>
+
 #include "couple.h"
-#endif
+
 
 
 class labelEditeur : public QWidget {
@@ -26,3 +27,4 @@ public slots:
 private slots:
     void afficherButton();
 };
+#endif

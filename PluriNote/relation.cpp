@@ -2,7 +2,6 @@
 #define relations_cpp
 #include <QMessageBox>
 #include "relation.h"
-#include "coupleediteur.h"
 #include <QDebug>
 #endif
 
@@ -23,6 +22,16 @@ void BaseRelation::chercherCoupleInRelation(Note*n){
     }
     QString nbCoupleSuppr = QString::number(j);
     QMessageBox::information(0,"Suppression", nbCoupleSuppr+" couple(s) on été supprimé dans la relation "+getTitle());
+}
+
+
+Couple* BaseRelation::getCouple(unsigned int id1, unsigned int id2 ) const{
+    for (unsigned int i=0; i<getNbCouple();i++){
+        if (getCouple(i)->getNote1()->getId() == id1 && getCouple(i)->getNote2()->getId() == id2){
+            return couples[i];
+        }
+    }
+    throw NotesException("Error");
 }
 
 /**************************************************************
@@ -80,4 +89,34 @@ void BaseRelation::CoupleEdit(Couple* c){
     CoupleEditeur * ce = new CoupleEditeur(c);
     ce->show();
 }
+
+
+/**************************************************************
+***                         Relation                        ***
+***************************************************************/
+
+
+void Reference::chercherReference(){
+    for (int i=0; i<Note::idIterator; i++){
+        for(NotesManager::iterator it=NotesManager::getInstance().begin(); it!=NotesManager::getInstance().end(); ++it){
+        }
+
+     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

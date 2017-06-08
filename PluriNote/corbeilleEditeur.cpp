@@ -1,9 +1,10 @@
 #ifndef corbeilleediteur_cpp
 #define corbeilleediteur_cpp
-#include "corbeilleediteur.h"
 #include <QDebug>
 #include<QMessageBox>
 #endif
+
+#include "corbeilleediteur.h"
 
 CorbeilleEditeur::CorbeilleEditeur( Corbeille* c, QWidget *) : corbeille(c){
 
