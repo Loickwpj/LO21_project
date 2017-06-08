@@ -3,6 +3,11 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "manager.h"
+#include <iostream>
+#include <typeinfo>
+#include "note.h"
+#include <QDebug>
 
 
 #endif
@@ -21,6 +26,8 @@ mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainWi
     QObject::connect(ui->pushButtonImage, SIGNAL(clicked()), this, SLOT(createImage()));
     QObject::connect(ui->pushButtonTask, SIGNAL(clicked()), this, SLOT(createTask()));
     QObject::connect(ui->pushButtonVideo, SIGNAL(clicked()), this, SLOT(createVideo()));
+
+    setNotesList();
 
 }
 
@@ -96,3 +103,36 @@ void mainWindow::clear(QLayout *layout){
         delete child;
      }
 }
+
+void mainWindow::setNotesList(){
+
+    ui->listWidgetNotesActives->clear();
+    QListWidgetItem *item;
+    NotesManager &nm = NotesManager::getInstance();
+    Task *task_type = new Task();
+
+    unsigned int j;
+    for (unsigned int i=0;i<nm.getNbNote();i++){
+        Note *n = nm.getNote(i);
+        //note non archive
+        if(!n->GetArchive()){
+            //ce n'est pas une tache
+            if((typeid(*n).name()!=typeid(*task_type).name()))
+            {//qDebug()<<"on ajoute la note non archive did" << id <<"a la list";
+                item = new QListWidgetItem(n->setNotesListNote(),ui->listWidgetNotesActives);
+            }
+            //c'est une tache
+            else
+                item= new QListWidgetItem(n->setNotesListNote(),ui->listWidgetTasksActives);
+        }
+        //note archive
+        else
+            item =  new QListWidgetItem(n->setNotesListNote(),ui->listWidgetArchive);
+
+
+        j=i+1;
+    }
+    qDebug()<<"y a avait" << j <<"notes non archivées dans le tableau";
+}
+
+

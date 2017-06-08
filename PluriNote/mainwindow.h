@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include<QListWidgetItem>
 
 #include "manager.h"
 #include "noteediteur.h"
@@ -18,8 +19,10 @@ public:
 ;
     void clear(QLayout *layout);
 
-   static mainWindow* getInstance();
+    static mainWindow* getInstance();
     static void libererInstance();
+    void setNotesList();
+    void setArchivesList();
 
 private:
     explicit mainWindow(QWidget *parent = 0);

@@ -52,7 +52,7 @@ class Relation : public BaseRelation {
     bool oriented;
 public:
     Relation(const QString & d, const QString& t) : BaseRelation(t,d), oriented(true) {}
-    void setOriented(){oriented= !oriented;};
+    void setOriented(){oriented= !oriented;}
     ~Relation() {for (unsigned int i=0; i<nbCouple;i++) delete couples[i]; delete [] couples;}
 
 

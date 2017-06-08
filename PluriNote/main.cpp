@@ -20,11 +20,11 @@ int main(int argc, char *argv[]) {
     NotesManager::Register("Audio", new Audio);
     NotesManager::Register("Video", new Video);
     NotesManager::Register("Image", new Image);
-/*
+
     QString fichier = QFileDialog::getOpenFileName();
     NotesManager::getInstance().setFilename(fichier);
     NotesManager::getInstance().load();
-*/
+
     mainWindow* mw = mainWindow::getInstance();
     mw->show();
 

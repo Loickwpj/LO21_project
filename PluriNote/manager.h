@@ -130,7 +130,7 @@ private:
     RelationsManager() : relations(nullptr), nbRelation(0), nbMaxRelation(0), filename("tmp.dat") {}
     //Duplication forbidden
     RelationsManager(const NotesManager&);
-    ~RelationsManager() {for (unsigned int i=0; i<nbRelation; i++) delete relations[i]; delete [] relations;};
+    ~RelationsManager() {for (unsigned int i=0; i<nbRelation; i++) delete relations[i]; delete [] relations;}
 public:
     //Accessor
     unsigned int getNbRelation() const {return nbRelation;}
