@@ -65,6 +65,8 @@ public:
     ///Method save
     virtual void saveNote(QXmlStreamWriter &stream) const = 0;
 
+    ///Method setNotesList
+    virtual QString setNotesListNote();
 
 
 };
@@ -170,6 +172,8 @@ public :
 
     ///Method save
     void saveNote(QXmlStreamWriter &stream) const;
+
+    QString setNotesListNote();
     
     ~Task() {}
 };

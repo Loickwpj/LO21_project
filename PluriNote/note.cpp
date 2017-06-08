@@ -1,6 +1,7 @@
 #ifndef note_cpp
 #define note_cpp
 #include "note.h"
+#include<QDebug>
 #endif
 
 
@@ -90,3 +91,33 @@ void Video::saveNote(QXmlStreamWriter &stream) const {
     stream.writeEndElement();
     
 }
+/**************************************************************
+ ***                        setList                           ***
+ ***************************************************************/
+
+
+QString Note::setNotesListNote(){
+        qDebug() << "Note non archive" ;
+        QString id = QString::number(getId());
+        QString title = getTitle();
+        QString titre = id+"-"+title ;
+        //qDebug()<<"on ajoute la note non archive did" << id <<"a la list";
+        //item = new QListWidgetItem(titre,ui->listWidgetNotesActives);
+        qDebug()<<"on ajoute la note non archive did" << id <<"a la list";
+        return(titre);
+}
+
+QString Task::setNotesListNote()
+{
+    qDebug() << "Task non archive" ;
+    QString id = QString::number(getId());
+    QString title = getTitle();
+    QString priorite = QString::number(getPriority());
+    QString deadLine = getDeadline().toString();
+    QString titre = id+"-"+title+" : " + priorite + " --> " + deadLine ;
+    //qDebug()<<"on ajoute la note non archive did" << id <<"a la list";
+    //item = new QListWidgetItem(titre,ui->listWidgetNotesActives);
+    qDebug()<<"on ajoute la task non archive did" << id <<"a la list";
+    return(titre);
+}
+
