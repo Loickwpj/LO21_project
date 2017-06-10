@@ -25,10 +25,9 @@ int main(int argc, char *argv[]) {
     NotesManager::getInstance().setFilename(fichier);
     NotesManager::getInstance().load();
 
+    qDebug()<<"on est maintenant là";
     mainWindow* mw = mainWindow::getInstance();
     mw->show();
-
-
 /*
      Couple c1();
 

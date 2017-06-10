@@ -121,3 +121,156 @@ QString Task::setNotesListNote()
     return(titre);
 }
 
+
+
+/**************************************************************
+ ***                       MEMENTO                             ***
+ ***************************************************************/
+
+
+
+/*********************************************************************
+***                       Memento Article                         ***
+**********************************************************************/
+
+
+Article& Article::addMemento() {
+        qDebug()<<"on est rentré dans add";
+        if(nbMemento == nbMax){
+        qDebug()<<" on est dans le if";
+        MementoA** oldCareTaker = careTaker;
+        nbMax += 5;
+        careTaker = new MementoA*[nbMax];
+        for(unsigned int i =0; i < nbMemento; i++)
+            careTaker[i] = oldCareTaker[i];
+        delete[] oldCareTaker;
+    }
+    qDebug()<<"on est just apres le if";
+    MementoA *m = createMemento();
+    qDebug()<<"jusque la tout va bien";
+
+    careTaker[nbMemento++]= m ;// crée un memento et l'ajoute au tableau des mementos
+    qDebug()<<"on a crée un memento dans le tableau";
+    return *this;
+}
+
+Article* Article::getPreviousMemento() {
+    unsigned int i=nbMemento-1;
+    setText(careTaker[i]->text);
+    setTitle(careTaker[i]->title);
+    setArchive(careTaker[i]->archive);
+    setDateLastModification(careTaker[i]->dateM);
+    delete careTaker[i];
+    nbMemento--;
+    qDebug()<<"nb memento ="<<nbMemento;
+    return this;
+}
+
+
+
+/*********************************************************************
+***                       Memento Tache                             ***
+**********************************************************************/
+
+
+Task& Task::addMemento() {
+        if(nbMemento == nbMax){
+        MementoT** oldCareTaker = careTaker;
+        nbMax += 5;
+        careTaker = new MementoT*[nbMax];
+        for(unsigned int i =0; i < nbMemento; i++)
+            careTaker[i] = oldCareTaker[i];
+        delete[] oldCareTaker;
+    }
+    careTaker[nbMemento++]= createMemento(); // crée un memento et l'ajoute au tableau des mementos
+    return *this;
+}
+
+Task* Task::getPreviousMemento() {
+    unsigned int i=nbMemento-1;
+    setTitle(careTaker[i]->title);
+    setArchive(careTaker[i]->archive);
+
+    setDateLastModification(careTaker[i]->dateM);
+    setAction(careTaker[i]->action);
+    setPriority(careTaker[i]->priority);
+    setDeadline(careTaker[i]->deadline);
+    setState(careTaker[i]->status);
+    delete careTaker[i];
+    nbMemento--;
+    return this;
+}
+
+
+/*********************************************************************
+***                       Memento Multimedia                       ***
+**********************************************************************/
+
+
+Multimedia& Multimedia::addMemento() {
+        if(nbMemento == nbMax){
+        MementoM** oldCareTaker = careTaker;
+        nbMax += 5;
+        careTaker = new MementoM*[nbMax];
+        for(unsigned int i =0; i < nbMemento; i++)
+            careTaker[i] = oldCareTaker[i];
+        delete[] oldCareTaker;
+    }
+    careTaker[nbMemento++]= createMemento(); // crée un memento et l'ajoute au tableau des mementos
+    return *this;
+}
+
+Multimedia* Multimedia::getPreviousMemento() {
+    unsigned int i=nbMemento-1;
+    setTitle(careTaker[i]->title);
+    setArchive(careTaker[i]->archive);
+
+    setDateLastModification(careTaker[i]->dateM);
+    setDescription(careTaker[i]->description);
+    setImage(careTaker[i]->image );
+    delete careTaker[i];
+    nbMemento--;
+    return this;
+}
+
+
+
+Video* Video::getPreviousMemento() {
+    unsigned int i=nbMemento-1;
+
+    setTitle(careTaker[i]->title);
+    setArchive(careTaker[i]->archive);
+    setDateLastModification(careTaker[i]->dateM);
+    setDescription(careTaker[i]->description);
+    setImage(careTaker[i]->image );
+    delete careTaker[i];
+    nbMemento--;
+    return this;
+}
+
+
+Image* Image::getPreviousMemento() {
+    unsigned int i=nbMemento-1;
+    setTitle(careTaker[i]->title);
+    setArchive(careTaker[i]->archive);
+
+    setDateLastModification(careTaker[i]->dateM);
+    setDescription(careTaker[i]->description);
+    setImage(careTaker[i]->image );
+    delete careTaker[i];
+    nbMemento--;
+    return this;
+}
+
+Audio* Audio::getPreviousMemento() {
+    unsigned int i=nbMemento-1;
+    setTitle(careTaker[i]->title);
+    setArchive(careTaker[i]->archive);
+
+    setDateLastModification(careTaker[i]->dateM);
+    setDescription(careTaker[i]->description);
+    setImage(careTaker[i]->image );
+    delete careTaker[i];
+    nbMemento--;
+    return this;
+}

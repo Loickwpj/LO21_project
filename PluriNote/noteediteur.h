@@ -39,6 +39,8 @@ protected:
 
     QPushButton* sauver;
     QPushButton* bsupprimer;
+    ///MEMENTO AJOUT BOUTON
+    QPushButton* bprevious;
 
 
 
@@ -56,6 +58,8 @@ signals:
 public slots:
     virtual void saveModifications()=0;
     virtual void supprimer()=0;
+    ///MEMENTO METHOD VIRTUELLE PUR
+    virtual void previousVersion()=0;
 private slots:
     void afficherBouton(QString str="");
     void afficherBouton(int);
@@ -84,9 +88,12 @@ public:
 
 signals:
 
+
 public slots:
     virtual void saveModifications();
     virtual void supprimer();
+    ///MEMENTO METHOD REDEFINI
+    virtual void previousVersion();
 
 
 private slots:
@@ -123,7 +130,8 @@ signals:
 public slots:
     virtual void saveModifications();
     virtual void supprimer();
-
+    ///MEMENTO METHOD REDEFINI
+    virtual void previousVersion();
 private slots:
     void afficherPriorite();
     void afficherDeadline();
@@ -149,6 +157,9 @@ signals:
 public slots:
     virtual void saveModifications() = 0;
     virtual void supprimer() = 0;
+    ///MEMENTO METHOD REDEFINI PUR
+    virtual void previousVersion()=0;
+
 private slots:
 };
 
@@ -169,6 +180,8 @@ public:
 public slots :
     void saveModifications();
     virtual void supprimer();
+    ///MEMENTO METHOD REDEFINI
+    virtual void previousVersion();
 };
 
 /*********************************************************************/
@@ -188,6 +201,8 @@ public:
 public slots :
     void saveModifications();
     virtual void supprimer();
+    ///MEMENTO METHOD REDEFINI
+    virtual void previousVersion();
 };
 
 /*********************************************************************/
@@ -207,6 +222,8 @@ public:
 public slots :
     void saveModifications();
     virtual void supprimer();
+    ///MEMENTO METHOD REDEFINI
+    virtual void previousVersion();
 };
 
 #endif
