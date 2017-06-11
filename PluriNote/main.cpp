@@ -25,10 +25,16 @@ int main(int argc, char *argv[]) {
     NotesManager::getInstance().setFilename(fichier);
     NotesManager::getInstance().load();
 
+    qDebug()<<"on est maintenant là";
     mainWindow* mw = mainWindow::getInstance();
     mw->show();
+<<<<<<< HEAD
 
 */
+=======
+/*
+     Couple c1();
+>>>>>>> 381718c66f38ac4b35b901ea4f898450bec1d6f8
 
    Article* a = new Article();
     Article* b = new Article();
