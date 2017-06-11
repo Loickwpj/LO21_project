@@ -156,6 +156,7 @@ void ArticleEditeur::previousVersion(){
         {bprevious->setDisabled(false);}
     else
         bprevious->setDisabled(true);
+    mainWindow::getInstance()->setNotesList();
     aE->show();
     this->close();
 }
@@ -307,6 +308,8 @@ void TaskEditeur::previousVersion(){
         bprevious->setDisabled(false);
     else
         bprevious->setDisabled(true);
+
+    mainWindow::getInstance()->setNotesList();
     E->show();
     this->close();
 }
@@ -425,6 +428,9 @@ void ImageEditeur::previousVersion(){
         bprevious->setDisabled(false);
     else
         bprevious->setDisabled(true);
+
+    mainWindow::getInstance()->setNotesList();
+
     E->show();
     this->close();
 }
@@ -524,6 +530,7 @@ void VideoEditeur::previousVersion(){
         bprevious->setDisabled(false);
     else
         bprevious->setDisabled(true);
+    mainWindow::getInstance()->setNotesList();
     E->show();
     this->close();
 }
@@ -623,6 +630,8 @@ void AudioEditeur::previousVersion(){
         bprevious->setDisabled(false);
     else
         bprevious->setDisabled(true);
+
+    mainWindow::getInstance()->setNotesList();
     E->show();
     this->close();
 }

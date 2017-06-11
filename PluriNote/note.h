@@ -19,6 +19,10 @@ class MultimediaEditeur;
 ***                            Execption                           ***
 **********************************************************************/
 
+/*! \class NoteExeption
+   * \brief classe permettant de lancer des exeptions en cas d'erreur
+   */
+
 class NotesException{
 public:
     NotesException(const QString& message):info(message) {}
@@ -37,6 +41,12 @@ private:
 ***                        Note Abstract Class                     ***
 **********************************************************************/
 
+
+/*! \class Note
+   * \brief Abastraite dont hérite toutes les autres notes
+   *
+   * Cette classe ne peut pas être instanciée
+   */
 class Note {
 
 protected:
@@ -54,7 +64,10 @@ public:
 
     static int idIterator;
 
-    /// MEMENTO MODIFICATION Constructor
+    ///On a 2 constructeurs :
+    /// 1 sans argument pour les editeurs
+    /// l'autre avec argument pour reconstruire les notes après chargement du fichier XML
+    /// on a fait la même chose pour chaque classe fille
     Note(): id(), title(""), dateC(QDate::currentDate()), dateM(QDate::currentDate()), archive(false),nbMemento(0),nbMax(5) {}
     virtual ~Note() {}
 
@@ -63,23 +76,42 @@ public:
     virtual Note* clone() =0;
 
     ///Accessor
+    /// \brief
+    /// recupere l'id
     unsigned int getId() const {return id;}
+    /// \brief
+    /// recupere le titre
     const QString& getTitle() const {return title;}
+    /// \brief
+    /// recupere la date de création
     const QDate& getDateC() const  {return dateC;}
+    /// \brief
+    /// recupere la date de derniere modification
     const QDate& getDateM() const  {return dateM;}
+    /// \brief
+    /// permet de savoir si une note est archivée ou non
     bool GetArchive() const {return archive;}
+    /// \brief
+    /// recupere le nombre de version précédente
     unsigned int getNbmemento() const {return nbMemento;}
     //static int getIdIterator() const {return idIterator;}
     virtual const QString  getType() const =0;
 
     ///Method set
+    ///  \brief
+    /// permet de modifier le titre
     virtual void setTitle(const QString& newTitle) {title=newTitle ;}
+    ///  \brief
+    /// permet de modifier la date modification
     virtual void setDateLastModification() {dateM=QDate::currentDate();}
     virtual void setDateLastModification(QDate& newDate) {dateM=newDate;}
+    ///  \brief
+    /// permet de rendre un note archivé ou non
     virtual void setArchive() {archive=!archive ;}
     virtual void setArchive(bool a) {archive=a ;}
+    ///  \brief
+    /// permet d'incrémenter la valeur de l'id
     virtual void setId() {id = idIterator++;}
-
 
     /*
     ///Method set
@@ -91,14 +123,31 @@ public:
     virtual void setMementoId() {id = idIterator++;}
 */
     ///Method save
+    /// \fn virtual void saveNote(QXmlStreamWriter &stream) const = 0
+    ///  \brief
+    /// Cette methode permet de sauvegarder la note
+    /// methode virtuelle pur : indique qu'il FAUT la redéfinir dans chaque classe fille
     virtual void saveNote(QXmlStreamWriter &stream) const = 0;
 
-    ///Method setNotesList
+    /// \fn virtual QString setNotesListNote();
+    /// \brief
+    /// method qui permet d'afficher les notes peut importe leur type dans la liste
+    /// virtual suppose que la method va être redefinie
     virtual QString setNotesListNote();
 
     ///Memento
+    /// \fn virtual Note& addMemento()=0;
+    /// \brief
+    /// method qui permet d'ajouter sauvegarder l'etat d'une note après une modification
+    /// on appelle la methode après chaque void saveModifications()
+    /// cette fontion est dans le fichier noteediteur.h
+    /// cette methode est virtuelle pur : il FAUT la redefinir dans chaque classe fille
     virtual Note& addMemento()=0;
 
+    /// \fn virtual void editNote() =0
+    /// \brief
+    /// permet d'editer grâce au NoteEditeur qui lui correspond
+    /// c'est pour cela que la methode est virtuelle pur, on la redefini pour chaque classe fille
     virtual void editNote() =0;
 
 };
@@ -109,6 +158,14 @@ public:
 /*********************************************************************
 ***                        Note Abstract Memento                    ***
 **********************************************************************/
+/*! \class MementoN
+   * \brief Classe Abastraite dont hérite tous les autres memento
+   *
+   * Elle regroupe les même attributs qu'une note avec des methodes différentes
+   * Les classes Memento permettent de fixer l'etat d'un type de note avant une modification
+   * Chaque class Memento est friendclass de la classe dont elle a les mêmes attributs pour avoir accès à celle-ci.
+   */
+
 
 class MementoN {
 protected :
@@ -132,6 +189,12 @@ public :
 ***                       Memento Article                           ***
 **********************************************************************/
 
+/*! \class MementoA
+   * \brief Classe qui hérite de MementoN
+   *
+   * Elle regroupe les même attributs qu'un Article avec des methodes différentes
+   *
+   */
 
 class MementoA : public MementoN {
 private :
@@ -150,6 +213,13 @@ public:
 /*********************************************************************
  ***                        Article                                 **
  *********************************************************************/
+/*! \class Article
+   * \brief Classe qui hérite de Note
+   *
+   * Note avec un tableau des attributs en plus :
+   * Un tableau (+taille max et taille actuelle) de MementoA pour sauvegarder ses versions précédentes
+   * Du texte
+   */
 
 
 class Article : public Note {
@@ -193,6 +263,10 @@ public :
         return new MementoA(getId(),getTitle(),getDateC(),getDateM(),GetArchive(),text) ;
     }
     Article& addMemento();
+    /// \fn  Article* getPreviousMemento()
+    /// \brief
+    /// fonction permettant de set tout les attributs avec les attributs de la version précédentes
+    /// \return Article* un_pointeur_sur_une_version_precedente
     Article *getPreviousMemento();
 
     void editNote();
@@ -202,8 +276,18 @@ public :
 
 /********************************************************************/
 
+/*! \enum state
+ *  \brief
+ *  Différents états que peut prendre une Tâche
+ */
+
 enum state {Waiting,Ongoing,Done};
 
+
+/*! \fn inline QString toString(state s)
+ *  \brief
+ *  Permet de convertir le type de l'enumeration state en type Qstring
+ */
 inline QString toString(state s){
     switch (s){
     case Waiting:   return "Waiting";
@@ -212,7 +296,10 @@ inline QString toString(state s){
     default:      return "[Unknown status]";
     }
 }
-
+/*! \fn inline state toState(const QString& s)
+ *  \brief
+ *  Permet de convertir le type Qstring en type énuméré sate
+ */
 inline state toState(const QString& s){
     if (s == "Waiting") return Waiting;
     if (s == "Ongoing") return Ongoing;
@@ -224,6 +311,12 @@ inline state toState(const QString& s){
 /*********************************************************************
 ***                       Memento Task                           ***
 **********************************************************************/
+/*! \class MementoT
+   * \brief Classe qui hérite de MementoN
+   *
+   * Elle regroupe les même attributs qu'une Tache avec des methodes différentes
+   *
+   */
 
 class MementoT : public MementoN {
 private :
@@ -247,6 +340,18 @@ public :
 /********************************************************************
 ***                        Task                                   ***
 *********************************************************************/
+/*! \class Task
+   * \brief Classe qui hérite de Note
+   *
+   * Note avec un tableau et des attributs en plus :
+   * Un tableau (+taille max et taille actuelle) de MementoA pour sauvegarder ses versions précédentes
+   * une action
+   * une valeur de priorité
+   * une date d'échéance
+   * un etat (en cours, en attente, fait)
+   * un tableau des états précédents
+   */
+
 
 
 class Task : public Note {
@@ -301,6 +406,12 @@ public :
         return new MementoT(getId(),getTitle(),getDateC(),getDateM(),GetArchive(),action,priority,deadline,status) ;
     }
     Task& addMemento();
+
+    ///MEMENTO
+    /// \fn  Task* getPreviousMemento()
+    /// \brief
+    /// fonction permettant de set tout les attributs avec les attributs de la version précédentes
+    /// \return Task* un_pointeur_sur_une_version_precedente
     Task* getPreviousMemento();
     
     void editNote();
@@ -315,7 +426,15 @@ public :
 /*********************************************************************
 ***                       Memento Multimedia                        ***
 **********************************************************************/
-
+/*! \class MementoM
+   * \brief Classe qui hérite de MementoN
+   *
+   * Elle regroupe les même attributs qu'un Article avec des methodes différentes
+   * Elle permet permet d'instancier un objet d'une version précédentes :
+   * d'image
+   * de video
+   * d'audio
+   */
 class MementoM : public MementoN {
 protected :
     friend class Audio;
@@ -342,6 +461,17 @@ public :
 /*********************************************************************
  ***                        Multimedia                              ***
  **********************************************************************/
+
+/*! \class Multimedia
+   * \brief Classe qui hérite de Note
+   *
+   * Note avec un tableau et des attributs en plus :
+   * Un tableau (+taille max et taille actuelle) de MementoM pour sauvegarder ses versions précédentes
+   * une description
+   * une image/video/audio (on a choisi de mettre un Qstring pour représenter le lien vers ce fichier)
+   *
+   * C'est une classe abstraite dont herite les : Image/Video/Audio
+   */
 
 
 class Multimedia : public Note {
@@ -397,6 +527,12 @@ public:
  ***                        Image                                   ***
  **********************************************************************/
 
+/*! \class Image
+   * \brief Classe qui hérite Multimedia (qui elle meme hérite de Note)
+   *
+   * Seules les methodes sont modifiées
+   */
+
 class Image : public Multimedia{
 
 public:
@@ -413,7 +549,10 @@ public:
     void saveNote(QXmlStreamWriter &stream) const;
 
 
-    ///MEMENTO
+    /// \fn  Image* getPreviousMemento()
+    /// \brief
+    /// fonction permettant de set tout les attributs avec les attributs de la version précédentes
+    /// \return Image* un_pointeur_sur_une_version_precedente
     Image* getPreviousMemento();
 
     void editNote();
@@ -425,7 +564,11 @@ public:
 /*********************************************************************
  ***                   Enregistrement Audio                        ***
  **********************************************************************/
-
+/*! \class Audio
+   * \brief Classe qui hérite Multimedia (qui elle meme hérite de Note)
+   *
+   * Seules les methodes sont modifiées
+   */
 class Audio : public Multimedia{
 
 public:
@@ -441,8 +584,10 @@ public:
     ///Method save
     void saveNote(QXmlStreamWriter &stream) const;
 
-
-    ///MEMENTO
+    /// \fn  Audio* getPreviousMemento()
+    /// \brief
+    /// fonction permettant de set tout les attributs avec les attributs de la version précédentes
+    /// \return Audio* un_pointeur_sur_une_version_precedente
     Audio* getPreviousMemento();
 
     void editNote();
@@ -454,6 +599,11 @@ public:
 /*********************************************************************
  ***                        video                                   ***
  **********************************************************************/
+/*! \class Audio
+   * \brief Classe qui hérite Multimedia (qui elle meme hérite de Note)
+   *
+   * Seules les methodes sont modifiées
+   */
 
 class Video : public Multimedia{
 
@@ -472,6 +622,10 @@ public:
     void saveNote(QXmlStreamWriter &stream) const;
 
     ///MEMENTO
+    /// \fn  Video* getPreviousMemento()
+    /// \brief
+    /// fonction permettant de set tout les attributs avec les attributs de la version précédentes
+    /// \return Video* un_pointeur_sur_une_version_precedente
     Video* getPreviousMemento();
 
     void editNote();
