@@ -119,3 +119,41 @@ void RelationEditeur::afficherBoutons(){
 void RelationEditeur::afficherRafraichir(){
     rafraichir->setDisabled(false);
 }
+
+
+/**************************************************************
+ ***                    Référence éditeur                   ***
+ ***************************************************************/
+
+
+ReferenceEditeur::ReferenceEditeur(Reference* r, QWidget*) : reference(r) {
+
+    titreRelation = new QLabel(Reference::getInstance()->getTitle());
+    list = new QListWidget();
+    layout = new QVBoxLayout();
+    scroller = new QScrollArea();
+
+    scroller->setWidget(list);
+
+    layout->addWidget(titreRelation);
+    layout->addWidget(list);
+
+    setList();
+
+    setLayout(layout);
+}
+
+
+void ReferenceEditeur::setList(){
+
+    list->clear();
+    QListWidgetItem* item;
+    for(unsigned int i=0;i<reference->getNbCouple();i++){
+        Couple* c = reference->getCouple(i);
+        QString label=c->getLabel();
+        QString id1 =QString::number(c->getNote1()->getId());
+        QString id2 =QString::number(c->getNote2()->getId());
+        if (label == "") item = new QListWidgetItem("Note1: "+id1+" Note2: "+id2+" ",list);
+        else {item = new QListWidgetItem("Note1: "+id1+" Note2: "+id2+" ("+label+")",list);};
+    }
+}

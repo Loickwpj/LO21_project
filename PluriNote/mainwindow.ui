@@ -19,7 +19,7 @@
      <rect>
       <x>260</x>
       <y>0</y>
-      <width>484</width>
+      <width>331</width>
       <height>561</height>
      </rect>
     </property>
@@ -150,35 +150,69 @@
      </item>
     </layout>
    </widget>
-   <widget class="QListWidget" name="listWidgetNotesActives">
+   <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>70</y>
-      <width>131</width>
-      <height>192</height>
+      <x>590</x>
+      <y>289</y>
+      <width>211</width>
+      <height>271</height>
      </rect>
     </property>
+    <layout class="QVBoxLayout" name="listRelationLayout">
+     <item>
+      <widget class="QLabel" name="relationLabel">
+       <property name="text">
+        <string>Relations :</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QListWidget" name="listRelation"/>
+     </item>
+    </layout>
    </widget>
-   <widget class="QListWidget" name="listWidgetTasksActives">
+   <widget class="QWidget" name="verticalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>70</y>
-      <width>111</width>
-      <height>192</height>
+      <x>-1</x>
+      <y>0</y>
+      <width>261</width>
+      <height>561</height>
      </rect>
     </property>
-   </widget>
-   <widget class="QListWidget" name="listWidgetArchive">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>260</y>
-      <width>256</width>
-      <height>101</height>
-     </rect>
-    </property>
+    <layout class="QVBoxLayout" name="partieGauche">
+     <item>
+      <widget class="QLabel" name="notesLabel">
+       <property name="text">
+        <string>Notes :</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QListWidget" name="listWidgetNotesActives"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="taskLabel">
+       <property name="text">
+        <string>Tâches : </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QListWidget" name="listWidgetTasksActives"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="archivesLabel">
+       <property name="text">
+        <string>Notes archivées :</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QListWidget" name="listWidgetArchive"/>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -187,12 +221,12 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuNote">
     <property name="title">
-     <string>Note</string>
+     <string>Notes</string>
     </property>
     <widget class="QMenu" name="menunouvelle_note">
      <property name="title">
@@ -206,7 +240,21 @@
     </widget>
     <addaction name="menunouvelle_note"/>
    </widget>
+   <widget class="QMenu" name="menuRelations">
+    <property name="title">
+     <string>Relations</string>
+    </property>
+    <addaction name="nouvelleRelationAction"/>
+   </widget>
+   <widget class="QMenu" name="menuCorbeille">
+    <property name="title">
+     <string>Corbeille</string>
+    </property>
+    <addaction name="actionafficher"/>
+   </widget>
    <addaction name="menuNote"/>
+   <addaction name="menuRelations"/>
+   <addaction name="menuCorbeille"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNote">
@@ -232,6 +280,16 @@
   <action name="actionVideo">
    <property name="text">
     <string>Video</string>
+   </property>
+  </action>
+  <action name="nouvelleRelationAction">
+   <property name="text">
+    <string>nouvelle relation</string>
+   </property>
+  </action>
+  <action name="actionafficher">
+   <property name="text">
+    <string>afficher</string>
    </property>
   </action>
  </widget>

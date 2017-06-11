@@ -2,9 +2,11 @@
 #define corbeilleediteur_cpp
 #include <QDebug>
 #include<QMessageBox>
-#endif
 
 #include "corbeilleediteur.h"
+#endif
+
+
 
 CorbeilleEditeur::CorbeilleEditeur( Corbeille* c, QWidget *) : corbeille(c){
 
@@ -52,7 +54,7 @@ void CorbeilleEditeur::setList(){
 
 
 void CorbeilleEditeur::restaurerNote(){
-    // if(!list->currentItem() == 0){
+
     QListWidgetItem* item = list->currentItem();
     QString id = item->text().section("-",0,0);
     unsigned int idint = id.toInt();
@@ -62,11 +64,8 @@ void CorbeilleEditeur::restaurerNote(){
     QMessageBox::information(this, "Restauration", "Note restaurée !");
     list->takeItem(list->currentRow());
     setList();
-    // }
-    // throw NotesException("ERROR");
+
+    mainWindow::getInstance()->setNotesList();
+
+
 }
-
-
-
-
-

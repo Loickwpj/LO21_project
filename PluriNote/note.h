@@ -3,8 +3,17 @@
 #include <QString>
 #include <QDate>
 #include <QXmlStreamWriter>
-#include<QDebug>
 
+#include "noteediteur.h"
+#include "ui_mainwindow.h"
+
+class NoteEditeur;
+class ArticleEditeur;
+class TaskEditeur;
+class ImageEditeur;
+class VideoEditeur;
+class AudioEditeur;
+class MultimediaEditeur;
 
 /*********************************************************************
 ***                            Execption                           ***
@@ -29,6 +38,7 @@ private:
 **********************************************************************/
 
 class Note {
+
 protected:
     int id ;
     QString title ;
@@ -60,6 +70,7 @@ public:
     bool GetArchive() const {return archive;}
     unsigned int getNbmemento() const {return nbMemento;}
     //static int getIdIterator() const {return idIterator;}
+    virtual const QString  getType() const =0;
 
     ///Method set
     virtual void setTitle(const QString& newTitle) {title=newTitle ;}
@@ -87,6 +98,8 @@ public:
 
     ///Memento
     virtual Note& addMemento()=0;
+
+    virtual void editNote() =0;
 
 };
 
@@ -162,7 +175,7 @@ public :
     ///Accessor
     const QString& getText() const {return text ;}
     const QDate& getDateC() const {return dateC;}
-
+    const QString getType() const {return "Article";}
 
     ///Modify attribute
     void setText(const QString& t) {text=t ;}
@@ -175,9 +188,14 @@ public :
     void saveNote(QXmlStreamWriter &stream) const;
 
     ///Memento
-    MementoA* createMemento() {qDebug()<<"On rentre dans le create " ; return new MementoA(getId(),getTitle(),getDateC(),getDateM(),GetArchive(),text) ;}
+    MementoA* createMemento() {
+
+        return new MementoA(getId(),getTitle(),getDateC(),getDateM(),GetArchive(),text) ;
+    }
     Article& addMemento();
     Article *getPreviousMemento();
+
+    void editNote();
 
 
 };
@@ -219,7 +237,8 @@ private :
 
 public :
 
-    MementoT(int i, const QString t, QDate d_c, QDate d_lm, bool a, const QString act, unsigned int p, QDate dl, state s): MementoN(i,t,d_c,d_lm,a), action(act), priority(p), deadline(dl) ,status(s) {}
+    MementoT(int i, const QString t, QDate d_c, QDate d_lm, bool a, const QString act, unsigned int p, QDate dl, state s):
+        MementoN(i,t,d_c,d_lm,a), action(act), priority(p), deadline(dl) ,status(s) {}
 
 };
 
@@ -246,7 +265,8 @@ public :
 
 
     ///MEMENTO MODIFICATIONS DES CONSTRUCTEURS
-    Task(int i, const QString t, QDate d_c, QDate d_lm, bool a, const QString act, unsigned int p=0, QDate dl=QDate(0000,00,00), state s=Waiting):
+    Task(int i, const QString t, QDate d_c, QDate d_lm, bool a, const QString act, unsigned int p=0,
+         QDate dl=QDate(0000,00,00), state s=Waiting):
         Note(i,t,d_c,d_lm,a), action(act), priority(p), deadline(dl), status(s), careTaker(new MementoT*[5]) {}
     
     Task() : Note(), action(""), priority(0), deadline(QDate::currentDate()), status(Waiting),careTaker(new MementoT*[5]) {}
@@ -259,6 +279,7 @@ public :
     const unsigned int& getPriority() const  {return priority ;}
     const QDate& getDeadline() const {return deadline ;}
     const state& getState() const {return status ;}
+    const QString getType() const {return "Task";};
 
     ///Modify attribute
     void setAction(const QString& newAction) {action=newAction;}
@@ -276,11 +297,13 @@ public :
 
 
     ///Memento
-    MementoT* createMemento() {return new MementoT(getId(),getTitle(),getDateC(),getDateM(),GetArchive(),action,priority,deadline,status) ;}
+    MementoT* createMemento() {
+        return new MementoT(getId(),getTitle(),getDateC(),getDateM(),GetArchive(),action,priority,deadline,status) ;
+    }
     Task& addMemento();
     Task* getPreviousMemento();
     
-
+    void editNote();
 
     ~Task() {}
 };
@@ -305,7 +328,8 @@ protected :
 
 
 public :
-    MementoM( int i, const QString t, QDate d_c, QDate d_lm, bool a, const QString& d, const QString& f) : MementoN(i,t,d_c,d_lm,a), description(d), image(f) {}
+    MementoM( int i, const QString t, QDate d_c, QDate d_lm, bool a, const QString& d, const QString& f) :
+        MementoN(i,t,d_c,d_lm,a), description(d), image(f) {}
 
 };
 
@@ -339,6 +363,7 @@ public:
     //Accessor
     const QString& getDescription() const {return description;}
     const QString& getImage() const {return image;}
+    const QString  getType() const =0;
 
     //setMethod
     void setDescription(const QString& d) { description=d;}
@@ -353,10 +378,13 @@ public:
     void saveNote(QXmlStreamWriter &stream) const;
 
     ///Memento
-    MementoM* createMemento() {return new MementoM(getId(),getTitle(),getDateC(),getDateM(),GetArchive(),description,image) ;}
+    MementoM* createMemento() {
+        return new MementoM(getId(),getTitle(),getDateC(),getDateM(),GetArchive(),description,image) ;
+    }
     Multimedia& addMemento();
     Multimedia* getPreviousMemento();
 
+    void editNote() =0;
 
     ~Multimedia(){}
 };
@@ -378,6 +406,8 @@ public:
     Image() : Multimedia() {}
     virtual Image * clone ();
     ~Image() {}
+
+    const QString getType() const {return "Image";}
     
     ///Method save
     void saveNote(QXmlStreamWriter &stream) const;
@@ -385,6 +415,8 @@ public:
 
     ///MEMENTO
     Image* getPreviousMemento();
+
+    void editNote();
 };
 
 /*********************************************************************/
@@ -404,6 +436,7 @@ public:
     virtual Audio* clone ();
     ~Audio() {}
 
+    const QString  getType() const {return "Audio";}
     
     ///Method save
     void saveNote(QXmlStreamWriter &stream) const;
@@ -411,6 +444,8 @@ public:
 
     ///MEMENTO
     Audio* getPreviousMemento();
+
+    void editNote();
 };
 
 /*********************************************************************/
@@ -431,12 +466,15 @@ public:
     virtual Video * clone ();
     ~Video() {}
     
-    
+    const QString  getType() const {return "Video";}
+
     ///Method save
     void saveNote(QXmlStreamWriter &stream) const;
 
     ///MEMENTO
     Video* getPreviousMemento();
+
+    void editNote();
 };
 
 

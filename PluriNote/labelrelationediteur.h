@@ -1,26 +1,29 @@
-#ifndef labelediteur_h
-#define labelediteur_h
+#ifndef labelrelationediteur_h
+#define labelrelationediteur_h
+
 #include <QWidget>
 #include <QLineEdit>
 #include <QFormLayout>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QMessageBox>
 
-#include "couple.h"
+//#include "relation.h"
+#include "mainwindow.h"
 
+class Relation;
 
-
-
-class labelEditeur : public QWidget {
+class labelRelationEditeur : public QWidget {
     Q_OBJECT
-    QLineEdit* label;
+    QLineEdit* titre;
+    QLineEdit* description;
     QFormLayout* formulaire;
     QVBoxLayout* layout;
-    QPushButton* modifier;
+    QPushButton* creer;
     QPushButton* bannuler;
-    Couple* couple;
+    Relation* relation;
 public:
-    labelEditeur(Couple*, QWidget* parent=0);
+    labelRelationEditeur(Relation*, QWidget* parent=0);
 signals:
 public slots:
     void saveModification();
@@ -28,4 +31,5 @@ public slots:
 private slots:
     void afficherButton();
 };
+
 #endif

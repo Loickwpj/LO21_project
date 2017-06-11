@@ -3,7 +3,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "manager.h"
+//#include "manager.h"
 #include <iostream>
 #include <typeinfo>
 #include "note.h"
@@ -12,7 +12,7 @@
 
 #endif
 
-mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainWindow){
+mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainWindow()){
     ui->setupUi(this);
 
     QObject::connect(ui->actionNote, SIGNAL(triggered()), this, SLOT(createArticle()));
@@ -27,7 +27,16 @@ mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainWi
     QObject::connect(ui->pushButtonTask, SIGNAL(clicked()), this, SLOT(createTask()));
     QObject::connect(ui->pushButtonVideo, SIGNAL(clicked()), this, SLOT(createVideo()));
 
+    QObject::connect(ui->listRelation, SIGNAL(itemSelectionChanged()), this, SLOT(afficherRelation()));
+    QObject::connect(ui->nouvelleRelationAction,SIGNAL(triggered()), this, SLOT(createRelation()));
+    QObject::connect(ui->actionafficher, SIGNAL(triggered()),this,SLOT(afficherCorbeille()));
+    QObject::connect(ui->listWidgetNotesActives, SIGNAL(itemSelectionChanged()),this,SLOT( afficherNote() ));
+    QObject::connect(ui->listWidgetTasksActives, SIGNAL(itemSelectionChanged()),this,SLOT( afficherTask() ));
+    QObject::connect(ui->listWidgetArchive, SIGNAL(itemSelectionChanged()),this,SLOT( afficherArchive() ));
+
+
     setNotesList();
+    setRelationsList();
 
 }
 
@@ -49,7 +58,7 @@ void mainWindow::libererInstance(){
 }
 
 void mainWindow::createArticle(){
-    clear(ui->partiePrincipale);
+    clear();
     Article* a = dynamic_cast<Article*>(NotesManager::getInstance().Create("Article"));
     NotesManager::getInstance().addNote(a);
     ArticleEditeur* e = new ArticleEditeur(a,this);
@@ -57,8 +66,9 @@ void mainWindow::createArticle(){
 
 }
 
+
 void mainWindow::createTask(){
-    clear(ui->partiePrincipale);
+    clear();
     Task* a = dynamic_cast<Task*>(NotesManager::getInstance().Create("Task"));
     NotesManager::getInstance().addNote(a);
     TaskEditeur* e = new TaskEditeur(a,this);
@@ -67,7 +77,7 @@ void mainWindow::createTask(){
 }
 
 void mainWindow::createImage(){
-    clear(ui->partiePrincipale);
+    clear();
     Image* a = dynamic_cast<Image*>(NotesManager::getInstance().Create("Image"));
     NotesManager::getInstance().addNote(a);
     ImageEditeur* e = new ImageEditeur(a,this);
@@ -76,7 +86,7 @@ void mainWindow::createImage(){
 }
 
 void mainWindow::createAudio(){
-    clear(ui->partiePrincipale);
+    clear();
     Audio* a = dynamic_cast<Audio*>(NotesManager::getInstance().Create("Audio"));
     NotesManager::getInstance().addNote(a);
     AudioEditeur* e = new AudioEditeur(a,this);
@@ -85,7 +95,7 @@ void mainWindow::createAudio(){
 }
 
 void mainWindow::createVideo(){
-    clear(ui->partiePrincipale);
+    clear();
     Video* a = dynamic_cast<Video*>(NotesManager::getInstance().Create("Video"));
     NotesManager::getInstance().addNote(a);
     VideoEditeur* e = new VideoEditeur(a,this);
@@ -95,21 +105,24 @@ void mainWindow::createVideo(){
 
 
 
-void mainWindow::clear(QLayout *layout){
-    QLayoutItem *child;
-    while( (child = layout->takeAt( 0 )) ){
-        layout->removeItem( child );
-        delete child->widget();
-        delete child;
-     }
+void mainWindow::clear(){
+QLayoutItem *item;
+   while ((item = ui->partiePrincipale->takeAt(0)) != 0) {
+        item->widget()->deleteLater();
+        delete item;
+   }
 }
 
 void mainWindow::setNotesList(){
 
     ui->listWidgetNotesActives->clear();
+    ui->listWidgetArchive->clear();
+    ui->listWidgetTasksActives->clear();
+
     QListWidgetItem *item;
     NotesManager &nm = NotesManager::getInstance();
-    Task *task_type = new Task();
+
+/*    Task *task_type = new Task();
 
     unsigned int j;
     for (unsigned int i=0;i<nm.getNbNote();i++){
@@ -132,7 +145,101 @@ void mainWindow::setNotesList(){
 
         j=i+1;
     }
-    qDebug()<<"y a avait" << j <<"notes non archivées dans le tableau";
+    //qDebug()<<"y a avait" << j <<"notes non archivées dans le tableau";*/
+
+    for (unsigned int i=0;i<nm.getNbNote();i++){
+        Note *n = nm.getNote(i);
+
+        if (!n -> GetArchive()){
+            if (n->getType() == "Task"){
+                item= new QListWidgetItem(n->setNotesListNote(),ui->listWidgetTasksActives);
+            }
+            else{
+                item = new QListWidgetItem(n->setNotesListNote(),ui->listWidgetNotesActives);
+            }
+        }
+        else{
+            item =  new QListWidgetItem(n->setNotesListNote(),ui->listWidgetArchive);
+        }
+
+    }
+}
+
+void mainWindow::setRelationsList(){
+    QListWidgetItem *item;
+    ui->listRelation->clear();
+    item = new QListWidgetItem(Reference::getInstance()->getTitle(),ui->listRelation);
+    //clear(ui->listRelationLayout);
+    for (unsigned int i=0; i<RelationsManager::getInstance().getNbRelation(); i++){
+        Relation& relation = RelationsManager::getInstance().getRelation(i);
+        qDebug()<< relation.getTitle();
+        qDebug()<<RelationsManager::getInstance().getRelation(0).getTitle();
+        item = new QListWidgetItem(relation.getTitle(),ui->listRelation);
+    }
+}
+
+
+void mainWindow::afficherRelation(){
+    clear();
+    QListWidgetItem* item = ui->listRelation->currentItem();
+    QString title = item->text();
+    if (title == "Référence"){ ReferenceEditeur* reference = new ReferenceEditeur(Reference::getInstance());
+        ui->partiePrincipale->addWidget(reference);}
+    else{
+        Relation& relation = RelationsManager::getInstance().getRelation(title);
+        RelationEditeur* r = new RelationEditeur(&relation);
+        ui->partiePrincipale->addWidget(r);
+    }
+}
+
+void mainWindow::createRelation(){
+    Relation& relation = RelationsManager::getInstance().getNewRelation("","");
+   labelRelationEditeur* editeur = new labelRelationEditeur(&relation);
+   editeur->show();
+}
+
+void mainWindow::afficherCorbeille(){
+    CorbeilleEditeur* corbeille = new CorbeilleEditeur(&Corbeille::getInstance());
+    corbeille->show();
+}
+
+void mainWindow::afficherNote(){
+    QListWidgetItem* item = ui->listWidgetNotesActives->currentItem();
+    unsigned int id =  item->text().section(" ",1,1).toInt();
+    for (NotesManager::iterator it = NotesManager::getInstance().begin(); it != NotesManager::getInstance().end() ; ++it){
+        if (it.value()->getId() == id ){
+                clear();
+                it.value()->editNote();
+        }
+    }
+}
+
+
+void mainWindow::afficherTask(){
+
+    QListWidgetItem* item = ui->listWidgetTasksActives->currentItem();
+    unsigned int id =  item->text().section(" ",1,1).toInt();
+
+    for (NotesManager::iterator it = NotesManager::getInstance().begin(); it != NotesManager::getInstance().end() ; ++it){
+        if (it.value()->getId() == id ){
+            clear();
+            it.value()->editNote();
+        }
+    }
+}
+
+
+void mainWindow::afficherArchive(){
+
+    QListWidgetItem* item = ui->listWidgetArchive->currentItem();
+    unsigned int id =  item->text().section(" ",1,1).toInt();
+
+    for (NotesManager::iterator it = NotesManager::getInstance().begin(); it != NotesManager::getInstance().end() ; ++it){
+        if (it.value()->getId() == id ){
+            clear();
+            it.value()->editNote();
+        }
+    }
 }
 
 

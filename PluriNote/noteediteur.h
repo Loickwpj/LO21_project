@@ -19,10 +19,17 @@
 //#include "singleton.h"
 //#include "note.h"
 #include "corbeilleediteur.h"
+#include "mainwindow.h"
 
 /*********************************************************************
  ***                         Note Editeur                           **
  *********************************************************************/
+
+class Article;
+class Task;
+class Image;
+class Audio;
+class Video;
 
 class NoteEditeur : public QWidget{
 

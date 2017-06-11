@@ -6,6 +6,8 @@
 //#include "noteediteur.h"
 #include "relation.h"
 
+
+class Note;
 /***************************************
 **          NOTESMANAGER              **
 ***************************************/
@@ -19,8 +21,8 @@ private:
     //Duplication forbidden
     NotesManager(const NotesManager&);
     ~NotesManager() {
-        for (unsigned int i=0; i<nbNote; i++) delete notes[i]; delete [] notes;
-    };
+        /*for (unsigned int i=0; i<nbNote; i++) delete notes[i]; delete [] notes;*/
+    }
     NotesManager() : Singleton<NotesManager>(), notes(nullptr), nbNote(0), nbMaxNote(0), filename("tmp.dat") {}
 
 
@@ -65,7 +67,7 @@ public:
 
     public:
         bool operator!=(iterator it) const {return currentN != it.currentN;}
-        Note& operator*() const {return **currentN;}
+        Note* value() const {return *currentN;}
         iterator& operator++() {currentN++; return *this;}
 
     };
@@ -130,7 +132,7 @@ private:
     RelationsManager() : relations(nullptr), nbRelation(0), nbMaxRelation(0), filename("tmp.dat") {}
     //Duplication forbidden
     RelationsManager(const NotesManager&);
-    ~RelationsManager() {for (unsigned int i=0; i<nbRelation; i++) delete relations[i]; delete [] relations;}
+    ~RelationsManager() {/*for (unsigned int i=0; i<nbRelation; i++) delete relations[i]; delete [] relations;*/}
 public:
     //Accessor
     unsigned int getNbRelation() const {return nbRelation;}
@@ -139,6 +141,7 @@ public:
     Relation& getNewRelation(const QString&, const QString&);
     void addRelation(Relation*);
     Relation& getRelation(const QString&);
+    Relation& getRelation(unsigned int);
     void chercherCouple(Note*);
 };
 
@@ -158,7 +161,7 @@ private:
     Corbeille() : notesSuppr(nullptr), nbNote(0), nbMaxNote(0), filename("tmp.dat") {}
     //Duplication forbidden
     Corbeille(const NotesManager&);
-    ~Corbeille() {for (unsigned int i=0; i<nbNote; i++) delete notesSuppr[i]; delete [] notesSuppr;};
+    ~Corbeille() {/*for (unsigned int i=0; i<nbNote; i++) delete notesSuppr[i]; delete [] notesSuppr;*/};
 public:
     Note* getNote(Note*);
     Note* getNote(int);

@@ -15,6 +15,7 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
@@ -34,6 +35,8 @@ public:
     QAction *actionImage;
     QAction *actionAudio;
     QAction *actionVideo;
+    QAction *nouvelleRelationAction;
+    QAction *actionafficher;
     QWidget *centralwidget;
     QWidget *verticalLayoutWidget_3;
     QVBoxLayout *centralLayout;
@@ -48,9 +51,23 @@ public:
     QPushButton *pushButtonVideo;
     QPushButton *pushButtonAudio;
     QSpacerItem *verticalSpacer_2;
+    QWidget *verticalLayoutWidget;
+    QVBoxLayout *listRelationLayout;
+    QLabel *relationLabel;
+    QListWidget *listRelation;
+    QWidget *verticalLayoutWidget_2;
+    QVBoxLayout *partieGauche;
+    QLabel *notesLabel;
+    QListWidget *listWidgetNotesActives;
+    QLabel *taskLabel;
+    QListWidget *listWidgetTasksActives;
+    QLabel *archivesLabel;
+    QListWidget *listWidgetArchive;
     QMenuBar *menubar;
     QMenu *menuNote;
     QMenu *menunouvelle_note;
+    QMenu *menuRelations;
+    QMenu *menuCorbeille;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *mainWindow)
@@ -68,11 +85,15 @@ public:
         actionAudio->setObjectName(QStringLiteral("actionAudio"));
         actionVideo = new QAction(mainWindow);
         actionVideo->setObjectName(QStringLiteral("actionVideo"));
+        nouvelleRelationAction = new QAction(mainWindow);
+        nouvelleRelationAction->setObjectName(QStringLiteral("nouvelleRelationAction"));
+        actionafficher = new QAction(mainWindow);
+        actionafficher->setObjectName(QStringLiteral("actionafficher"));
         centralwidget = new QWidget(mainWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         verticalLayoutWidget_3 = new QWidget(centralwidget);
         verticalLayoutWidget_3->setObjectName(QStringLiteral("verticalLayoutWidget_3"));
-        verticalLayoutWidget_3->setGeometry(QRect(260, 0, 301, 561));
+        verticalLayoutWidget_3->setGeometry(QRect(260, 0, 331, 561));
         centralLayout = new QVBoxLayout(verticalLayoutWidget_3);
         centralLayout->setObjectName(QStringLiteral("centralLayout"));
         centralLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
@@ -147,6 +168,58 @@ public:
 
         centralLayout->addLayout(partiePrincipale);
 
+        verticalLayoutWidget = new QWidget(centralwidget);
+        verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
+        verticalLayoutWidget->setGeometry(QRect(590, 289, 211, 271));
+        listRelationLayout = new QVBoxLayout(verticalLayoutWidget);
+        listRelationLayout->setObjectName(QStringLiteral("listRelationLayout"));
+        listRelationLayout->setContentsMargins(0, 0, 0, 0);
+        relationLabel = new QLabel(verticalLayoutWidget);
+        relationLabel->setObjectName(QStringLiteral("relationLabel"));
+
+        listRelationLayout->addWidget(relationLabel);
+
+        listRelation = new QListWidget(verticalLayoutWidget);
+        listRelation->setObjectName(QStringLiteral("listRelation"));
+
+        listRelationLayout->addWidget(listRelation);
+
+        verticalLayoutWidget_2 = new QWidget(centralwidget);
+        verticalLayoutWidget_2->setObjectName(QStringLiteral("verticalLayoutWidget_2"));
+        verticalLayoutWidget_2->setGeometry(QRect(-1, 0, 261, 561));
+        partieGauche = new QVBoxLayout(verticalLayoutWidget_2);
+        partieGauche->setObjectName(QStringLiteral("partieGauche"));
+        partieGauche->setContentsMargins(0, 0, 0, 0);
+        notesLabel = new QLabel(verticalLayoutWidget_2);
+        notesLabel->setObjectName(QStringLiteral("notesLabel"));
+
+        partieGauche->addWidget(notesLabel);
+
+        listWidgetNotesActives = new QListWidget(verticalLayoutWidget_2);
+        listWidgetNotesActives->setObjectName(QStringLiteral("listWidgetNotesActives"));
+
+        partieGauche->addWidget(listWidgetNotesActives);
+
+        taskLabel = new QLabel(verticalLayoutWidget_2);
+        taskLabel->setObjectName(QStringLiteral("taskLabel"));
+
+        partieGauche->addWidget(taskLabel);
+
+        listWidgetTasksActives = new QListWidget(verticalLayoutWidget_2);
+        listWidgetTasksActives->setObjectName(QStringLiteral("listWidgetTasksActives"));
+
+        partieGauche->addWidget(listWidgetTasksActives);
+
+        archivesLabel = new QLabel(verticalLayoutWidget_2);
+        archivesLabel->setObjectName(QStringLiteral("archivesLabel"));
+
+        partieGauche->addWidget(archivesLabel);
+
+        listWidgetArchive = new QListWidget(verticalLayoutWidget_2);
+        listWidgetArchive->setObjectName(QStringLiteral("listWidgetArchive"));
+
+        partieGauche->addWidget(listWidgetArchive);
+
         mainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(mainWindow);
         menubar->setObjectName(QStringLiteral("menubar"));
@@ -155,18 +228,26 @@ public:
         menuNote->setObjectName(QStringLiteral("menuNote"));
         menunouvelle_note = new QMenu(menuNote);
         menunouvelle_note->setObjectName(QStringLiteral("menunouvelle_note"));
+        menuRelations = new QMenu(menubar);
+        menuRelations->setObjectName(QStringLiteral("menuRelations"));
+        menuCorbeille = new QMenu(menubar);
+        menuCorbeille->setObjectName(QStringLiteral("menuCorbeille"));
         mainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(mainWindow);
         statusbar->setObjectName(QStringLiteral("statusbar"));
         mainWindow->setStatusBar(statusbar);
 
         menubar->addAction(menuNote->menuAction());
+        menubar->addAction(menuRelations->menuAction());
+        menubar->addAction(menuCorbeille->menuAction());
         menuNote->addAction(menunouvelle_note->menuAction());
         menunouvelle_note->addAction(actionNote);
         menunouvelle_note->addAction(actionTache);
         menunouvelle_note->addAction(actionImage);
         menunouvelle_note->addAction(actionAudio);
         menunouvelle_note->addAction(actionVideo);
+        menuRelations->addAction(nouvelleRelationAction);
+        menuCorbeille->addAction(actionafficher);
 
         retranslateUi(mainWindow);
 
@@ -181,6 +262,8 @@ public:
         actionImage->setText(QApplication::translate("mainWindow", "Image", Q_NULLPTR));
         actionAudio->setText(QApplication::translate("mainWindow", "Audio", Q_NULLPTR));
         actionVideo->setText(QApplication::translate("mainWindow", "Video", Q_NULLPTR));
+        nouvelleRelationAction->setText(QApplication::translate("mainWindow", "nouvelle relation", Q_NULLPTR));
+        actionafficher->setText(QApplication::translate("mainWindow", "afficher", Q_NULLPTR));
         label->setText(QApplication::translate("mainWindow", "PluriNotes", Q_NULLPTR));
         label_2->setText(QApplication::translate("mainWindow", "Cr\303\251er une nouvelle note :", Q_NULLPTR));
         pushButtonArticle->setText(QApplication::translate("mainWindow", "Article", Q_NULLPTR));
@@ -188,8 +271,14 @@ public:
         pushButtonImage->setText(QApplication::translate("mainWindow", "Image", Q_NULLPTR));
         pushButtonVideo->setText(QApplication::translate("mainWindow", "Vid\303\251o", Q_NULLPTR));
         pushButtonAudio->setText(QApplication::translate("mainWindow", "Audio", Q_NULLPTR));
-        menuNote->setTitle(QApplication::translate("mainWindow", "Note", Q_NULLPTR));
+        relationLabel->setText(QApplication::translate("mainWindow", "Relations :", Q_NULLPTR));
+        notesLabel->setText(QApplication::translate("mainWindow", "Notes :", Q_NULLPTR));
+        taskLabel->setText(QApplication::translate("mainWindow", "T\303\242ches : ", Q_NULLPTR));
+        archivesLabel->setText(QApplication::translate("mainWindow", "Notes archiv\303\251es :", Q_NULLPTR));
+        menuNote->setTitle(QApplication::translate("mainWindow", "Notes", Q_NULLPTR));
         menunouvelle_note->setTitle(QApplication::translate("mainWindow", "nouvelle note", Q_NULLPTR));
+        menuRelations->setTitle(QApplication::translate("mainWindow", "Relations", Q_NULLPTR));
+        menuCorbeille->setTitle(QApplication::translate("mainWindow", "Corbeille", Q_NULLPTR));
     } // retranslateUi
 
 };

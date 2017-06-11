@@ -1,6 +1,7 @@
 #ifndef coupleediteur_h
 #define coupleediteur_h
 #include <QWidget>
+#include <QObject>
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -12,6 +13,8 @@
 
 #include "manager.h"
 #include "couple.h"
+
+class Couple;
 
 class CoupleEditeur : public QWidget{
     Q_OBJECT

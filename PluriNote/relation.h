@@ -11,6 +11,7 @@
  ***                        Base Relation                        ***
  *******************************************************************/
 class Couple;
+class Note;
 
 class BaseRelation{
 protected:
@@ -20,12 +21,13 @@ protected:
     unsigned int nbCouple, nbMaxCouple;
 public:
 
-    BaseRelation(const QString & d, const QString & t) : title(t), description(d), couples(nullptr), nbCouple(0), nbMaxCouple(0) {;}
+    BaseRelation(const QString & d, const QString & t) : title(t), description(d), couples(nullptr), nbCouple(0), nbMaxCouple(0) {}
     BaseRelation() :title(""), description(""), couples(nullptr), nbCouple(0), nbMaxCouple(0) {}
 
     //Accesor
     const QString & getDescription () const {return description;}
     unsigned int getNbCouple() const {return nbCouple;}
+    unsigned int getNbMaxCouple() const {return nbMaxCouple;}
     //void addCouple(Note*, Note*);
     void addCouple(Couple*);
     void removeCouple(const QString&,Note*,Note*);
@@ -33,6 +35,8 @@ public:
     Couple* getCouple(int i) const {return couples[i];}
     Couple* getCouple(unsigned int id1, unsigned int id2 ) const;
 
+    void setTitle(const QString & t) {title=t;}
+    void setDescription(const QString & d) {description=d;}
 
     //Methods
     void chercherCoupleInRelation(Note*);
@@ -53,7 +57,7 @@ class Relation : public BaseRelation {
 public:
     Relation(const QString & d, const QString& t) : BaseRelation(t,d), oriented(true) {}
     void setOriented(){oriented= !oriented;}
-    ~Relation() {for (unsigned int i=0; i<nbCouple;i++) delete couples[i]; delete [] couples;}
+    ~Relation() {/*for (unsigned int i=0; i<nbCouple;i++) delete couples[i]; delete [] couples;*/}
 
 
 };
@@ -76,6 +80,7 @@ public:
  ***                           Référence                         ***
  *******************************************************************/
 
+
 class Reference : public BaseRelation {
 
 private:
@@ -84,8 +89,9 @@ private:
 
     Reference() : BaseRelation("Ensemble des notes référérençant d'autres notes via la notation \{id}","Référence") {}
     ~Reference() {
-        for (unsigned int i=0; i<nbCouple; i++) delete couples[i];
-        delete [] couples;
+        /*
+         * for (unsigned int i=0; i<nbCouple; i++) delete couples[i];
+        delete [] couples;*/
     }
 
 
@@ -94,6 +100,28 @@ public:
     static Reference* getInstance();
     static void libererInstance();
     void chercherReference();
+    void addCoupleReference(Note&,int);
+
+
+    bool checkIfInReference(Note*);
+
+
+    /// Class iterator
+    class iterator{
+        friend class Reference;
+        Couple** currentN;
+
+        iterator(Couple**n): currentN(n){}
+
+    public:
+        bool operator!=(iterator it) const {return currentN != it.currentN;}
+        Couple& value() const {return **currentN;}
+        iterator& operator++() {currentN++; return *this;}
+
+    };
+
+    iterator begin() const{ return iterator(couples); }
+    iterator end() const{return iterator(couples + nbCouple);}
 
 };
 

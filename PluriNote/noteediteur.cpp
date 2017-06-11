@@ -96,6 +96,14 @@ ArticleEditeur::ArticleEditeur(Article* a, QWidget *parent) : NoteEditeur(parent
     QObject::connect(bsupprimer, SIGNAL(clicked()), this, SLOT(supprimer()));
     ///MEMENTO CONNECT
     QObject::connect(bprevious, SIGNAL(clicked()), this, SLOT(previousVersion()));
+
+    if (article->GetArchive()){
+        title->setDisabled(true);
+        text->setDisabled(true);
+        bsupprimer->setDisabled(true);
+        bprevious->setDisabled(true);
+
+    }
 }
 
 
@@ -112,19 +120,34 @@ void ArticleEditeur::saveModifications(){
     ///MEMENTO APPARITION DU BOUTON APRES SAVE
     bprevious->setDisabled(false);
     if (NotesManager::getInstance().getFilename() !="tmp.dat") NotesManager::getInstance().save();
+
+    Reference::getInstance()->chercherReference();
+
+    mainWindow::getInstance()->setNotesList();
+
     QMessageBox::information(this, "Sauvegarde", "Article sauvegardé !");
 }
 
 
 void ArticleEditeur::supprimer(){
-    Singleton<Corbeille>::getInstance().addNoteCorbeille(article);
-    Singleton<NotesManager>::getInstance().supprimerNote(article->getId());
-    QMessageBox::information(this, "Suppression", "Article supprimé !");
-    CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
-    RelationsManager::getInstance().chercherCouple(article);
-    c->show();
+
+    if (Reference::getInstance()->checkIfInReference( article )){
+        article->setArchive();
+        QMessageBox::information(this, "Archivage", "Article archivé !");
+    }
+    else{
+        Singleton<Corbeille>::getInstance().addNoteCorbeille(article);
+        Singleton<NotesManager>::getInstance().supprimerNote(article->getId());
+        QMessageBox::information(this, "Suppression", "Article supprimé !");
+        CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
+        RelationsManager::getInstance().chercherCouple(article);
+        c->show();
+    }
+    mainWindow::getInstance()->setNotesList();
     this->close();
 }
+
+
 ///MEMENTO METHOD REDEFINI
 void ArticleEditeur::previousVersion(){
     ArticleEditeur* aE = new ArticleEditeur((article->getPreviousMemento()));
@@ -205,6 +228,18 @@ TaskEditeur::TaskEditeur(Task* t, QWidget *parent) : NoteEditeur(parent), task(t
     QObject::connect(priorite,SIGNAL(clicked()), this, SLOT(afficherPriorite()));
     ///MEMENTO CONNECT
     QObject::connect(bprevious, SIGNAL(clicked()), this, SLOT(previousVersion()));
+
+    if (task->GetArchive()){
+        title->setDisabled(true);
+        action->setDisabled(true);
+        priorite->setDisabled(true);
+        bdeadline->setDisabled(true);
+        bsupprimer->setDisabled(true);
+        state->setDisabled(true);
+        bprevious->setDisabled(true);
+    }
+
+
 }
 void TaskEditeur::saveModifications(){
     ///MEMENTO ADD MEMENTO
@@ -217,6 +252,13 @@ void TaskEditeur::saveModifications(){
     task->setDeadline(deadline->date());
     task->setState(state->currentText());
     //task->setDeadline(deadline->text().t);
+
+    if (NotesManager::getInstance().getFilename() !="tmp.dat") NotesManager::getInstance().save();
+
+        Reference::getInstance()->chercherReference();
+
+        mainWindow::getInstance()->setNotesList();
+
     QMessageBox::information(this, "Sauvegarde", "Tâche sauvegardée !");
     sauver->setDisabled(true);
     ///MEMENTO AFFICHAGE DU BOUTON
@@ -224,12 +266,20 @@ void TaskEditeur::saveModifications(){
 }
 
 void TaskEditeur::supprimer(){
-    Singleton<Corbeille>::getInstance().addNoteCorbeille(task);
-    Singleton<NotesManager>::getInstance().supprimerNote(task->getId());
-    QMessageBox::information(this, "Suppression", "Article supprimé !");
-    CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
-    RelationsManager::getInstance().chercherCouple(task);
-    c->show();
+    if (Reference::getInstance()->checkIfInReference( task )){
+        task->setArchive();
+        QMessageBox::information(this, "Archivage", "Tâche archivée !");
+    }
+    else{
+        Singleton<Corbeille>::getInstance().addNoteCorbeille(task);
+        Singleton<NotesManager>::getInstance().supprimerNote(task->getId());
+        QMessageBox::information(this, "Suppression", "Article supprimé !");
+        CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
+        RelationsManager::getInstance().chercherCouple(task);
+        c->show();
+    }
+
+    mainWindow::getInstance()->setNotesList();
     this->close();
 }
 
@@ -318,6 +368,14 @@ ImageEditeur::ImageEditeur(Image*i, QWidget*parent) : MultimediaEditeur(parent),
     ///MEMENTO CONNECT
     QObject::connect(bprevious, SIGNAL(clicked()), this, SLOT(previousVersion()));
 
+
+    if (fichierImage->GetArchive()){
+        title->setDisabled(true);
+        description->setDisabled(true);
+        bsupprimer->setDisabled(true);
+        bprevious->setDisabled(true);
+    }
+
 }
 
 void ImageEditeur::saveModifications(){
@@ -330,7 +388,12 @@ void ImageEditeur::saveModifications(){
     fichierImage->setDescription(description->text());
     fichierImage->setImage(image->text());
 
-    //task->setDeadline(deadline->text().t);
+    if (NotesManager::getInstance().getFilename() !="tmp.dat") NotesManager::getInstance().save();
+
+    Reference::getInstance()->chercherReference();
+
+    mainWindow::getInstance()->setNotesList();
+
     QMessageBox::information(this, "Sauvegarde", "Image sauvegardée !");
     sauver->setDisabled(true);
     ///MEMENTO APPARITION BOUTON
@@ -338,12 +401,19 @@ void ImageEditeur::saveModifications(){
 }
 
 void ImageEditeur::supprimer(){
-    Corbeille::getInstance().addNoteCorbeille(fichierImage);
-    NotesManager::getInstance().supprimerNote(fichierImage->getId());
-    QMessageBox::information(this, "Suppression", "Article supprimé !");
-    CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
-    RelationsManager::getInstance().chercherCouple(fichierImage);
-    c->show();
+    if (Reference::getInstance()->checkIfInReference( fichierImage )){
+        fichierImage->setArchive();
+        QMessageBox::information(this, "Archivage", "Image archivée !");
+    }
+    else{
+        Corbeille::getInstance().addNoteCorbeille(fichierImage);
+        NotesManager::getInstance().supprimerNote(fichierImage->getId());
+        QMessageBox::information(this, "Suppression", "Article supprimé !");
+        CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
+        RelationsManager::getInstance().chercherCouple(fichierImage);
+        c->show();
+    }
+    mainWindow::getInstance()->setNotesList();
     this->close();
 }
 
@@ -398,6 +468,12 @@ VideoEditeur::VideoEditeur(Video*i, QWidget*parent) : MultimediaEditeur(parent),
     ///MEMENTO CONNECT
     QObject::connect(bprevious, SIGNAL(clicked()), this, SLOT(previousVersion()));
 
+    if (fichierVideo->GetArchive()){
+        title->setDisabled(true);
+        description->setDisabled(true);
+        bsupprimer->setDisabled(true);
+        bprevious->setDisabled(true);
+    }
 }
 
 void VideoEditeur::saveModifications(){
@@ -409,6 +485,12 @@ void VideoEditeur::saveModifications(){
     fichierVideo->setDescription(description->text());
     fichierVideo->setImage(image->text());
 
+    if (NotesManager::getInstance().getFilename() !="tmp.dat") NotesManager::getInstance().save();
+
+    Reference::getInstance()->chercherReference();
+
+    mainWindow::getInstance()->setNotesList();
+
     //task->setDeadline(deadline->text().t);
     QMessageBox::information(this, "Sauvegarde", "Vidéo sauvegardée !");
     sauver->setDisabled(true);
@@ -417,12 +499,20 @@ void VideoEditeur::saveModifications(){
 }
 
 void VideoEditeur::supprimer(){
-    Corbeille::getInstance().addNoteCorbeille(fichierVideo);
-    NotesManager::getInstance().supprimerNote(fichierVideo->getId());
-    QMessageBox::information(this, "Suppression", "Article supprimé !");
-    CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
-    RelationsManager::getInstance().chercherCouple(fichierVideo);
-    c->show();
+    if (Reference::getInstance()->checkIfInReference( fichierVideo )){
+        fichierVideo->setArchive();
+        QMessageBox::information(this, "Archivage", "Image archivée !");
+    }
+    else{
+        Corbeille::getInstance().addNoteCorbeille(fichierVideo);
+        NotesManager::getInstance().supprimerNote(fichierVideo->getId());
+        QMessageBox::information(this, "Suppression", "Article supprimé !");
+        CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
+        RelationsManager::getInstance().chercherCouple(fichierVideo);
+        c->show();
+    }
+
+    mainWindow::getInstance()->setNotesList();
     this->close();
 }
 
@@ -475,6 +565,13 @@ AudioEditeur::AudioEditeur(Audio*i, QWidget*parent) : MultimediaEditeur(parent),
     QObject::connect(bsupprimer, SIGNAL(clicked()), this, SLOT(supprimer()));
     ///MEMENTO CONNEXION
     QObject::connect(bprevious, SIGNAL(clicked()), this, SLOT(previousVersion()));
+
+    if (fichierAudio->GetArchive()){
+        title->setDisabled(true);
+        description->setDisabled(true);
+        bsupprimer->setDisabled(true);
+        bprevious->setDisabled(true);
+    }
 }
 
 void AudioEditeur::saveModifications(){
@@ -486,6 +583,12 @@ void AudioEditeur::saveModifications(){
     fichierAudio->setDescription(description->text());
     fichierAudio->setImage(image->text());
 
+    if (NotesManager::getInstance().getFilename() !="tmp.dat") NotesManager::getInstance().save();
+
+    Reference::getInstance()->chercherReference();
+
+    mainWindow::getInstance()->setNotesList();
+
     //task->setDeadline(deadline->text().t);
     QMessageBox::information(this, "Sauvegarde", "Audio sauvegardé !");
     sauver->setDisabled(true);
@@ -494,12 +597,20 @@ void AudioEditeur::saveModifications(){
 }
 
 void AudioEditeur::supprimer(){
-    Corbeille::getInstance().addNoteCorbeille(fichierAudio);
-    NotesManager::getInstance().supprimerNote(fichierAudio->getId());
-    QMessageBox::information(this, "Suppression", "Article supprimé !");
-    CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
-    RelationsManager::getInstance().chercherCouple(fichierAudio);
-    c->show();
+    if (Reference::getInstance()->checkIfInReference( fichierAudio )){
+        fichierAudio->setArchive();
+        QMessageBox::information(this, "Archivage", "Audio archivé !");
+    }
+    else{
+        Corbeille::getInstance().addNoteCorbeille(fichierAudio);
+        NotesManager::getInstance().supprimerNote(fichierAudio->getId());
+        QMessageBox::information(this, "Suppression", "Article supprimé !");
+        CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
+        RelationsManager::getInstance().chercherCouple(fichierAudio);
+        c->show();
+    }
+
+    mainWindow::getInstance()->setNotesList();
     this->close();
 }
 

@@ -8,6 +8,7 @@
 
 #include "manager.h"
 
+class Corbeille;
 
 class CorbeilleEditeur : public QWidget{
 private:

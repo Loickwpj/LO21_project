@@ -12,6 +12,8 @@
 #include "manager.h"
 #include "labelediteur.h"
 
+class Reference;
+class Relation;
 
 class RelationEditeur : public QWidget {
     Q_OBJECT
@@ -44,6 +46,27 @@ public slots:
 private slots:
     void afficherRafraichir();
     void afficherBoutons();
+
+};
+
+class ReferenceEditeur : public QWidget {
+    Q_OBJECT
+    QLabel* titreRelation;
+    QListWidget* list;
+    QVBoxLayout* layout;
+    QScrollArea* scroller;
+
+
+    Reference* reference;
+
+public:
+    ~ReferenceEditeur() {}
+    ReferenceEditeur(Reference*, QWidget* parent = 0);
+    void setList();
+signals:
+public slots:
+    //void ssetList();
+private slots:
 
 };
 

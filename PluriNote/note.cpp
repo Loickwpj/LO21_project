@@ -4,6 +4,64 @@
 #include<QDebug>
 #endif
 
+/**************************************************************
+***                        editNote()                       ***
+***************************************************************/
+/*
+ArticleEditeur* Article::editNote(){
+    ArticleEditeur* e = new ArticleEditeur(this,0);
+    Ui::mainWindow* i;// = new Ui::mainWindow();
+    i = new Ui::mainWindow();
+    //i->setupUi(NotesManager::getInstance());
+
+    return e;
+}
+
+TaskEditeur* Task::editNote(){
+    TaskEditeur* e = new TaskEditeur(this,0);
+    return e;
+}
+ImageEditeur* Image::editNote(){
+    ImageEditeur* e = new ImageEditeur(this,0);
+    return e;
+}
+AudioEditeur* Audio::editNote(){
+    AudioEditeur* e = new AudioEditeur(this,0);
+    return e;
+}
+VideoEditeur* Video::editNote(){
+    VideoEditeur* e = new VideoEditeur(this,0);
+    return e;
+}
+
+*/
+
+
+void Article::editNote(){
+    ArticleEditeur* e = new ArticleEditeur(this,0);
+    mainWindow::getInstance()->ui->partiePrincipale->addWidget(e);
+}
+
+void Task::editNote(){
+    TaskEditeur* e = new TaskEditeur(this,0);
+    mainWindow::getInstance()->ui->partiePrincipale->addWidget(e);
+}
+
+void Image::editNote(){
+    ImageEditeur* e = new ImageEditeur(this,0);
+    mainWindow::getInstance()->ui->partiePrincipale->addWidget(e);
+}
+
+void Audio::editNote(){
+    AudioEditeur* e = new AudioEditeur(this,0);
+    mainWindow::getInstance()->ui->partiePrincipale->addWidget(e);
+}
+
+void Video::editNote(){
+    VideoEditeur* e = new VideoEditeur(this,0);
+    mainWindow::getInstance()->ui->partiePrincipale->addWidget(e);
+}
+
 
 /**************************************************************
 ***                        Clone                            ***
@@ -91,33 +149,34 @@ void Video::saveNote(QXmlStreamWriter &stream) const {
     stream.writeEndElement();
     
 }
+
 /**************************************************************
  ***                        setList                           ***
  ***************************************************************/
 
 
 QString Note::setNotesListNote(){
-        qDebug() << "Note non archive" ;
+        //qDebug() << "Note non archive" ;
         QString id = QString::number(getId());
         QString title = getTitle();
-        QString titre = id+"-"+title ;
+        QString titre = " "+id+" -"+title ;
         //qDebug()<<"on ajoute la note non archive did" << id <<"a la list";
         //item = new QListWidgetItem(titre,ui->listWidgetNotesActives);
-        qDebug()<<"on ajoute la note non archive did" << id <<"a la list";
+        //qDebug()<<"on ajoute la note non archive did" << id <<"a la list";
         return(titre);
 }
 
 QString Task::setNotesListNote()
 {
-    qDebug() << "Task non archive" ;
+    //qDebug() << "Task non archive" ;
     QString id = QString::number(getId());
     QString title = getTitle();
     QString priorite = QString::number(getPriority());
     QString deadLine = getDeadline().toString();
-    QString titre = id+"-"+title+" : " + priorite + " --> " + deadLine ;
+    QString titre =" "+id+" -"+title+" : " + priorite + " --> " + deadLine ;
     //qDebug()<<"on ajoute la note non archive did" << id <<"a la list";
     //item = new QListWidgetItem(titre,ui->listWidgetNotesActives);
-    qDebug()<<"on ajoute la task non archive did" << id <<"a la list";
+    //qDebug()<<"on ajoute la task non archive did" << id <<"a la list";
     return(titre);
 }
 

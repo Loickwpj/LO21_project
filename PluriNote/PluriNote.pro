@@ -12,7 +12,8 @@ SOURCES += \
     couple.cpp \
     coupleediteur.cpp \
     labelediteur.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    labelrelationediteur.cpp
 
 HEADERS += \
     note.h \
@@ -25,7 +26,8 @@ HEADERS += \
     relationediteur.h \
     coupleediteur.h \
     labelediteur.h \
-    mainwindow.h
+    mainwindow.h \
+    labelrelationediteur.h
 
 FORMS += \
     mainwindow.ui
