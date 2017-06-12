@@ -20,12 +20,20 @@ int main(int argc, char *argv[]) {
     NotesManager::Register("Audio", new Audio);
     NotesManager::Register("Video", new Video);
     NotesManager::Register("Image", new Image);
-/*
+
     QString fichier = QFileDialog::getOpenFileName();
     NotesManager::getInstance().setFilename(fichier);
     NotesManager::getInstance().load();
 
-    qDebug()<<"on est maintenant là";*/
+    //qDebug()<<"on est maintenant là";
+
+    QString fichierRelation = QFileDialog::getOpenFileName();
+    RelationsManager::getInstance().setFilename(fichierRelation);
+    RelationsManager::getInstance().loadRelations();
+
+    //QString fichierReference = QFileDialog::getOpenFileName();
+    //Reference::getInstance()->loadRef(fichierReference);
+
 
     mainWindow* mw = mainWindow::getInstance();
     mw->show();

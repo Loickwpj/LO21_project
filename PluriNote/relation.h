@@ -3,6 +3,7 @@
 //#include "couple.h"
 //#include "manager.h"
 #include "coupleediteur.h"
+#include <QFile>
 
 
 
@@ -56,6 +57,9 @@ class Relation : public BaseRelation {
     bool oriented;
 public:
     Relation(const QString & d, const QString& t) : BaseRelation(t,d), oriented(true) {}
+    ///rajout d'un constructeur
+    Relation(const QString & d, const QString& t, bool o) : BaseRelation(t,d), oriented(o) {}
+    bool getOriented() const {return oriented ;}
     void setOriented(){oriented= !oriented;}
     ~Relation() {/*for (unsigned int i=0; i<nbCouple;i++) delete couples[i]; delete [] couples;*/}
 
@@ -101,6 +105,9 @@ public:
     static void libererInstance();
     void chercherReference();
     void addCoupleReference(Note&,int);
+    //void saveRef();
+    //void loadRef(QString f);
+    //void loadCouple(QXmlStreamReader& xml);
 
 
     bool checkIfInReference(Note*);

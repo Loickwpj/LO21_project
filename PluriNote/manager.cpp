@@ -447,6 +447,15 @@ void NotesManager::loadMultimedia(QXmlStreamReader &xml, QString type){
 
 
 
+
+
+
+
+
+
+
+
+
 /**********************************************
 **             RELATIONSMAANGER              **
 ***********************************************/
@@ -496,6 +505,183 @@ void RelationsManager::chercherCouple(Note*n){
         relations[i]->chercherCoupleInRelation(n);
     }
 }
+
+
+
+
+/**********************************************
+ **                 RELATION MANAGER          **
+ ***********************************************/
+
+void RelationsManager::saveRelation() const {
+
+    QFile newfile(filename);
+    if (!newfile.open(QIODevice::WriteOnly | QIODevice::Text))
+        throw NotesException("erreur sauvegarde notes : ouverture fichier xml");
+    QXmlStreamWriter stream(&newfile);
+    stream.setAutoFormatting(true);
+    stream.writeStartDocument();
+    stream.writeStartElement("fichier_relation");
+    for(unsigned int i=0; i<nbRelation; i++){
+        stream.writeStartElement("relation");
+        stream.writeTextElement("titleRelation", relations[i]->getTitle());
+        stream.writeTextElement("descriptionRelation", relations[i]->getDescription());
+        stream.writeTextElement("nbCouple",QString::number(relations[i]->getNbCouple()));
+        stream.writeTextElement("nbMaxCouple",QString::number(relations[i]->getNbMaxCouple()));
+        stream.writeTextElement("oriented",QString::number(relations[i]->getOriented()));
+
+        stream.writeStartElement("couples");
+        for(unsigned int j=0; j<relations[i]->getNbCouple();j++)
+        {
+            qDebug()<<"on est dans la boucle qui save les couple jusqu'a nombre de couple = "<<relations[i]->getNbCouple();
+            relations[i]->getCouple(j)->saveCouple(stream);
+        }
+        stream.writeEndElement();
+        stream.writeEndElement();
+    }
+    stream.writeEndElement();
+    stream.writeEndDocument();
+    newfile.close();
+}
+
+
+void RelationsManager::loadRelations(){
+    Relation* r = nullptr;
+    QFile fin(filename);
+    // If we can't open it, let's show an error message.
+    if (!fin.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        throw NotesException("Erreur ouverture fichier notes");
+    }
+
+    QXmlStreamReader xml(&fin);
+    while(!xml.atEnd() && !xml.hasError()) {
+        // Read next element.
+        QXmlStreamReader::TokenType token = xml.readNext();
+
+        if(token == QXmlStreamReader::StartDocument) continue;
+
+        if(token == QXmlStreamReader::StartElement) {
+            // If it's named fichier_relation, we'll go to the next.
+            if(xml.name() == "fichier_relation") continue;
+
+            if(xml.name() == "relation") {
+                r=loadRelation(xml);
+            }
+            if(xml.name() == "couples") continue;
+            if(xml.name()=="couple")
+            {
+                loadCouple(xml,r);
+            }
+
+        }
+
+    }
+
+    // Error handling.
+    if(xml.hasError()) {
+        throw NotesException("Erreur lecteur fichier notes, parser xml");
+    }
+    // Removes any device() or data from the reader * and resets its internal state to the initial state.
+    xml.clear();
+    qDebug()<<"fin load\n";
+}
+/*
+// We've found couples
+if(xml.name() == "couples") {
+    r= new Relation(descirption,title,oriented.toInt());
+    loadCouple(xml,r);
+    addRelation(r);
+}
+*/
+
+
+Relation* RelationsManager::loadRelation(QXmlStreamReader &xml){
+    qDebug()<<"new relation\n";
+    QString title;
+    QString descirption;
+
+    QString nbCouple;
+    QString nbMaxcouple;
+    QString oriented;
+    QXmlStreamAttributes attributes = xml.attributes();
+    xml.readNext();
+    while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "oriented")) {
+        if(xml.tokenType() == QXmlStreamReader::StartElement) {
+            // We've found title
+            if(xml.name() == "titleRelation") {
+                xml.readNext(); title=xml.text().toString();
+            }
+
+            // We've found description
+            if(xml.name() == "descriptionRelation") {
+                xml.readNext(); descirption=xml.text().toString();
+            }
+
+            if(xml.name() == "oriented") {
+                xml.readNext();
+                oriented=xml.text().toString();
+            }
+
+        }
+        xml.readNext();
+
+    }
+
+    Relation *r= new Relation(title,descirption,oriented.toInt());
+    addRelation(r);
+    return r;
+}
+
+
+
+void RelationsManager::loadCouple(QXmlStreamReader &xml,Relation* r){
+    QString id1;
+    QString id2;
+    QString label;
+
+    QXmlStreamAttributes attributes = xml.attributes();
+    xml.readNext();
+    //We're going to loop over the things because the order might change.
+    //We'll continue the loop until we hit an EndElement named article.
+    while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "couple")) {
+        if(xml.tokenType() == QXmlStreamReader::StartElement) {
+
+            // We've found date label
+            if(xml.name() == "label") {
+                xml.readNext();
+                label=xml.text().toString();
+                qDebug()<<"label"<<label<<"\n";
+            }
+
+            // We've found id1
+            if(xml.name() == "id1") {
+                xml.readNext(); id1=xml.text().toString();
+                qDebug()<<"id1"<<id1<<"\n";
+            }
+
+            // We've found id2
+            if(xml.name() == "id2") {
+                xml.readNext(); id2=xml.text().toString();
+                qDebug()<<"id2"<<id2<<"\n";
+            }
+
+
+        }
+        // ...and next...
+        xml.readNext();
+    }
+    qDebug()<<"ajout couple "<<label<<"\n";
+    Note* n1=NotesManager::getInstance().getNote(id1.toInt());
+    Note* n2=NotesManager::getInstance().getNote(id2.toInt());
+    //qDebug()<<"getNote(x) avec x1 = "<< id1.toInt();
+    //qDebug()<<"getNote(x) avec x2 = "<< id2.toInt();
+    //qDebug()<<"titre de n1"<<n1->getTitle() ;
+    //qDebug()<<"titre de n2"<<n2->getTitle() ;
+    Couple* coupleLoaded= new Couple(label,n1,n2);
+    r->addCouple(coupleLoaded);
+}
+
+
 
 
 

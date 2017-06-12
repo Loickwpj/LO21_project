@@ -97,6 +97,7 @@ void CoupleEditeur::saveModifications(){
     couple->setNote2(n2);
 
     QMessageBox::information(this, "Sauvegarde","Le couple a été enregistré !");
+    RelationsManager::getInstance().saveRelation();
     close();
 }
 

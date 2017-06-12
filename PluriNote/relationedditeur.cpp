@@ -77,7 +77,6 @@ void RelationEditeur::setList(){
         if (label == "") item = new QListWidgetItem("Note1: "+id1+" Note2: "+id2+" ",list);
         else {item = new QListWidgetItem("Note1: "+id1+" Note2: "+id2+" ("+label+")",list);};
     }
-
 }
 
 void RelationEditeur::supprimerCouple(){

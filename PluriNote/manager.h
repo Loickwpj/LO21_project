@@ -143,6 +143,19 @@ public:
     Relation& getRelation(const QString&);
     Relation& getRelation(unsigned int);
     void chercherCouple(Note*);
+
+
+    //method fichier
+    QString getFilename() const { return filename; }
+    void setFilename(const QString& f) { filename=f; }
+    void load(); // load notes from file filename
+    //void loadArticle(QXmlStreamReader &xml);
+    //void loadTask(QXmlStreamReader &xml);
+    //void loadMultimedia(QXmlStreamReader &xml, QString type);
+    void saveRelation() const; // save relation in file filename
+    void loadRelations();
+    Relation* loadRelation(QXmlStreamReader &xml);
+    void loadCouple(QXmlStreamReader &xml, Relation* r);
 };
 
 
@@ -161,7 +174,7 @@ private:
     Corbeille() : notesSuppr(nullptr), nbNote(0), nbMaxNote(0), filename("tmp.dat") {}
     //Duplication forbidden
     Corbeille(const NotesManager&);
-    ~Corbeille() {/*for (unsigned int i=0; i<nbNote; i++) delete notesSuppr[i]; delete [] notesSuppr;*/};
+    ~Corbeille() {/*for (unsigned int i=0; i<nbNote; i++) delete notesSuppr[i]; delete [] notesSuppr;*/}
 public:
     Note* getNote(Note*);
     Note* getNote(int);

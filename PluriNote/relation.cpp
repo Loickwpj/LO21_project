@@ -18,7 +18,7 @@ void BaseRelation::chercherCoupleInRelation(Note*n){
         if (couples[i]->getNote1() == n || couples[i]->getNote2() == n){
 
             removeCouple(couples[i]->getLabel(),couples[i]->getNote1(),couples[i]->getNote2());
-           // j++;
+            // j++;
 
         }
     }
@@ -68,7 +68,7 @@ void BaseRelation::addCouple(Couple* c){
         couples=newCouples;
         delete [] oldcouples;
     }
-/*
+    /*
     qDebug()<<RelationsManager::getInstance().getRelation(1).getNbCouple();
     qDebug()<<RelationsManager::getInstance().getRelation(1).getNbMaxCouple();
 */
@@ -92,7 +92,7 @@ void BaseRelation::getNewCouple(){
     Couple* c= new Couple();
     CoupleEdit(c);
     //addCouple(c->getNote1(),c->getNote2());
-/*
+    /*
     qDebug()<<RelationsManager::getInstance().getRelation(1).getNbCouple();
     qDebug()<<RelationsManager::getInstance().getRelation(1).getNbMaxCouple();
 */
@@ -117,10 +117,10 @@ Reference* Reference::getInstance(){
     return instance;
 }
 
- void Reference::libererInstance(){
-     if (instance) delete instance;
-     instance=nullptr;
- }
+void Reference::libererInstance(){
+    if (instance) delete instance;
+    instance=nullptr;
+}
 
 
 void Reference::chercherReference(){
@@ -129,7 +129,7 @@ void Reference::chercherReference(){
             if (it.value()->getTitle().contains("\{"+QString::number(i)+"}")) Reference::addCoupleReference(*it.value(),i);
         }
 
-     }
+    }
 }
 
 
@@ -142,6 +142,7 @@ void Reference::addCoupleReference(Note& note1, int id2){
     if (existed==false) {
         Couple* couple = new Couple("",&note1,note2);
         Reference::getInstance()->addCouple(couple);
+        //saveRef();
     }
 }
 
@@ -155,6 +156,130 @@ bool Reference::checkIfInReference(Note*n){
 
 
 
+/*******************************************************************
+ ***                           Référence                         ***
+ *******************************************************************/
+/*
 
+void Reference::saveRef() {
+
+    QFile newfile("reference.xml");
+    qDebug()<<"on est apres le newfile";
+    if (!newfile.open(QIODevice::WriteOnly | QIODevice::Text)){
+        qDebug()<<"on throw l'exeption";
+        throw NotesException("erreur sauvegarde notes : ouverture fichier xml");}
+    QXmlStreamWriter stream(&newfile);
+    stream.setAutoFormatting(true);
+    stream.writeStartDocument();
+    stream.writeStartElement("fichier_reference");
+    stream.writeStartElement("reference");
+    stream.writeTextElement("titleReference",getTitle());
+    stream.writeTextElement("descriptionReference", getDescription());
+    stream.writeStartElement("couples");
+    for(unsigned int j=0;getNbCouple();j++)
+    {
+        qDebug()<<"on est dans la boucle qui save les couples";
+        getInstance()->getCouple(j)->saveCouple(stream);
+    }
+    stream.writeEndElement();
+    stream.writeEndElement();
+
+    stream.writeEndElement();
+    stream.writeEndDocument();
+    newfile.close();
+}
+
+
+void Reference::loadRef(QString f){
+    QFile fin(f);
+    qDebug()<<"on arrive la";
+    // If we can't open it, let's show an error message.
+    if (!fin.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        throw NotesException("Erreur ouverture fichier notes");
+    }
+
+    QXmlStreamReader xml(&fin);
+    while(!xml.atEnd() && !xml.hasError()) {
+        // Read next element.
+        QXmlStreamReader::TokenType token = xml.readNext();
+
+        if(token == QXmlStreamReader::StartDocument) continue;
+
+        if(token == QXmlStreamReader::StartElement) {
+            // If it's named fichier_relation, we'll go to the next.
+            if(xml.name() == "fichier_reference") continue;
+
+            if(xml.name() == "reference") {
+                qDebug()<<"on arrive ici";
+                Reference::getInstance();
+            }
+            if(xml.name() == "couples") continue;
+            if(xml.name()=="couple")
+            {
+                loadCouple(xml);
+            }
+
+        }
+
+    }
+
+    // Error handling.
+    if(xml.hasError()) {
+        qDebug()<<"c la que ça plante";
+        throw NotesException("Erreur lecteur fichier notes, parser xml");
+    }
+    // Removes any device() or data from the reader * and resets its internal state to the initial state.
+    xml.clear();
+    qDebug()<<"fin load\n";
+}
+
+
+void Reference::loadCouple(QXmlStreamReader& xml){
+    QString id1;
+    QString id2;
+    QString label;
+
+    QXmlStreamAttributes attributes = xml.attributes();
+    xml.readNext();
+    //We're going to loop over the things because the order might change.
+    //We'll continue the loop until we hit an EndElement named article.
+    while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "couple")) {
+        if(xml.tokenType() == QXmlStreamReader::StartElement) {
+
+            // We've found date label
+            if(xml.name() == "label") {
+                xml.readNext();
+                label=xml.text().toString();
+                qDebug()<<"label"<<label<<"\n";
+            }
+
+            // We've found id1
+            if(xml.name() == "id1") {
+                xml.readNext(); id1=xml.text().toString();
+                qDebug()<<"id1"<<id1<<"\n";
+            }
+
+            // We've found id2
+            if(xml.name() == "id2") {
+                xml.readNext(); id2=xml.text().toString();
+                qDebug()<<"id2"<<id2<<"\n";
+            }
+
+
+        }
+        // ...and next...
+        xml.readNext();
+    }
+    Note* n1=NotesManager::getInstance().getNote(id1.toInt());
+    //qDebug()<<"getNote(x) avec x1 = "<< id1.toInt();
+    //qDebug()<<"getNote(x) avec x2 = "<< id2.toInt();
+    //qDebug()<<"titre de n1"<<n1->getTitle() ;
+    //qDebug()<<"titre de n2"<<n2->getTitle() ;
+    //Couple* coupleLoaded= new Couple(label,n1,n2);
+    Reference::getInstance()->addCoupleReference(*n1,id2.toInt());
+}
+
+
+*/
 
 

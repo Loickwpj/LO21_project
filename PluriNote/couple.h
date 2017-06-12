@@ -27,6 +27,7 @@ public:
     void setLabel(const QString & l) {label =l;}
     void setNote1(Note* n) {note1=n;}
     void setNote2(Note* n) {note2=n;}
+    void saveCouple(QXmlStreamWriter &stream) const;
 
 };
 

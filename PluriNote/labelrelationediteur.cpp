@@ -35,6 +35,7 @@ void labelRelationEditeur::saveModification(){
     relation->setDescription(description->text());
     QMessageBox::information(this,"sauvegarde","Relation créée !");
     mainWindow::getInstance()->setRelationsList();
+
     this->close();
 }
 
