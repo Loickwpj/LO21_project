@@ -37,6 +37,9 @@ public:
     QAction *actionVideo;
     QAction *nouvelleRelationAction;
     QAction *actionafficher;
+    QAction *actioncorbeille;
+    QAction *actionde_merde;
+    QAction *actionclose;
     QWidget *centralwidget;
     QWidget *verticalLayoutWidget_3;
     QVBoxLayout *centralLayout;
@@ -68,6 +71,8 @@ public:
     QMenu *menunouvelle_note;
     QMenu *menuRelations;
     QMenu *menuCorbeille;
+    QMenu *menuparam_tres;
+    QMenu *menuApp;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *mainWindow)
@@ -89,6 +94,12 @@ public:
         nouvelleRelationAction->setObjectName(QStringLiteral("nouvelleRelationAction"));
         actionafficher = new QAction(mainWindow);
         actionafficher->setObjectName(QStringLiteral("actionafficher"));
+        actioncorbeille = new QAction(mainWindow);
+        actioncorbeille->setObjectName(QStringLiteral("actioncorbeille"));
+        actionde_merde = new QAction(mainWindow);
+        actionde_merde->setObjectName(QStringLiteral("actionde_merde"));
+        actionclose = new QAction(mainWindow);
+        actionclose->setObjectName(QStringLiteral("actionclose"));
         centralwidget = new QWidget(mainWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         verticalLayoutWidget_3 = new QWidget(centralwidget);
@@ -232,6 +243,10 @@ public:
         menuRelations->setObjectName(QStringLiteral("menuRelations"));
         menuCorbeille = new QMenu(menubar);
         menuCorbeille->setObjectName(QStringLiteral("menuCorbeille"));
+        menuparam_tres = new QMenu(menubar);
+        menuparam_tres->setObjectName(QStringLiteral("menuparam_tres"));
+        menuApp = new QMenu(menubar);
+        menuApp->setObjectName(QStringLiteral("menuApp"));
         mainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(mainWindow);
         statusbar->setObjectName(QStringLiteral("statusbar"));
@@ -240,6 +255,8 @@ public:
         menubar->addAction(menuNote->menuAction());
         menubar->addAction(menuRelations->menuAction());
         menubar->addAction(menuCorbeille->menuAction());
+        menubar->addAction(menuparam_tres->menuAction());
+        menubar->addAction(menuApp->menuAction());
         menuNote->addAction(menunouvelle_note->menuAction());
         menunouvelle_note->addAction(actionNote);
         menunouvelle_note->addAction(actionTache);
@@ -248,6 +265,8 @@ public:
         menunouvelle_note->addAction(actionVideo);
         menuRelations->addAction(nouvelleRelationAction);
         menuCorbeille->addAction(actionafficher);
+        menuparam_tres->addAction(actioncorbeille);
+        menuApp->addAction(actionclose);
 
         retranslateUi(mainWindow);
 
@@ -264,6 +283,9 @@ public:
         actionVideo->setText(QApplication::translate("mainWindow", "Video", Q_NULLPTR));
         nouvelleRelationAction->setText(QApplication::translate("mainWindow", "nouvelle relation", Q_NULLPTR));
         actionafficher->setText(QApplication::translate("mainWindow", "afficher", Q_NULLPTR));
+        actioncorbeille->setText(QApplication::translate("mainWindow", "corbeille", Q_NULLPTR));
+        actionde_merde->setText(QApplication::translate("mainWindow", "de merde", Q_NULLPTR));
+        actionclose->setText(QApplication::translate("mainWindow", "close", Q_NULLPTR));
         label->setText(QApplication::translate("mainWindow", "PluriNotes", Q_NULLPTR));
         label_2->setText(QApplication::translate("mainWindow", "Cr\303\251er une nouvelle note :", Q_NULLPTR));
         pushButtonArticle->setText(QApplication::translate("mainWindow", "Article", Q_NULLPTR));
@@ -279,6 +301,8 @@ public:
         menunouvelle_note->setTitle(QApplication::translate("mainWindow", "nouvelle note", Q_NULLPTR));
         menuRelations->setTitle(QApplication::translate("mainWindow", "Relations", Q_NULLPTR));
         menuCorbeille->setTitle(QApplication::translate("mainWindow", "Corbeille", Q_NULLPTR));
+        menuparam_tres->setTitle(QApplication::translate("mainWindow", "param\303\250tres", Q_NULLPTR));
+        menuApp->setTitle(QApplication::translate("mainWindow", "App", Q_NULLPTR));
     } // retranslateUi
 
 };

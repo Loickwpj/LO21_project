@@ -59,13 +59,17 @@ SOURCES       = ../PluriNote/note.cpp \
 		../PluriNote/coupleediteur.cpp \
 		../PluriNote/labelediteur.cpp \
 		../PluriNote/mainwindow.cpp \
-		../PluriNote/labelrelationediteur.cpp moc_noteediteur.cpp \
+		../PluriNote/labelrelationediteur.cpp \
+		../PluriNote/archivefenetre.cpp \
+		../PluriNote/parametrecorbeilleediteur.cpp moc_noteediteur.cpp \
 		moc_corbeilleediteur.cpp \
 		moc_relationediteur.cpp \
 		moc_coupleediteur.cpp \
 		moc_labelediteur.cpp \
 		moc_mainwindow.cpp \
-		moc_labelrelationediteur.cpp
+		moc_labelrelationediteur.cpp \
+		moc_archivefenetre.cpp \
+		moc_parametrecorbeilleediteur.cpp
 OBJECTS       = note.o \
 		main.o \
 		noteediteur.o \
@@ -78,13 +82,17 @@ OBJECTS       = note.o \
 		labelediteur.o \
 		mainwindow.o \
 		labelrelationediteur.o \
+		archivefenetre.o \
+		parametrecorbeilleediteur.o \
 		moc_noteediteur.o \
 		moc_corbeilleediteur.o \
 		moc_relationediteur.o \
 		moc_coupleediteur.o \
 		moc_labelediteur.o \
 		moc_mainwindow.o \
-		moc_labelrelationediteur.o
+		moc_labelrelationediteur.o \
+		moc_archivefenetre.o \
+		moc_parametrecorbeilleediteur.o
 DIST          = /Users/loickWPJ/Qt/5.8/clang_64/mkspecs/features/spec_pre.prf \
 		/Users/loickWPJ/Qt/5.8/clang_64/mkspecs/qdevice.pri \
 		/Users/loickWPJ/Qt/5.8/clang_64/mkspecs/features/device_config.prf \
@@ -272,7 +280,9 @@ DIST          = /Users/loickWPJ/Qt/5.8/clang_64/mkspecs/features/spec_pre.prf \
 		../PluriNote/coupleediteur.h \
 		../PluriNote/labelediteur.h \
 		../PluriNote/mainwindow.h \
-		../PluriNote/labelrelationediteur.h ../PluriNote/note.cpp \
+		../PluriNote/labelrelationediteur.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h ../PluriNote/note.cpp \
 		../PluriNote/main.cpp \
 		../PluriNote/noteediteur.cpp \
 		../PluriNote/manager.cpp \
@@ -283,7 +293,9 @@ DIST          = /Users/loickWPJ/Qt/5.8/clang_64/mkspecs/features/spec_pre.prf \
 		../PluriNote/coupleediteur.cpp \
 		../PluriNote/labelediteur.cpp \
 		../PluriNote/mainwindow.cpp \
-		../PluriNote/labelrelationediteur.cpp
+		../PluriNote/labelrelationediteur.cpp \
+		../PluriNote/archivefenetre.cpp \
+		../PluriNote/parametrecorbeilleediteur.cpp
 QMAKE_TARGET  = PluriNote
 DESTDIR       = 
 TARGET        = PluriNote.app/Contents/MacOS/PluriNote
@@ -689,8 +701,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /Users/loickWPJ/Qt/5.8/clang_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../PluriNote/note.h ../PluriNote/noteediteur.h ../PluriNote/singleton.h ../PluriNote/manager.h ../PluriNote/corbeilleediteur.h ../PluriNote/couple.h ../PluriNote/relation.h ../PluriNote/relationediteur.h ../PluriNote/coupleediteur.h ../PluriNote/labelediteur.h ../PluriNote/mainwindow.h ../PluriNote/labelrelationediteur.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../PluriNote/note.cpp ../PluriNote/main.cpp ../PluriNote/noteediteur.cpp ../PluriNote/manager.cpp ../PluriNote/corbeilleEditeur.cpp ../PluriNote/relation.cpp ../PluriNote/relationedditeur.cpp ../PluriNote/couple.cpp ../PluriNote/coupleediteur.cpp ../PluriNote/labelediteur.cpp ../PluriNote/mainwindow.cpp ../PluriNote/labelrelationediteur.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../PluriNote/note.h ../PluriNote/noteediteur.h ../PluriNote/singleton.h ../PluriNote/manager.h ../PluriNote/corbeilleediteur.h ../PluriNote/couple.h ../PluriNote/relation.h ../PluriNote/relationediteur.h ../PluriNote/coupleediteur.h ../PluriNote/labelediteur.h ../PluriNote/mainwindow.h ../PluriNote/labelrelationediteur.h ../PluriNote/archivefenetre.h ../PluriNote/parametrecorbeilleediteur.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../PluriNote/note.cpp ../PluriNote/main.cpp ../PluriNote/noteediteur.cpp ../PluriNote/manager.cpp ../PluriNote/corbeilleEditeur.cpp ../PluriNote/relation.cpp ../PluriNote/relationedditeur.cpp ../PluriNote/couple.cpp ../PluriNote/coupleediteur.cpp ../PluriNote/labelediteur.cpp ../PluriNote/mainwindow.cpp ../PluriNote/labelrelationediteur.cpp ../PluriNote/archivefenetre.cpp ../PluriNote/parametrecorbeilleediteur.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../PluriNote/mainwindow.ui $(DISTDIR)/
 
 
@@ -723,9 +735,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /Users/loickWPJ/Qt/5.8/clang_64/mkspecs/features/data/dummy.cpp
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -pipe -stdlib=libc++ -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk -mmacosx-version-min=10.9 $(EXPORT_QMAKE_XARCH_CFLAGS) -g -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h /Users/loickWPJ/Qt/5.8/clang_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_noteediteur.cpp moc_corbeilleediteur.cpp moc_relationediteur.cpp moc_coupleediteur.cpp moc_labelediteur.cpp moc_mainwindow.cpp moc_labelrelationediteur.cpp
+compiler_moc_header_make_all: moc_noteediteur.cpp moc_corbeilleediteur.cpp moc_relationediteur.cpp moc_coupleediteur.cpp moc_labelediteur.cpp moc_mainwindow.cpp moc_labelrelationediteur.cpp moc_archivefenetre.cpp moc_parametrecorbeilleediteur.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_noteediteur.cpp moc_corbeilleediteur.cpp moc_relationediteur.cpp moc_coupleediteur.cpp moc_labelediteur.cpp moc_mainwindow.cpp moc_labelrelationediteur.cpp
+	-$(DEL_FILE) moc_noteediteur.cpp moc_corbeilleediteur.cpp moc_relationediteur.cpp moc_coupleediteur.cpp moc_labelediteur.cpp moc_mainwindow.cpp moc_labelrelationediteur.cpp moc_archivefenetre.cpp moc_parametrecorbeilleediteur.cpp
 moc_noteediteur.cpp: /Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QWidget \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QFormLayout \
@@ -777,6 +789,10 @@ moc_noteediteur.cpp: /Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Hea
 		../PluriNote/labelrelationediteur.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		ui_mainwindow.h \
 		../PluriNote/relation.h \
 		../PluriNote/coupleediteur.h \
@@ -838,6 +854,10 @@ moc_corbeilleediteur.cpp: /Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framewor
 		../PluriNote/labelrelationediteur.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		ui_mainwindow.h \
 		../PluriNote/relation.h \
 		../PluriNote/coupleediteur.h \
@@ -899,6 +919,10 @@ moc_relationediteur.cpp: /Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework
 		../PluriNote/labelrelationediteur.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		ui_mainwindow.h \
 		../PluriNote/relation.h \
 		../PluriNote/coupleediteur.h \
@@ -962,6 +986,10 @@ moc_coupleediteur.cpp: /Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/H
 		../PluriNote/labelrelationediteur.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		ui_mainwindow.h \
 		../PluriNote/relation.h \
 		../PluriNote/coupleediteur.h \
@@ -1025,6 +1053,10 @@ moc_labelediteur.cpp: /Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/He
 		../PluriNote/labelrelationediteur.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		ui_mainwindow.h \
 		../PluriNote/labelediteur.h \
 		moc_predefs.h \
@@ -1082,6 +1114,10 @@ moc_mainwindow.cpp: /Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Head
 		../PluriNote/labelrelationediteur.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		ui_mainwindow.h \
 		../PluriNote/relation.h \
 		../PluriNote/coupleediteur.h \
@@ -1148,10 +1184,144 @@ moc_labelrelationediteur.cpp: /Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.fram
 		../PluriNote/relationediteur.h \
 		../PluriNote/labelediteur.h \
 		../PluriNote/labelrelationediteur.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		../PluriNote/labelrelationediteur.h \
 		moc_predefs.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/bin/moc
 	/Users/loickWPJ/Qt/5.8/clang_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/Users/loickWPJ/Qt/5.8/clang_64/mkspecs/macx-clang -I/Users/loickWPJ/Documents/UTC/LO21/Projet/github/PluriNote -I/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers -I/Users/loickWPJ/Qt/5.8/clang_64/lib/QtGui.framework/Headers -I/Users/loickWPJ/Qt/5.8/clang_64/lib/QtXml.framework/Headers -I/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/8.1.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/include -F/Users/loickWPJ/Qt/5.8/clang_64/lib ../PluriNote/labelrelationediteur.h -o moc_labelrelationediteur.cpp
+
+moc_archivefenetre.cpp: /Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QLineEdit \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qlineedit.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QFormLayout \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qformlayout.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QPushButton \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/mainwindow.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QListWidgetItem \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qlistwidget.h \
+		../PluriNote/manager.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QXmlStreamReader \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qxmlstream.h \
+		../PluriNote/singleton.h \
+		../PluriNote/note.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QString \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QDate \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qdatetime.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QXmlStreamWriter \
+		../PluriNote/noteediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QHBoxLayout \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QComboBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qcombobox.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QRadioButton \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qradiobutton.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QGroupBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qgroupbox.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QCheckBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qcheckbox.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QDateEdit \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qdatetimeedit.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QSpinBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qspinbox.h \
+		../PluriNote/corbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QListWidget \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QScrollArea \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qscrollarea.h \
+		ui_mainwindow.h \
+		../PluriNote/relation.h \
+		../PluriNote/coupleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QObject \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qobject.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QLabel \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
+		../PluriNote/couple.h \
+		../PluriNote/relationediteur.h \
+		../PluriNote/labelediteur.h \
+		../PluriNote/labelrelationediteur.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
+		../PluriNote/archivefenetre.h \
+		moc_predefs.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/bin/moc
+	/Users/loickWPJ/Qt/5.8/clang_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/Users/loickWPJ/Qt/5.8/clang_64/mkspecs/macx-clang -I/Users/loickWPJ/Documents/UTC/LO21/Projet/github/PluriNote -I/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers -I/Users/loickWPJ/Qt/5.8/clang_64/lib/QtGui.framework/Headers -I/Users/loickWPJ/Qt/5.8/clang_64/lib/QtXml.framework/Headers -I/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/8.1.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/include -F/Users/loickWPJ/Qt/5.8/clang_64/lib ../PluriNote/archivefenetre.h -o moc_archivefenetre.cpp
+
+moc_parametrecorbeilleediteur.cpp: /Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QLabel \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QPushButton \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QHBoxLayout \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
+		../PluriNote/mainwindow.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QListWidgetItem \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qlistwidget.h \
+		../PluriNote/manager.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QXmlStreamReader \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qxmlstream.h \
+		../PluriNote/singleton.h \
+		../PluriNote/note.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QString \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QDate \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qdatetime.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QXmlStreamWriter \
+		../PluriNote/noteediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QFormLayout \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qformlayout.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QLineEdit \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qlineedit.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QComboBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qcombobox.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QRadioButton \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qradiobutton.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QGroupBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qgroupbox.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QCheckBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qcheckbox.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QDateEdit \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qdatetimeedit.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QSpinBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qspinbox.h \
+		../PluriNote/corbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QListWidget \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QScrollArea \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qscrollarea.h \
+		ui_mainwindow.h \
+		../PluriNote/relation.h \
+		../PluriNote/coupleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QObject \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qobject.h \
+		../PluriNote/couple.h \
+		../PluriNote/relationediteur.h \
+		../PluriNote/labelediteur.h \
+		../PluriNote/labelrelationediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		moc_predefs.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/bin/moc
+	/Users/loickWPJ/Qt/5.8/clang_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/Users/loickWPJ/Qt/5.8/clang_64/mkspecs/macx-clang -I/Users/loickWPJ/Documents/UTC/LO21/Projet/github/PluriNote -I/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers -I/Users/loickWPJ/Qt/5.8/clang_64/lib/QtGui.framework/Headers -I/Users/loickWPJ/Qt/5.8/clang_64/lib/QtXml.framework/Headers -I/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/8.1.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/include -F/Users/loickWPJ/Qt/5.8/clang_64/lib ../PluriNote/parametrecorbeilleediteur.h -o moc_parametrecorbeilleediteur.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -1229,6 +1399,10 @@ note.o: ../PluriNote/note.cpp ../PluriNote/note.h \
 		../PluriNote/labelrelationediteur.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		ui_mainwindow.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QDebug \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qdebug.h
@@ -1291,6 +1465,10 @@ main.o: ../PluriNote/main.cpp /Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.fram
 		../PluriNote/labelrelationediteur.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		ui_mainwindow.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QDebug \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qdebug.h \
@@ -1354,6 +1532,10 @@ noteediteur.o: ../PluriNote/noteediteur.cpp ../PluriNote/noteediteur.h \
 		../PluriNote/labelrelationediteur.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QDebug \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qdebug.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o noteediteur.o ../PluriNote/noteediteur.cpp
@@ -1409,6 +1591,10 @@ manager.o: ../PluriNote/manager.cpp ../PluriNote/manager.h \
 		../PluriNote/labelrelationediteur.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		ui_mainwindow.h \
 		../PluriNote/relation.h \
 		../PluriNote/coupleediteur.h \
@@ -1480,6 +1666,10 @@ corbeilleEditeur.o: ../PluriNote/corbeilleEditeur.cpp /Users/loickWPJ/Qt/5.8/cla
 		../PluriNote/labelediteur.h \
 		../PluriNote/couple.h \
 		../PluriNote/labelrelationediteur.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		ui_mainwindow.h \
 		../PluriNote/relation.h \
 		../PluriNote/coupleediteur.h \
@@ -1542,6 +1732,10 @@ relation.o: ../PluriNote/relation.cpp /Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidg
 		../PluriNote/labelediteur.h \
 		../PluriNote/couple.h \
 		../PluriNote/labelrelationediteur.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		ui_mainwindow.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QDebug \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qdebug.h
@@ -1598,6 +1792,10 @@ relationedditeur.o: ../PluriNote/relationedditeur.cpp /Users/loickWPJ/Qt/5.8/cla
 		../PluriNote/labelrelationediteur.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		ui_mainwindow.h \
 		../PluriNote/relation.h \
 		../PluriNote/coupleediteur.h \
@@ -1662,6 +1860,10 @@ couple.o: ../PluriNote/couple.cpp ../PluriNote/couple.h \
 		../PluriNote/labelrelationediteur.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o couple.o ../PluriNote/couple.cpp
 
@@ -1721,6 +1923,10 @@ coupleediteur.o: ../PluriNote/coupleediteur.cpp /Users/loickWPJ/Qt/5.8/clang_64/
 		../PluriNote/labelediteur.h \
 		../PluriNote/couple.h \
 		../PluriNote/labelrelationediteur.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		ui_mainwindow.h \
 		../PluriNote/relation.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o coupleediteur.o ../PluriNote/coupleediteur.cpp
@@ -1780,6 +1986,10 @@ labelediteur.o: ../PluriNote/labelediteur.cpp ../PluriNote/labelediteur.h \
 		../PluriNote/labelrelationediteur.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		ui_mainwindow.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QDebug \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qdebug.h
@@ -1841,6 +2051,10 @@ mainwindow.o: ../PluriNote/mainwindow.cpp ../PluriNote/mainwindow.h \
 		../PluriNote/labelrelationediteur.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QDebug \
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qdebug.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../PluriNote/mainwindow.cpp
@@ -1900,8 +2114,136 @@ labelrelationediteur.o: ../PluriNote/labelrelationediteur.cpp ../PluriNote/label
 		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
 		../PluriNote/couple.h \
 		../PluriNote/relationediteur.h \
-		../PluriNote/labelediteur.h
+		../PluriNote/labelediteur.h \
+		../PluriNote/archivefenetre.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o labelrelationediteur.o ../PluriNote/labelrelationediteur.cpp
+
+archivefenetre.o: ../PluriNote/archivefenetre.cpp ../PluriNote/archivefenetre.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QLineEdit \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qlineedit.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QFormLayout \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qformlayout.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QPushButton \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/mainwindow.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QListWidgetItem \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qlistwidget.h \
+		../PluriNote/manager.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QXmlStreamReader \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qxmlstream.h \
+		../PluriNote/singleton.h \
+		../PluriNote/note.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QString \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QDate \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qdatetime.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QXmlStreamWriter \
+		../PluriNote/noteediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QHBoxLayout \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QComboBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qcombobox.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QRadioButton \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qradiobutton.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QGroupBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qgroupbox.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QCheckBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qcheckbox.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QDateEdit \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qdatetimeedit.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QSpinBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qspinbox.h \
+		../PluriNote/corbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QListWidget \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QScrollArea \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qscrollarea.h \
+		ui_mainwindow.h \
+		../PluriNote/relation.h \
+		../PluriNote/coupleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QObject \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qobject.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QLabel \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
+		../PluriNote/couple.h \
+		../PluriNote/relationediteur.h \
+		../PluriNote/labelediteur.h \
+		../PluriNote/labelrelationediteur.h \
+		../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o archivefenetre.o ../PluriNote/archivefenetre.cpp
+
+parametrecorbeilleediteur.o: ../PluriNote/parametrecorbeilleediteur.cpp ../PluriNote/parametrecorbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QLabel \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QPushButton \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QHBoxLayout \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QSettings \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qsettings.h \
+		../PluriNote/mainwindow.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QListWidgetItem \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qlistwidget.h \
+		../PluriNote/manager.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QXmlStreamReader \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qxmlstream.h \
+		../PluriNote/singleton.h \
+		../PluriNote/note.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QString \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QDate \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qdatetime.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QXmlStreamWriter \
+		../PluriNote/noteediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QFormLayout \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qformlayout.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QLineEdit \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qlineedit.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QComboBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qcombobox.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QRadioButton \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qradiobutton.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QGroupBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qgroupbox.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QCheckBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qcheckbox.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QDateEdit \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qdatetimeedit.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QSpinBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qspinbox.h \
+		../PluriNote/corbeilleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QListWidget \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QScrollArea \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qscrollarea.h \
+		ui_mainwindow.h \
+		../PluriNote/relation.h \
+		../PluriNote/coupleediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/QObject \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtCore.framework/Headers/qobject.h \
+		../PluriNote/couple.h \
+		../PluriNote/relationediteur.h \
+		../PluriNote/labelediteur.h \
+		../PluriNote/labelrelationediteur.h \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		/Users/loickWPJ/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../PluriNote/archivefenetre.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o parametrecorbeilleediteur.o ../PluriNote/parametrecorbeilleediteur.cpp
 
 moc_noteediteur.o: moc_noteediteur.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_noteediteur.o moc_noteediteur.cpp
@@ -1923,6 +2265,12 @@ moc_mainwindow.o: moc_mainwindow.cpp
 
 moc_labelrelationediteur.o: moc_labelrelationediteur.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_labelrelationediteur.o moc_labelrelationediteur.cpp
+
+moc_archivefenetre.o: moc_archivefenetre.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_archivefenetre.o moc_archivefenetre.cpp
+
+moc_parametrecorbeilleediteur.o: moc_parametrecorbeilleediteur.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_parametrecorbeilleediteur.o moc_parametrecorbeilleediteur.cpp
 
 ####### Install
 

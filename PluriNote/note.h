@@ -40,7 +40,7 @@ private:
 ***                        Note Abstract Class                     ***
 **********************************************************************/
 /*! \class Note
-   * \brief Abastraite dont hérite toutes les autres notes
+   * \brief Abstraite dont hérite toutes les autres notes
    *
    * Cette classe ne peut pas être instanciée
    */
@@ -82,7 +82,8 @@ public:
     /**
      * @brief clone
      * @return un pointeur sur note
-     * methode virtuelle pur qui clone le type en question
+     * methode virtuelle pure qui retourne un noubel object de
+     * la classe de l'objet appelant (article, tâche ou multimédia...)
      * elle sera redéfinie pour TOUTES les classes filles
      */
     virtual Note* clone() =0;
@@ -91,7 +92,7 @@ public:
     /**
      * @brief getId
      * @return unsigned int
-     * retourne l'id de la
+     * retourne l'id de la note
      */
     unsigned int getId() const {return id;}
     /**
@@ -414,7 +415,7 @@ inline state toState(const QString& s){
 /*********************************************************************
 ***                       Memento Task                           ***
 **********************************************************************/
-**********************************************************************/
+/**********************************************************************/
 
 /*! \class MementoT
    * \brief Classe qui hérite de MementoN
@@ -422,6 +423,8 @@ inline state toState(const QString& s){
    * Elle regroupe les même attributs qu'une Tache avec des methodes différentes
    *
    */
+
+
 class MementoT : public MementoN {
 private :
     friend class Task;
