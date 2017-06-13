@@ -252,9 +252,23 @@
     </property>
     <addaction name="actionafficher"/>
    </widget>
+   <widget class="QMenu" name="menuparam_tres">
+    <property name="title">
+     <string>paramètres</string>
+    </property>
+    <addaction name="actioncorbeille"/>
+   </widget>
+   <widget class="QMenu" name="menuApp">
+    <property name="title">
+     <string>App</string>
+    </property>
+    <addaction name="actionclose"/>
+   </widget>
    <addaction name="menuNote"/>
    <addaction name="menuRelations"/>
    <addaction name="menuCorbeille"/>
+   <addaction name="menuparam_tres"/>
+   <addaction name="menuApp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNote">
@@ -290,6 +304,21 @@
   <action name="actionafficher">
    <property name="text">
     <string>afficher</string>
+   </property>
+  </action>
+  <action name="actioncorbeille">
+   <property name="text">
+    <string>corbeille</string>
+   </property>
+  </action>
+  <action name="actionde_merde">
+   <property name="text">
+    <string>de merde</string>
+   </property>
+  </action>
+  <action name="actionclose">
+   <property name="text">
+    <string>close</string>
    </property>
   </action>
  </widget>

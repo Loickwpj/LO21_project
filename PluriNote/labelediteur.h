@@ -20,6 +20,7 @@ class labelEditeur : public QWidget {
     QPushButton* bannuler;
     Couple* couple;
 public:
+    ///CONSTRUCTEUR
     labelEditeur(Couple*, QWidget* parent=0);
 signals:
 public slots:

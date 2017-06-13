@@ -8,6 +8,8 @@
 #include "noteediteur.h"
 #include "relationediteur.h"
 #include "labelrelationediteur.h"
+#include "archivefenetre.h"
+#include "parametrecorbeilleediteur.h"
 
 
 namespace Ui {
@@ -32,7 +34,10 @@ public:
     Ui::mainWindow *ui;
 
 private:
+    ///CONSTRUCTEUR
     explicit mainWindow(QWidget *parent = 0);
+
+    ///DESTRUCTEUR
     ~mainWindow();
 
     static mainWindow* instance;
@@ -43,13 +48,16 @@ public slots:
     void createAudio();
     void createImage();
     void createVideo();
-    void afficherCorbeille();
-
     void createRelation() ;
+
+    void afficherCorbeille();
+    void afficherParametreCorbeille();
     void afficherRelation();
     void afficherNote();
     void afficherTask();
     void afficherArchive();
+
+    void quitter();
 };
 
 #endif // MAINWINDOW_H

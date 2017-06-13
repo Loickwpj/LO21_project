@@ -23,6 +23,7 @@ class labelRelationEditeur : public QWidget {
     QPushButton* bannuler;
     Relation* relation;
 public:
+    ///CONSTRUCTEUR
     labelRelationEditeur(Relation*, QWidget* parent=0);
 signals:
 public slots:

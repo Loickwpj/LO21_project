@@ -35,8 +35,10 @@ class CoupleEditeur : public QWidget{
     Couple* couple;
 
 public:
+    ///CONSTRUCTEUR
     CoupleEditeur(Couple*, QWidget *parent = 0);
-    //~CoupleEditeur() {}
+
+    ///SET
     void setList1();
     void setList2();
 signals:

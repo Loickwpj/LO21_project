@@ -8,6 +8,7 @@
 #include <typeinfo>
 #include "note.h"
 #include <QDebug>
+#include <QSettings>
 
 
 #endif
@@ -33,17 +34,16 @@ mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainWi
     QObject::connect(ui->listWidgetNotesActives, SIGNAL(itemSelectionChanged()),this,SLOT( afficherNote() ));
     QObject::connect(ui->listWidgetTasksActives, SIGNAL(itemSelectionChanged()),this,SLOT( afficherTask() ));
     QObject::connect(ui->listWidgetArchive, SIGNAL(itemSelectionChanged()),this,SLOT( afficherArchive() ));
-
+    //QObject::connect(ui->listRelation, SIGNAL(itemSelectionChanged()),this,SLOT(afficherReference()));
+    QObject::connect(ui->actioncorbeille, SIGNAL(triggered()),this,SLOT(afficherParametreCorbeille()));
+    QObject::connect(ui->actionclose,SIGNAL(triggered()), this, SLOT(quitter()));
 
     setNotesList();
     setRelationsList();
 
 }
 
-mainWindow::~mainWindow()
-{
-    delete ui;
-}
+mainWindow::~mainWindow(){delete ui;}
 
 mainWindow* mainWindow::instance =0;
 
@@ -106,11 +106,11 @@ void mainWindow::createVideo(){
 
 
 void mainWindow::clear(){
-QLayoutItem *item;
-   while ((item = ui->partiePrincipale->takeAt(0)) != 0) {
+    QLayoutItem *item;
+    while ((item = ui->partiePrincipale->takeAt(0)) != 0) {
         item->widget()->deleteLater();
         delete item;
-   }
+    }
 }
 
 void mainWindow::setNotesList(){
@@ -122,30 +122,26 @@ void mainWindow::setNotesList(){
     QListWidgetItem *item;
     NotesManager &nm = NotesManager::getInstance();
 
-/*    Task *task_type = new Task();
 
-    unsigned int j;
+
     for (unsigned int i=0;i<nm.getNbNote();i++){
         Note *n = nm.getNote(i);
-        //note non archive
-        if(!n->GetArchive()){
-            //ce n'est pas une tache
-            if((typeid(*n).name()!=typeid(*task_type).name()))
-            {//qDebug()<<"on ajoute la note non archive did" << id <<"a la list";
-                item = new QListWidgetItem(n->setNotesListNote(),ui->listWidgetNotesActives);
+
+        Reference::getInstance()->chercherReference();
+        /// On met le tableau de référence à zéro et on le reconstruit pour obtenir les références réelles
+        ///Si une note archivée n'est plus référencée par une note x (cas où x vient d'être supprimée), alors
+        /// la note archivée ne l'est plus et on modifie la valeur de l'attribut archive et on la met dans la corbeille
+        if (n->GetArchive()){
+            n->setArchive(Reference::getInstance()->checkIfInReference(n));
+            if ( n->GetArchive() == false ) { /// Si une note passe d'un état archivé à non archivé, on propose à l'utilisateur
+                ///de la la supprimer car
+                ///ça signifie que la note qui la référençait a été supprimé, il n'y a plus de
+                /// raisons de la garder dans les archives
+                ArchiveFenetreEditeur* fenetre = new ArchiveFenetreEditeur(n,this);
+                fenetre->show();
             }
-            //c'est une tache
-            else
-                item= new QListWidgetItem(n->setNotesListNote(),ui->listWidgetTasksActives);
         }
-        //note archive
-        else
-            item =  new QListWidgetItem(n->setNotesListNote(),ui->listWidgetArchive);
-
-
-        j=i+1;
     }
-    //qDebug()<<"y a avait" << j <<"notes non archivées dans le tableau";*/
 
     for (unsigned int i=0;i<nm.getNbNote();i++){
         Note *n = nm.getNote(i);
@@ -167,13 +163,13 @@ void mainWindow::setNotesList(){
 
 void mainWindow::setRelationsList(){
     QListWidgetItem *item;
+
     ui->listRelation->clear();
+
     item = new QListWidgetItem(Reference::getInstance()->getTitle(),ui->listRelation);
-    //clear(ui->listRelationLayout);
+
     for (unsigned int i=0; i<RelationsManager::getInstance().getNbRelation(); i++){
         Relation& relation = RelationsManager::getInstance().getRelation(i);
-        qDebug()<< relation.getTitle();
-        qDebug()<<RelationsManager::getInstance().getRelation(0).getTitle();
         item = new QListWidgetItem(relation.getTitle(),ui->listRelation);
     }
 }
@@ -181,10 +177,16 @@ void mainWindow::setRelationsList(){
 
 void mainWindow::afficherRelation(){
     clear();
+
     QListWidgetItem* item = ui->listRelation->currentItem();
+
     QString title = item->text();
-    if (title == "Référence"){ ReferenceEditeur* reference = new ReferenceEditeur(Reference::getInstance());
-        ui->partiePrincipale->addWidget(reference);}
+
+    if (title == "Référence"){
+        Reference::getInstance()->chercherReference();
+        ReferenceEditeur* reference = new ReferenceEditeur(Reference::getInstance());
+        ui->partiePrincipale->addWidget(reference);
+    }
     else{
         Relation& relation = RelationsManager::getInstance().getRelation(title);
         RelationEditeur* r = new RelationEditeur(&relation);
@@ -194,8 +196,8 @@ void mainWindow::afficherRelation(){
 
 void mainWindow::createRelation(){
     Relation& relation = RelationsManager::getInstance().getNewRelation("","");
-   labelRelationEditeur* editeur = new labelRelationEditeur(&relation);
-   editeur->show();
+    labelRelationEditeur* editeur = new labelRelationEditeur(&relation);
+    editeur->show();
 }
 
 void mainWindow::afficherCorbeille(){
@@ -208,8 +210,8 @@ void mainWindow::afficherNote(){
     unsigned int id =  item->text().section(" ",1,1).toInt();
     for (NotesManager::iterator it = NotesManager::getInstance().begin(); it != NotesManager::getInstance().end() ; ++it){
         if (it.value()->getId() == id ){
-                clear();
-                it.value()->editNote();
+            clear();
+            it.value()->editNote();
         }
     }
 }
@@ -242,4 +244,20 @@ void mainWindow::afficherArchive(){
     }
 }
 
+void mainWindow::afficherParametreCorbeille(){
+    ParametreCorbeille* parametres = new ParametreCorbeille();
+    parametres->show();
+}
 
+void mainWindow::quitter(){
+    QSettings settings("loickwpj","pluriNote");
+    if(settings.value("viderCorbeilleAuto").toBool()){
+        Corbeille::getInstance().deleteAll();
+        this->close();
+    }
+    else{
+        QuitterApp* quitter = new QuitterApp();
+        quitter->show();
+
+    }
+}

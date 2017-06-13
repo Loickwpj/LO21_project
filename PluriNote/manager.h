@@ -6,8 +6,9 @@
 //#include "noteediteur.h"
 #include "relation.h"
 
-
+class Relation;
 class Note;
+
 /***************************************
 **          NOTESMANAGER              **
 ***************************************/
@@ -17,39 +18,36 @@ class NotesManager : public Singleton<NotesManager>{
 private:
     Note** notes;
     unsigned int nbNote, nbMaxNote;
-    mutable QString filename; // mutable indique qu'on peut modifier l'attribut en tout temps
-    //Duplication forbidden
+    mutable QString filename;
+
+    ///CONSTRUCTEUR
     NotesManager(const NotesManager&);
-    ~NotesManager() {
-        /*for (unsigned int i=0; i<nbNote; i++) delete notes[i]; delete [] notes;*/
-    }
     NotesManager() : Singleton<NotesManager>(), notes(nullptr), nbNote(0), nbMaxNote(0), filename("tmp.dat") {}
 
+    ///DESTRUCTEUR
+    ~NotesManager() {}
 
 public:
 
-    //FACTORY
+    ///FACTORY
     static std::map<QString,Note*> m_map;
-
-    //Fonction qui associe clé <=> prototype
     static void Register(const QString& key,Note* obj);
-
-    //Celle qui va créer les objets
     Note* Create(const QString& key) const;
 
-    //Accessor
+    ///ACCESSEUR
     unsigned int getNbNote() {return nbNote;}
-
-    //methods
-    virtual Note* getNewNote(const QString&);
     Note& getNote(const QString& id);
-    //void editNote(Note*,const QString&);
+    Note* getNote( int i);
+
+
+    ///MANIPULATION DES NOTES
+    virtual Note* getNewNote(const QString&);
     void supprimerNote(int);
     void addNote(Note*);
-    Note* getNote( int i);
+
     
     
-    //method fichier
+    ///MANIPULAITON FICHIER
     QString getFilename() const { return filename; }
     void setFilename(const QString& f) { filename=f; }
     void load(); // load notes from file filename
@@ -58,9 +56,10 @@ public:
     void loadMultimedia(QXmlStreamReader &xml, QString type);
     void save() const; // save notes in file filename
     
-    /// Class iterator
+    ///ITERATOR
     class iterator{
         friend class NotesManager;
+
         Note** currentN;
 
         iterator(Note**n): currentN(n){}
@@ -75,49 +74,12 @@ public:
     iterator begin() const{ return iterator(notes); }
     iterator end() const{return iterator(notes + nbNote);}
 
-};
-
-/*
-    /// Class SearchIterator
-    class SearchIterator{
-        friend class NotesManager;
-        Note** currentN;
-        int nbRemain;
-        std::string toFind;
-        SearchIterator(Note** n, int nb, std::string tf): currentN(n), nbRemain(nb), toFind(tf){
-            while(nbRemain > 0 && (**currentN).getTitle().find(toFind) == std::string::npos){
-                currentN++;
-                nbRemain--;
-            }
-        }
-    public:
-        bool isDone()const {return nbRemain == 0;}
-        const Note& current() const{ return **currentN;}
-        void next(){
-            if(isDone())
-                throw NotesException("ERROR : fin de la collection");
-            currentN++;
-            nbRemain--;
-            while(nbRemain > 0 && (**currentN).getTitle().find(toFind) == std::string::npos){
-                currentN++;
-                nbRemain--;
-            }
-        }
-    };
-
-    SearchIterator getSearchIterator(std::string tf) const{
-        return SearchIterator(notes, nbNote, tf);
-
-    }
-
-
 
 
 };
 
-*/
 
-class Relation;
+
 
 /***************************************
  **         RELATIONSMANAGER          **
@@ -129,34 +91,56 @@ private:
     Relation** relations;
     unsigned int nbRelation, nbMaxRelation;
     QString filename;
-    RelationsManager() : relations(nullptr), nbRelation(0), nbMaxRelation(0), filename("tmp.dat") {}
-    //Duplication forbidden
-    RelationsManager(const NotesManager&);
-    ~RelationsManager() {/*for (unsigned int i=0; i<nbRelation; i++) delete relations[i]; delete [] relations;*/}
-public:
-    //Accessor
-    unsigned int getNbRelation() const {return nbRelation;}
 
-    //Methods
-    Relation& getNewRelation(const QString&, const QString&);
-    void addRelation(Relation*);
+    ///CONSTRUCTEURS
+    RelationsManager() : relations(nullptr), nbRelation(0), nbMaxRelation(0), filename("tmp.dat") {}
+    RelationsManager(const NotesManager&);
+
+    ///DESTRUCTEUR
+    ~RelationsManager() {}
+
+public:
+    ///ACCESSEUR
+    unsigned int getNbRelation() const {return nbRelation;}
     Relation& getRelation(const QString&);
     Relation& getRelation(unsigned int);
+
+    ///MANIPULATION RELATIONS
+    Relation& getNewRelation(const QString&, const QString&);
+    void addRelation(Relation*);
     void chercherCouple(Note*);
 
+    ///METHOD FICHIER XML
+     QString getFilename() const { return filename; }
+     void setFilename(const QString& f) { filename=f; }
+     void load(); // load notes from file filename
 
-    //method fichier
-    QString getFilename() const { return filename; }
-    void setFilename(const QString& f) { filename=f; }
-    void load(); // load notes from file filename
-    //void loadArticle(QXmlStreamReader &xml);
-    //void loadTask(QXmlStreamReader &xml);
-    //void loadMultimedia(QXmlStreamReader &xml, QString type);
-    void saveRelation() const; // save relation in file filename
-    void loadRelations();
-    Relation* loadRelation(QXmlStreamReader &xml);
-    void loadCouple(QXmlStreamReader &xml, Relation* r);
+     void saveRelation() const; // save relation in file filename
+     void loadRelations();
+     Relation* loadRelation(QXmlStreamReader &xml);
+     void loadCouple(QXmlStreamReader &xml, Relation* r);
+
+
+    ///ITERATOR
+    class iterator{
+        friend class RelationsManager;
+        Relation** currentN;
+
+        iterator(Relation**n): currentN(n){}
+
+    public:
+        bool operator!=(iterator it) const {return currentN != it.currentN;}
+        Relation* value() const {return *currentN;}
+        iterator& operator++() {currentN++; return *this;}
+
+    };
+
+    iterator begin() const{ return iterator(relations); }
+    iterator end() const{return iterator(relations + nbRelation);}
+
+
 };
+
 
 
 
@@ -171,20 +155,45 @@ private:
     unsigned int nbNote;
     unsigned int nbMaxNote;
     QString filename;
+
+    ///CONSTRUCTEURS
     Corbeille() : notesSuppr(nullptr), nbNote(0), nbMaxNote(0), filename("tmp.dat") {}
-    //Duplication forbidden
     Corbeille(const NotesManager&);
-    ~Corbeille() {/*for (unsigned int i=0; i<nbNote; i++) delete notesSuppr[i]; delete [] notesSuppr;*/}
+
+    ///DESTRUCTEUR
+    ~Corbeille() {};
+
 public:
+
+    ///ACCESSEURS
     Note* getNote(Note*);
     Note* getNote(int);
+    unsigned int getNbNote(){return nbNote;}
+
+    ///MANIPULATION NOTES
     void addNoteCorbeille(Note*);
     void deleteNote(const QString&);
     void deleteAll();
     void restaurer(unsigned int);
-    unsigned int getNbNote(){return nbNote;}
-
     void supprimerNote(unsigned int id);
+
+    ///ITERATOR
+    class iterator{
+        friend class Corbeille;
+        Note** currentN;
+
+        iterator(Note**n): currentN(n){}
+
+    public:
+        bool operator!=(iterator it) const {return currentN != it.currentN;}
+        Note* value() const {return *currentN;}
+        iterator& operator++() {currentN++; return *this;}
+
+    };
+
+    iterator begin() const{ return iterator(notesSuppr); }
+    iterator end() const{return iterator(notesSuppr + nbNote);}
+
 };
 
 

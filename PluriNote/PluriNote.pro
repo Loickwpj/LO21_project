@@ -13,7 +13,9 @@ SOURCES += \
     coupleediteur.cpp \
     labelediteur.cpp \
     mainwindow.cpp \
-    labelrelationediteur.cpp
+    labelrelationediteur.cpp \
+    archivefenetre.cpp \
+    parametrecorbeilleediteur.cpp
 
 HEADERS += \
     note.h \
@@ -27,7 +29,9 @@ HEADERS += \
     coupleediteur.h \
     labelediteur.h \
     mainwindow.h \
-    labelrelationediteur.h
+    labelrelationediteur.h \
+    archivefenetre.h \
+    parametrecorbeilleediteur.h
 
 FORMS += \
     mainwindow.ui

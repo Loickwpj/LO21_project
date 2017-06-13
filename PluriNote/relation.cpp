@@ -12,26 +12,32 @@
 
 
 void BaseRelation::chercherCoupleInRelation(Note*n){
-    unsigned int j=0;
-    qDebug()<<"on y est";
-    for (unsigned int i=0; i<nbCouple; i++){
+    //unsigned int j=0;
+
+    /*for (unsigned int i=0; i<nbCouple; i++){
         if (couples[i]->getNote1() == n || couples[i]->getNote2() == n){
 
             removeCouple(couples[i]->getLabel(),couples[i]->getNote1(),couples[i]->getNote2());
-            // j++;
+           // j++;
 
+        }*/
+    for (BaseRelation::iterator it = begin() ; it != end() ; ++it){
+        if (it.value().getNote1() == n || it.value().getNote2() == n){
+            removeCouple(it.value().getLabel(),it.value().getNote1(),it.value().getNote2());
         }
     }
-    QString nbCoupleSuppr = QString::number(j);
-    if (nbCoupleSuppr != 0)
-        QMessageBox::information(0,"Suppression", nbCoupleSuppr+" couple(s) on été supprimé dans la relation "+getTitle());
 }
 
 
 Couple* BaseRelation::getCouple(unsigned int id1, unsigned int id2 ) const{
-    for (unsigned int i=0; i<getNbCouple();i++){
+    /*for (unsigned int i=0; i<getNbCouple();i++){
         if (getCouple(i)->getNote1()->getId() == id1 && getCouple(i)->getNote2()->getId() == id2){
             return couples[i];
+        }
+    }*/
+    for (BaseRelation::iterator it = begin() ; it != end() ; ++it){
+        if (it.value().getNote1()->getId() == id1 && it.value().getNote2()->getId() == id2){
+            return &it.value();
         }
     }
     throw NotesException("Error");
@@ -41,19 +47,6 @@ Couple* BaseRelation::getCouple(unsigned int id1, unsigned int id2 ) const{
  ***                        Relation                        ***
  ***************************************************************/
 
-/*void BaseRelation::addCouple(Note* n1, Note* n2){
-    if (nbCouple == nbMaxCouple ){
-        Couple** newCouples = new Couple* [nbMaxCouple+5];
-        for (unsigned int i=0; i<nbCouple; i++){
-            newCouples[i]= new Couple (*couples[i]);
-        }
-        nbMaxCouple+=5;
-        Couple** oldcouples=couples;
-        couples=newCouples;
-        delete [] oldcouples;
-    }
-    couples[nbCouple++]= new Couple("",n1,n2);
-}*/
 
 void BaseRelation::addCouple(Couple* c){
 
@@ -68,10 +61,7 @@ void BaseRelation::addCouple(Couple* c){
         couples=newCouples;
         delete [] oldcouples;
     }
-    /*
-    qDebug()<<RelationsManager::getInstance().getRelation(1).getNbCouple();
-    qDebug()<<RelationsManager::getInstance().getRelation(1).getNbMaxCouple();
-*/
+
     couples[nbCouple++] = c;
 
 }
@@ -91,11 +81,6 @@ void BaseRelation::removeCouple(const QString & label,Note* n1, Note* n2){
 void BaseRelation::getNewCouple(){
     Couple* c= new Couple();
     CoupleEdit(c);
-    //addCouple(c->getNote1(),c->getNote2());
-    /*
-    qDebug()<<RelationsManager::getInstance().getRelation(1).getNbCouple();
-    qDebug()<<RelationsManager::getInstance().getRelation(1).getNbMaxCouple();
-*/
     addCouple(c);
 
 }
@@ -124,9 +109,44 @@ void Reference::libererInstance(){
 
 
 void Reference::chercherReference(){
+
+    if (couples){
+        for (unsigned int i=0; i<nbCouple;i++) delete couples[i];
+        delete [] couples;
+        couples = nullptr;
+        nbCouple=0;
+        nbMaxCouple=0;
+    }
+
     for (int i=0; i<Note::idIterator; i++){
         for(NotesManager::iterator it=NotesManager::getInstance().begin(); it!=NotesManager::getInstance().end(); ++it){
             if (it.value()->getTitle().contains("\{"+QString::number(i)+"}")) Reference::addCoupleReference(*it.value(),i);
+
+            if(it.value()->getType() == "Article"){
+                Article* a = dynamic_cast<Article*>(it.value());
+                if (a->getText().contains("\{"+QString::number(i)+"}")) Reference::addCoupleReference(*it.value(),i);
+            }
+
+            if(it.value()->getType() == "Task"){
+                Task* t = dynamic_cast<Task*>(it.value());
+                if (t->getAction().contains("\{"+QString::number(i)+"}")) Reference::addCoupleReference(*it.value(),i);
+            }
+
+            if(it.value()->getType() == "Audio"){
+                Audio* a = dynamic_cast<Audio*>(it.value());
+                if (a->getDescription().contains("\{"+QString::number(i)+"}")) Reference::addCoupleReference(*it.value(),i);
+            }
+
+            if(it.value()->getType() == "Video"){
+                Video* v = dynamic_cast<Video*>(it.value());
+                if (v->getDescription().contains("\{"+QString::number(i)+"}")) Reference::addCoupleReference(*it.value(),i);
+            }
+
+            if(it.value()->getType() == "Image"){
+                Image* im = dynamic_cast<Image*>(it.value());
+                if (im->getDescription().contains("\{"+QString::number(i)+"}")) Reference::addCoupleReference(*it.value(),i);
+            }
+
         }
 
     }
@@ -142,7 +162,6 @@ void Reference::addCoupleReference(Note& note1, int id2){
     if (existed==false) {
         Couple* couple = new Couple("",&note1,note2);
         Reference::getInstance()->addCouple(couple);
-        //saveRef();
     }
 }
 
@@ -153,14 +172,12 @@ bool Reference::checkIfInReference(Note*n){
     return false;
 }
 
+void Reference::chercherCouple(Note*n){
+    chercherCoupleInRelation(n);
+}
 
 
-
-/*******************************************************************
- ***                           Référence                         ***
- *******************************************************************/
 /*
-
 void Reference::saveRef() {
 
     QFile newfile("reference.xml");

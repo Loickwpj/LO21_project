@@ -21,7 +21,9 @@ private:
 
     Corbeille* corbeille;
 public:
+    ///CONSTRUCTEUR
     CorbeilleEditeur(Corbeille*, QWidget* parent = 0);
+
     void setList();
 signals:
 public slots:

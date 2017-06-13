@@ -33,8 +33,13 @@ class RelationEditeur : public QWidget {
     Relation* relation;
 
 public:
+
+    ///DESTRUCTEUR
     ~RelationEditeur() {}
+
+    ///CONSTRUCTEUR
     RelationEditeur(Relation*, QWidget* parent = 0);
+
     void setList();
 signals:
 public slots:

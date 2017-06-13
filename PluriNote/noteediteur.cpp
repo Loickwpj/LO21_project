@@ -22,7 +22,6 @@ NoteEditeur::NoteEditeur(QWidget *){
     dateM = new QDateEdit(this);
     sauver = new QPushButton("sauver",this);
     bsupprimer = new QPushButton("supprimer",this);
-    ///MEMENTO CREATION DU BOUTON
     bprevious = new QPushButton("previous Version", this);
 
 
@@ -34,8 +33,7 @@ NoteEditeur::NoteEditeur(QWidget *){
 
     layout = new QVBoxLayout;
     layout->addLayout(formulaire);
-    //layout->addWidget(sauver);
-    //layout->addWidget(bsupprimer);
+
 
 
     id->setDisabled(true);
@@ -67,7 +65,7 @@ void NoteEditeur::afficherBouton(QDate){
  ***                      Article Editeur                           **
  *********************************************************************/
 ArticleEditeur::ArticleEditeur(Article* a, QWidget *parent) : NoteEditeur(parent), article(a){
-    ///MEMENTO CONDITION A CHECK
+
     if(article->getNbmemento()>0)
     {bprevious->setDisabled(false);}
     else
@@ -108,16 +106,15 @@ ArticleEditeur::ArticleEditeur(Article* a, QWidget *parent) : NoteEditeur(parent
 
 
 void ArticleEditeur::saveModifications(){
-    ///MEMENTO ADD
+
     article->addMemento();
 
     article->setTitle(title->text());
     article->setText(text->text());
     article->setDateLastModification();
 
-    qDebug()<<"nb memento après save= "<< article->getNbmemento();
+
     sauver->setDisabled(true);
-    ///MEMENTO APPARITION DU BOUTON APRES SAVE
     bprevious->setDisabled(false);
     if (NotesManager::getInstance().getFilename() !="tmp.dat") NotesManager::getInstance().save();
 
@@ -139,24 +136,21 @@ void ArticleEditeur::supprimer(){
         Singleton<Corbeille>::getInstance().addNoteCorbeille(article);
         Singleton<NotesManager>::getInstance().supprimerNote(article->getId());
         QMessageBox::information(this, "Suppression", "Article supprimé !");
-        CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
         RelationsManager::getInstance().chercherCouple(article);
-        c->show();
+        Reference::getInstance()->chercherCouple(article);
     }
     mainWindow::getInstance()->setNotesList();
     this->close();
 }
 
 
-///MEMENTO METHOD REDEFINI
 void ArticleEditeur::previousVersion(){
     ArticleEditeur* aE = new ArticleEditeur((article->getPreviousMemento()));
     QMessageBox::information(this, "update", "Version précédente mise à jour !");
     if(article->getNbmemento()>0)
-        {bprevious->setDisabled(false);}
+    {bprevious->setDisabled(false);}
     else
         bprevious->setDisabled(true);
-    mainWindow::getInstance()->setNotesList();
     aE->show();
     this->close();
 }
@@ -165,9 +159,8 @@ void ArticleEditeur::previousVersion(){
  ***                         Task Editeur                           **
  *********************************************************************/
 TaskEditeur::TaskEditeur(Task* t, QWidget *parent) : NoteEditeur(parent), task(t) {
-    ///MEMENTO CONDITION CHECK
     if(task->getNbmemento()>0)
-    {bprevious->setDisabled(false);}
+        bprevious->setDisabled(false);
     else
         bprevious->setDisabled(true);
 
@@ -179,7 +172,6 @@ TaskEditeur::TaskEditeur(Task* t, QWidget *parent) : NoteEditeur(parent), task(t
     action = new QLineEdit(this);
     priority = new QSpinBox(this);
     deadline = new QDateEdit(this);
-    //state = new QLineEdit(this);
     priorite = new QCheckBox("priorité");
     bdeadline = new QCheckBox("deadline");
     option = new QGroupBox("Options",this);
@@ -187,7 +179,6 @@ TaskEditeur::TaskEditeur(Task* t, QWidget *parent) : NoteEditeur(parent), task(t
 
     priority->setMaximum(5);
     priority->setMinimum(0);
-    //priority->setValue(0);
 
     formulaire->addRow("Texte :", action);
     formulaire->addRow("Priorité :", priority);
@@ -214,7 +205,6 @@ TaskEditeur::TaskEditeur(Task* t, QWidget *parent) : NoteEditeur(parent), task(t
     layout->addWidget(option);
     layout->addWidget(sauver);
     layout->addWidget(bsupprimer);
-    ///MEMENTO AJOUT DU BOUTON
     layout->addWidget(bprevious);
     setLayout(layout);
 
@@ -227,7 +217,6 @@ TaskEditeur::TaskEditeur(Task* t, QWidget *parent) : NoteEditeur(parent), task(t
     QObject::connect(bsupprimer, SIGNAL(clicked()), this, SLOT(supprimer()));
     QObject::connect(bdeadline,SIGNAL(clicked()), this, SLOT(afficherDeadline()));
     QObject::connect(priorite,SIGNAL(clicked()), this, SLOT(afficherPriorite()));
-    ///MEMENTO CONNECT
     QObject::connect(bprevious, SIGNAL(clicked()), this, SLOT(previousVersion()));
 
     if (task->GetArchive()){
@@ -243,7 +232,6 @@ TaskEditeur::TaskEditeur(Task* t, QWidget *parent) : NoteEditeur(parent), task(t
 
 }
 void TaskEditeur::saveModifications(){
-    ///MEMENTO ADD MEMENTO
     task->addMemento();
 
     task->setTitle(title->text());
@@ -256,13 +244,12 @@ void TaskEditeur::saveModifications(){
 
     if (NotesManager::getInstance().getFilename() !="tmp.dat") NotesManager::getInstance().save();
 
-        Reference::getInstance()->chercherReference();
+    Reference::getInstance()->chercherReference();
 
-        mainWindow::getInstance()->setNotesList();
+    mainWindow::getInstance()->setNotesList();
 
     QMessageBox::information(this, "Sauvegarde", "Tâche sauvegardée !");
     sauver->setDisabled(true);
-    ///MEMENTO AFFICHAGE DU BOUTON
     bprevious->setDisabled(false);
 }
 
@@ -275,9 +262,7 @@ void TaskEditeur::supprimer(){
         Singleton<Corbeille>::getInstance().addNoteCorbeille(task);
         Singleton<NotesManager>::getInstance().supprimerNote(task->getId());
         QMessageBox::information(this, "Suppression", "Article supprimé !");
-        CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
         RelationsManager::getInstance().chercherCouple(task);
-        c->show();
     }
 
     mainWindow::getInstance()->setNotesList();
@@ -300,7 +285,7 @@ void TaskEditeur::afficherPriorite(){
     }
 }
 
-///MEMENTO METHOD REDEFINI
+
 void TaskEditeur::previousVersion(){
     TaskEditeur* E = new TaskEditeur((task->getPreviousMemento()));
     QMessageBox::information(this, "update", "Version précédente mise à jour !");
@@ -308,8 +293,6 @@ void TaskEditeur::previousVersion(){
         bprevious->setDisabled(false);
     else
         bprevious->setDisabled(true);
-
-    mainWindow::getInstance()->setNotesList();
     E->show();
     this->close();
 }
@@ -344,7 +327,7 @@ MultimediaEditeur::MultimediaEditeur(QWidget*parent) : NoteEditeur(parent) {
 *********************************************************************/
 
 ImageEditeur::ImageEditeur(Image*i, QWidget*parent) : MultimediaEditeur(parent), fichierImage(i) {
-    ///MEMENTO CONDITION A CHECK
+
     if(fichierImage->getNbmemento()>0)
     {bprevious->setDisabled(false);}
     else
@@ -353,7 +336,6 @@ ImageEditeur::ImageEditeur(Image*i, QWidget*parent) : MultimediaEditeur(parent),
     sauver->setDisabled(true);
     layout->addWidget(sauver);
     layout->addWidget(bsupprimer);
-    ///MEMENTO AJOUT DU BOUTON
     layout->addWidget(bprevious);
     setLayout(layout);
 
@@ -368,7 +350,6 @@ ImageEditeur::ImageEditeur(Image*i, QWidget*parent) : MultimediaEditeur(parent),
     QObject::connect(description, SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
     QObject::connect(image, SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
     QObject::connect(bsupprimer, SIGNAL(clicked()), this, SLOT(supprimer()));
-    ///MEMENTO CONNECT
     QObject::connect(bprevious, SIGNAL(clicked()), this, SLOT(previousVersion()));
 
 
@@ -382,7 +363,7 @@ ImageEditeur::ImageEditeur(Image*i, QWidget*parent) : MultimediaEditeur(parent),
 }
 
 void ImageEditeur::saveModifications(){
-    ///MEMENTO ADD
+
     fichierImage->addMemento();
 
 
@@ -399,7 +380,7 @@ void ImageEditeur::saveModifications(){
 
     QMessageBox::information(this, "Sauvegarde", "Image sauvegardée !");
     sauver->setDisabled(true);
-    ///MEMENTO APPARITION BOUTON
+
     bprevious->setDisabled(false);
 }
 
@@ -412,15 +393,15 @@ void ImageEditeur::supprimer(){
         Corbeille::getInstance().addNoteCorbeille(fichierImage);
         NotesManager::getInstance().supprimerNote(fichierImage->getId());
         QMessageBox::information(this, "Suppression", "Article supprimé !");
-        CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
+        //CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
         RelationsManager::getInstance().chercherCouple(fichierImage);
-        c->show();
+        //c->show();
     }
     mainWindow::getInstance()->setNotesList();
     this->close();
 }
 
-///MEMENTO METHOD REDEFINI
+
 void ImageEditeur::previousVersion(){
     ImageEditeur* E = new ImageEditeur((fichierImage->getPreviousMemento()));
     QMessageBox::information(this, "update", "Version précédente mise à jour !");
@@ -428,9 +409,6 @@ void ImageEditeur::previousVersion(){
         bprevious->setDisabled(false);
     else
         bprevious->setDisabled(true);
-
-    mainWindow::getInstance()->setNotesList();
-
     E->show();
     this->close();
 }
@@ -447,7 +425,7 @@ void ImageEditeur::previousVersion(){
 *********************************************************************/
 
 VideoEditeur::VideoEditeur(Video*i, QWidget*parent) : MultimediaEditeur(parent), fichierVideo(i) {
-    ///MEMENTO CONDITION CHECK
+
     if(fichierVideo->getNbmemento()>0)
     {bprevious->setDisabled(false);}
     else
@@ -455,7 +433,7 @@ VideoEditeur::VideoEditeur(Video*i, QWidget*parent) : MultimediaEditeur(parent),
     sauver->setDisabled(true);
     layout->addWidget(sauver);
     layout->addWidget(bsupprimer);
-    ///MEMENTO ADD LAYOUT
+
     layout->addWidget(bprevious);
 
     setLayout(layout);
@@ -471,7 +449,6 @@ VideoEditeur::VideoEditeur(Video*i, QWidget*parent) : MultimediaEditeur(parent),
     QObject::connect(description, SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
     QObject::connect(image, SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
     QObject::connect(bsupprimer, SIGNAL(clicked()), this, SLOT(supprimer()));
-    ///MEMENTO CONNECT
     QObject::connect(bprevious, SIGNAL(clicked()), this, SLOT(previousVersion()));
 
     if (fichierVideo->GetArchive()){
@@ -483,7 +460,7 @@ VideoEditeur::VideoEditeur(Video*i, QWidget*parent) : MultimediaEditeur(parent),
 }
 
 void VideoEditeur::saveModifications(){
-    ///MEMENTO ADD
+
     fichierVideo->addMemento();
 
     fichierVideo->setDateLastModification();
@@ -497,10 +474,9 @@ void VideoEditeur::saveModifications(){
 
     mainWindow::getInstance()->setNotesList();
 
-    //task->setDeadline(deadline->text().t);
+
     QMessageBox::information(this, "Sauvegarde", "Vidéo sauvegardée !");
     sauver->setDisabled(true);
-    ///MEMENTO APPARITION DU BOUTON
     bprevious->setDisabled(false);
 }
 
@@ -513,16 +489,16 @@ void VideoEditeur::supprimer(){
         Corbeille::getInstance().addNoteCorbeille(fichierVideo);
         NotesManager::getInstance().supprimerNote(fichierVideo->getId());
         QMessageBox::information(this, "Suppression", "Article supprimé !");
-        CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
+        //CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
         RelationsManager::getInstance().chercherCouple(fichierVideo);
-        c->show();
+        //c->show();
     }
 
     mainWindow::getInstance()->setNotesList();
     this->close();
 }
 
-/// MEMENTO METHOD REDEFINI
+
 void VideoEditeur::previousVersion(){
     VideoEditeur* E = new VideoEditeur((fichierVideo->getPreviousMemento()));
     QMessageBox::information(this, "update", "Version précédente mise à jour !");
@@ -530,7 +506,6 @@ void VideoEditeur::previousVersion(){
         bprevious->setDisabled(false);
     else
         bprevious->setDisabled(true);
-    mainWindow::getInstance()->setNotesList();
     E->show();
     this->close();
 }
@@ -547,7 +522,6 @@ void VideoEditeur::previousVersion(){
 AudioEditeur::AudioEditeur(Audio*i, QWidget*parent) : MultimediaEditeur(parent), fichierAudio(i) {
 
     //sauver->setDisabled(true);
-    ///MEMENTO CONDITION A CHECK
     if(fichierAudio->getNbmemento()>0)
     {bprevious->setDisabled(false);}
     else
@@ -555,7 +529,6 @@ AudioEditeur::AudioEditeur(Audio*i, QWidget*parent) : MultimediaEditeur(parent),
 
     layout->addWidget(sauver);
     layout->addWidget(bsupprimer);
-    ///MEMENTO ADD WIDGET
     layout->addWidget(bprevious);
     setLayout(layout);
 
@@ -570,7 +543,6 @@ AudioEditeur::AudioEditeur(Audio*i, QWidget*parent) : MultimediaEditeur(parent),
     QObject::connect(description, SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
     QObject::connect(image, SIGNAL(textChanged(QString)), this, SLOT(afficherBouton(QString)));
     QObject::connect(bsupprimer, SIGNAL(clicked()), this, SLOT(supprimer()));
-    ///MEMENTO CONNEXION
     QObject::connect(bprevious, SIGNAL(clicked()), this, SLOT(previousVersion()));
 
     if (fichierAudio->GetArchive()){
@@ -582,7 +554,7 @@ AudioEditeur::AudioEditeur(Audio*i, QWidget*parent) : MultimediaEditeur(parent),
 }
 
 void AudioEditeur::saveModifications(){
-    ///MEMENTO ADD
+
     fichierAudio->addMemento();
 
     fichierAudio->setDateLastModification();
@@ -599,7 +571,6 @@ void AudioEditeur::saveModifications(){
     //task->setDeadline(deadline->text().t);
     QMessageBox::information(this, "Sauvegarde", "Audio sauvegardé !");
     sauver->setDisabled(true);
-    ///MEMENTO APPARITION BOUTON
     bprevious->setDisabled(false);
 }
 
@@ -612,16 +583,13 @@ void AudioEditeur::supprimer(){
         Corbeille::getInstance().addNoteCorbeille(fichierAudio);
         NotesManager::getInstance().supprimerNote(fichierAudio->getId());
         QMessageBox::information(this, "Suppression", "Article supprimé !");
-        CorbeilleEditeur* c = new CorbeilleEditeur (&(Corbeille::getInstance()));
         RelationsManager::getInstance().chercherCouple(fichierAudio);
-        c->show();
     }
 
     mainWindow::getInstance()->setNotesList();
     this->close();
 }
 
-///MEMENTO METHOD REDEFINI
 
 void AudioEditeur::previousVersion(){
     AudioEditeur* E = new AudioEditeur((fichierAudio->getPreviousMemento()));
@@ -630,8 +598,6 @@ void AudioEditeur::previousVersion(){
         bprevious->setDisabled(false);
     else
         bprevious->setDisabled(true);
-
-    mainWindow::getInstance()->setNotesList();
     E->show();
     this->close();
 }

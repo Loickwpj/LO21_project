@@ -57,26 +57,45 @@ void RelationEditeur::setOriented(){
 void RelationEditeur::ssetList(){
     list->clear();
     QListWidgetItem* item;
-    for(unsigned int i=0;i<relation->getNbCouple();i++){
+    /*    for(unsigned int i=0;i<relation->getNbCouple();i++){
         Couple* c = relation->getCouple(i);
         QString label=c->getLabel();
         QString id1 =QString::number(c->getNote1()->getId());
         QString id2 =QString::number(c->getNote2()->getId());
         item = new QListWidgetItem("Note1: "+id1+" Note2: "+id2+" ("+label+")",list);
+    }*/
+
+    for (Relation::iterator it=relation->begin(); it != relation->end(); ++it){
+        QString label = it.value().getLabel();
+        QString id1 =QString::number(it.value().getNote1()->getId());
+        QString id2 =QString::number(it.value().getNote2()->getId());
+        item = new QListWidgetItem("Note1: "+id1+" Note2: "+id2+" ("+label+")",list);
     }
+
+
     rafraichir->setDisabled(true);
 }
 void RelationEditeur::setList(){
     list->clear();
     QListWidgetItem* item;
-    for(unsigned int i=0;i<relation->getNbCouple();i++){
+
+    /*   for(unsigned int i=0;i<relation->getNbCouple();i++){
         Couple* c = relation->getCouple(i);
         QString label=c->getLabel();
         QString id1 =QString::number(c->getNote1()->getId());
         QString id2 =QString::number(c->getNote2()->getId());
         if (label == "") item = new QListWidgetItem("Note1: "+id1+" Note2: "+id2+" ",list);
         else {item = new QListWidgetItem("Note1: "+id1+" Note2: "+id2+" ("+label+")",list);};
+    }*/
+
+    for (Relation::iterator it=relation->begin(); it != relation->end(); ++it){
+        QString label=it.value().getLabel();
+        QString id1 =QString::number(it.value().getNote1()->getId());
+        QString id2 =QString::number(it.value().getNote2()->getId());
+        if (label == "") item = new QListWidgetItem("Note1: "+id1+" Note2: "+id2+" ",list);
+        else {item = new QListWidgetItem("Note1: "+id1+" Note2: "+id2+" ("+label+")",list);};
     }
+
 }
 
 void RelationEditeur::supprimerCouple(){
@@ -85,11 +104,19 @@ void RelationEditeur::supprimerCouple(){
     QString id2 = item->text().section(" ",3,3);
     unsigned int id1int = id1.toInt();
     unsigned int id2int = id2.toInt();
-    for (unsigned int i=0; i<relation->getNbCouple();i++){
+
+    /*for (unsigned int i=0; i<relation->getNbCouple();i++){
         if (relation->getCouple(i)->getNote1()->getId() == id1int && relation->getCouple(i)->getNote2()->getId() == id2int){
             relation->removeCouple(relation->getCouple(i)->getLabel(),relation->getCouple(i)->getNote1(),relation->getCouple(i)->getNote2());
         }
+    }*/
+
+    for (Relation::iterator it=relation->begin(); it != relation->end(); ++it) {
+        if (it.value().getNote1()->getId() == id1int && it.value().getNote1()->getId() == id2int){
+            relation->removeCouple(it.value().getLabel(),it.value().getNote1(),it.value().getNote2());
+        }
     }
+
     setList();
 }
 
@@ -147,11 +174,21 @@ void ReferenceEditeur::setList(){
 
     list->clear();
     QListWidgetItem* item;
-    for(unsigned int i=0;i<reference->getNbCouple();i++){
+
+    /*  for(unsigned int i=0;i<reference->getNbCouple();i++){
         Couple* c = reference->getCouple(i);
         QString label=c->getLabel();
         QString id1 =QString::number(c->getNote1()->getId());
         QString id2 =QString::number(c->getNote2()->getId());
+        if (label == "") item = new QListWidgetItem("Note1: "+id1+" Note2: "+id2+" ",list);
+        else {item = new QListWidgetItem("Note1: "+id1+" Note2: "+id2+" ("+label+")",list);};
+    }*/
+
+    for (Reference::iterator it=Reference::getInstance()->begin(); it != Reference::getInstance()->end(); ++it){
+        //Couple* c = reference->getCouple(i);
+        QString label=it.value().getLabel();
+        QString id1 =QString::number(it.value().getNote1()->getId());
+        QString id2 =QString::number(it.value().getNote2()->getId());
         if (label == "") item = new QListWidgetItem("Note1: "+id1+" Note2: "+id2+" ",list);
         else {item = new QListWidgetItem("Note1: "+id1+" Note2: "+id2+" ("+label+")",list);};
     }

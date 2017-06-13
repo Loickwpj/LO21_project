@@ -15,9 +15,7 @@
 #include <QDateEdit>
 #include <QSpinBox>
 
-//#include "manager.h"
-//#include "singleton.h"
-//#include "note.h"
+
 #include "corbeilleediteur.h"
 #include "mainwindow.h"
 
@@ -38,24 +36,21 @@ private:
 protected:
     QFormLayout* formulaire;
     QVBoxLayout* layout;
-
     QLineEdit* id;
     QLineEdit* title;
     QDateEdit* dateC;
     QDateEdit* dateM;
-
     QPushButton* sauver;
     QPushButton* bsupprimer;
-    ///MEMENTO AJOUT BOUTON
     QPushButton* bprevious;
 
 
-
-
-    // Note* note;
-
 public:
+
+    ///CONSTRUCTEUR
     NoteEditeur(QWidget *parent = 0);
+
+    ///DESTRUCTEUR
     virtual ~NoteEditeur() {}
 
 
@@ -65,7 +60,6 @@ signals:
 public slots:
     virtual void saveModifications()=0;
     virtual void supprimer()=0;
-    ///MEMENTO METHOD VIRTUELLE PUR
     virtual void previousVersion()=0;
 private slots:
     void afficherBouton(QString str="");
@@ -90,7 +84,11 @@ private:
     Article* article;
 
 public:
+
+    ///CONSTRUCTEUR
     ArticleEditeur(Article* a, QWidget *parent=0);
+
+    ///DESTRUCTEUR
     ~ArticleEditeur() {}
 
 signals:
@@ -99,7 +97,6 @@ signals:
 public slots:
     virtual void saveModifications();
     virtual void supprimer();
-    ///MEMENTO METHOD REDEFINI
     virtual void previousVersion();
 
 
@@ -115,11 +112,11 @@ private slots:
  *********************************************************************/
 class TaskEditeur : public NoteEditeur{
 private:
+
     Q_OBJECT
     QLineEdit* action;
     QSpinBox* priority;
     QDateEdit* deadline;
-    //QLineEdit* state;
     QComboBox* state;
     Task* task;
     QCheckBox* priorite;
@@ -128,7 +125,11 @@ private:
     QHBoxLayout* lay;
 
 public:
+
+    ///CONSTRUCTEUR
     TaskEditeur(Task* a, QWidget *parent=0);
+
+    ///DESTRUCTEUR
     ~TaskEditeur() {}
 
 
@@ -137,7 +138,6 @@ signals:
 public slots:
     virtual void saveModifications();
     virtual void supprimer();
-    ///MEMENTO METHOD REDEFINI
     virtual void previousVersion();
 private slots:
     void afficherPriorite();
@@ -157,14 +157,15 @@ protected:
     QLineEdit* image;
 
 public:
+    ///CONSTRUCTEUR
     MultimediaEditeur(QWidget*parent=0);
+
+    ///DESTRUCTEUR
     ~MultimediaEditeur(){}
 
 signals:
 public slots:
     virtual void saveModifications() = 0;
-    virtual void supprimer() = 0;
-    ///MEMENTO METHOD REDEFINI PUR
     virtual void previousVersion()=0;
 
 private slots:
@@ -181,13 +182,16 @@ private:
     Q_OBJECT
     Image* fichierImage;
 public:
+
+    ///CONSTRUCTEUR
     ImageEditeur(Image*, QWidget*parent=0);
+
+    ///DESTRUCTEUR
     ~ImageEditeur() {}
 
 public slots :
     void saveModifications();
     virtual void supprimer();
-    ///MEMENTO METHOD REDEFINI
     virtual void previousVersion();
 };
 
@@ -202,13 +206,16 @@ private:
     Q_OBJECT
     Audio* fichierAudio;
 public:
+
+    ///CONSTRUCTEUR
     AudioEditeur(Audio*, QWidget*parent=0);
+
+    ///DESTRUCTEUR
     ~AudioEditeur() {}
 
 public slots :
     void saveModifications();
     virtual void supprimer();
-    ///MEMENTO METHOD REDEFINI
     virtual void previousVersion();
 };
 
@@ -223,13 +230,16 @@ private:
     Q_OBJECT
     Video* fichierVideo;
 public:
+
+    ///CONSTRUCTEUR
     VideoEditeur(Video*, QWidget*parent=0);
+
+    ///DESTRUCTEUR
     ~VideoEditeur() {}
 
 public slots :
     void saveModifications();
     virtual void supprimer();
-    ///MEMENTO METHOD REDEFINI
     virtual void previousVersion();
 };
 

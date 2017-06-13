@@ -7,35 +7,6 @@
 /**************************************************************
 ***                        editNote()                       ***
 ***************************************************************/
-/*
-ArticleEditeur* Article::editNote(){
-    ArticleEditeur* e = new ArticleEditeur(this,0);
-    Ui::mainWindow* i;// = new Ui::mainWindow();
-    i = new Ui::mainWindow();
-    //i->setupUi(NotesManager::getInstance());
-
-    return e;
-}
-
-TaskEditeur* Task::editNote(){
-    TaskEditeur* e = new TaskEditeur(this,0);
-    return e;
-}
-ImageEditeur* Image::editNote(){
-    ImageEditeur* e = new ImageEditeur(this,0);
-    return e;
-}
-AudioEditeur* Audio::editNote(){
-    AudioEditeur* e = new AudioEditeur(this,0);
-    return e;
-}
-VideoEditeur* Video::editNote(){
-    VideoEditeur* e = new VideoEditeur(this,0);
-    return e;
-}
-
-*/
-
 
 void Article::editNote(){
     ArticleEditeur* e = new ArticleEditeur(this,0);
@@ -80,9 +51,6 @@ Video* Video::clone(){return new Video(*this);}
 /**************************************************************
  ***                        saveNote                          ***
  ***************************************************************/
-
-//on pourrait factoriser les premiers elements
-//(mais on adopte methode agile donc on privilégie la fonctionnalité)
 
 
 void Note::saveNote(QXmlStreamWriter &stream) const {
@@ -150,53 +118,43 @@ void Video::saveNote(QXmlStreamWriter &stream) const {
     
 }
 
-/**************************************************************
- ***                        setList                           ***
- ***************************************************************/
+/*************************************************************
+***                        setList                         ***
+**************************************************************/
 
 
 QString Note::setNotesListNote(){
-        //qDebug() << "Note non archive" ;
-        QString id = QString::number(getId());
-        QString title = getTitle();
-        QString titre = " "+id+" -"+title ;
-        //qDebug()<<"on ajoute la note non archive did" << id <<"a la list";
-        //item = new QListWidgetItem(titre,ui->listWidgetNotesActives);
-        //qDebug()<<"on ajoute la note non archive did" << id <<"a la list";
-        return(titre);
+    QString id = QString::number(getId());
+    QString title = getTitle();
+    QString titre = " "+id+" -"+title ;
+    return(titre);
 }
 
-QString Task::setNotesListNote()
-{
-    //qDebug() << "Task non archive" ;
+QString Task::setNotesListNote(){
     QString id = QString::number(getId());
     QString title = getTitle();
     QString priorite = QString::number(getPriority());
     QString deadLine = getDeadline().toString();
     QString titre =" "+id+" -"+title+" : " + priorite + " --> " + deadLine ;
-    //qDebug()<<"on ajoute la note non archive did" << id <<"a la list";
-    //item = new QListWidgetItem(titre,ui->listWidgetNotesActives);
-    //qDebug()<<"on ajoute la task non archive did" << id <<"a la list";
     return(titre);
 }
 
 
 
-/**************************************************************
- ***                       MEMENTO                             ***
+/***************************************************************
+ ***                       MEMENTO                           ***
  ***************************************************************/
 
 
 
-/*********************************************************************
-***                       Memento Article                         ***
-**********************************************************************/
+/*******************************************************************
+***                       Memento Article                        ***
+********************************************************************/
 
 
 Article& Article::addMemento() {
-        qDebug()<<"on est rentré dans add";
-        if(nbMemento == nbMax){
-        qDebug()<<" on est dans le if";
+
+    if(nbMemento == nbMax){
         MementoA** oldCareTaker = careTaker;
         nbMax += 5;
         careTaker = new MementoA*[nbMax];
@@ -204,12 +162,13 @@ Article& Article::addMemento() {
             careTaker[i] = oldCareTaker[i];
         delete[] oldCareTaker;
     }
-    qDebug()<<"on est just apres le if";
+
+
     MementoA *m = createMemento();
-    qDebug()<<"jusque la tout va bien";
+
 
     careTaker[nbMemento++]= m ;// crée un memento et l'ajoute au tableau des mementos
-    qDebug()<<"on a crée un memento dans le tableau";
+
     return *this;
 }
 
@@ -233,7 +192,7 @@ Article* Article::getPreviousMemento() {
 
 
 Task& Task::addMemento() {
-        if(nbMemento == nbMax){
+    if(nbMemento == nbMax){
         MementoT** oldCareTaker = careTaker;
         nbMax += 5;
         careTaker = new MementoT*[nbMax];
@@ -241,7 +200,7 @@ Task& Task::addMemento() {
             careTaker[i] = oldCareTaker[i];
         delete[] oldCareTaker;
     }
-    careTaker[nbMemento++]= createMemento(); // crée un memento et l'ajoute au tableau des mementos
+    careTaker[nbMemento++]= createMemento();
     return *this;
 }
 
@@ -267,7 +226,7 @@ Task* Task::getPreviousMemento() {
 
 
 Multimedia& Multimedia::addMemento() {
-        if(nbMemento == nbMax){
+    if(nbMemento == nbMax){
         MementoM** oldCareTaker = careTaker;
         nbMax += 5;
         careTaker = new MementoM*[nbMax];
@@ -275,7 +234,7 @@ Multimedia& Multimedia::addMemento() {
             careTaker[i] = oldCareTaker[i];
         delete[] oldCareTaker;
     }
-    careTaker[nbMemento++]= createMemento(); // crée un memento et l'ajoute au tableau des mementos
+    careTaker[nbMemento++]= createMemento();
     return *this;
 }
 

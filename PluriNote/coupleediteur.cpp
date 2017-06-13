@@ -83,8 +83,8 @@ void CoupleEditeur::saveModifications(){
     QString id2 = note2->currentItem()->text().section("-",0,0);
     unsigned int idint2 = id2.toInt();
 
-    /*On accepte qu'une note soit en relation avec elle-même (exemple : une note peut être en relation
-     avec une de ses parties qui sera transmise en label )*/
+    ///On accepte qu'une note soit en relation avec elle-même (exemple : une note peut être en relation
+    ///avec une de ses parties qui sera transmise en label )
 
     Note* n1;
     Note* n2;
@@ -95,9 +95,8 @@ void CoupleEditeur::saveModifications(){
 
     couple->setNote1(n1);
     couple->setNote2(n2);
-
-    QMessageBox::information(this, "Sauvegarde","Le couple a été enregistré !");
     RelationsManager::getInstance().saveRelation();
+    QMessageBox::information(this, "Sauvegarde","Le couple a été enregistré !");
     close();
 }
 

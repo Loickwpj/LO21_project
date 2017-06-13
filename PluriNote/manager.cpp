@@ -43,42 +43,6 @@ Note* NotesManager::Create(const QString& key) const
     return tmp;
 }
 
-/*
-void NotesManager::editNote(Note* n, const QString& type){
-
-    if (type == "Task"){
-        Task* t =(dynamic_cast<Task*>(n));
-        TaskEditeur* e = new TaskEditeur(t);
-        e->show();
-    }
-
-    if (type == "Article"){
-        Article* a =(dynamic_cast<Article*>(n));
-        ArticleEditeur* e = new ArticleEditeur(a);
-        e->show();
-    }
-
-    if (type == "Image"){
-        Image* i =(dynamic_cast<Image*>(n));
-        ImageEditeur* e = new ImageEditeur(i);
-        e->show();
-    }
-
-    if (type == "Video"){
-        Video* v =(dynamic_cast<Video*>(n));
-        VideoEditeur* e = new VideoEditeur(v);
-        e->show();
-    }
-
-    if (type == "Audio"){
-        Audio* au =(dynamic_cast<Audio*>(n));
-        AudioEditeur* e = new AudioEditeur(au);
-        e->show();
-    }
-
-}
-
-*/
 
 Note* NotesManager::getNewNote(const QString& type){
     Note* n = Create(type);
@@ -89,10 +53,7 @@ Note* NotesManager::getNewNote(const QString& type){
 
 
 void NotesManager::addNote(Note* n){
-    /*  for(unsigned int i = 0; i < nbNote; i++){
-        if(notes[i]->getId() == n->getId())
-            throw NotesException("Article existe deja");
-    }*/
+
     if(nbNote == nbMaxNote){
         Note ** old_notes = notes;
         notes = new Note*[nbMaxNote+5];
@@ -134,27 +95,27 @@ void NotesManager::save() const {
 
 
 void NotesManager::load(){
-    qDebug()<<"debut load \n";
     QFile fin(filename);
     if (!fin.open(QIODevice::ReadOnly | QIODevice::Text)) {
         throw NotesException("Erreur ouverture fichier notes");
     }
+
     QXmlStreamReader xml(&fin);
 
-    qDebug()<<"debut fichier\n";
-    // We'll parse the XML until we reach end of it.
+
+
     while(!xml.atEnd() && !xml.hasError()) {
-        // Read next element.
+
         QXmlStreamReader::TokenType token = xml.readNext();
-        // If token is just StartDocument, we'll go to next.
+
         if(token == QXmlStreamReader::StartDocument) continue;
-        // If token is StartElement, we'll see if we can read it.
+
         if(token == QXmlStreamReader::StartElement) {
 
-            // If it's named fichier_notes, we'll go to the next.
+
             if(xml.name() == "fichier_notes") continue;
 
-            // If it's named tache, we'll dig the information from there.
+
             if (xml.name()=="Article")
                 loadArticle(xml);
             else
@@ -175,13 +136,13 @@ void NotesManager::load(){
         }
     }
 
-    // Error handling.
+
     if(xml.hasError()) {
         qDebug()<<"erreur lecteur fichier, parser \n";
         throw NotesException("Erreur lecteur fichier notes, parser xml");
 
     }
-    // Removes any device() or data from the reader * and resets its internal state to the initial state.
+
     xml.clear();
 
     qDebug()<<"fin load\n";
@@ -190,7 +151,6 @@ void NotesManager::load(){
 
 void NotesManager::loadArticle(QXmlStreamReader &xml){
 
-    qDebug()<<"new Article\n";
     QString identificateur;
     QString titre;
     QString text;
@@ -200,50 +160,49 @@ void NotesManager::loadArticle(QXmlStreamReader &xml){
 
     QXmlStreamAttributes attributes = xml.attributes();
     xml.readNext();
-    //We're going to loop over the things because the order might change.
-    //We'll continue the loop until we hit an EndElement named article.
+
     while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "Article")) {
         if(xml.tokenType() == QXmlStreamReader::StartElement) {
-            // We've found identificteur.
+
             if(xml.name() == "id") {
                 xml.readNext(); identificateur=xml.text().toInt();
                 qDebug()<<"id="<<identificateur<<"\n";
             }
 
-            // We've found titre.
+
             if(xml.name() == "title") {
                 xml.readNext(); titre=xml.text().toString();
                 qDebug()<<"titre="<<titre<<"\n";
             }
 
-            // We've found date creation
+
             if(xml.name() == "dateCreation") {
                 xml.readNext();
                 dateC=xml.text().toString();
                 qDebug()<<"date creation"<<dateC<<"\n";
             }
 
-            // We've found date de derniere modif
+
             if(xml.name() == "dateModif") {
                 xml.readNext();
                 dateM=xml.text().toString();
                 qDebug()<<"date de derniere modif"<<dateM<<"\n";
             }
 
-            // We've found Archive
+
             if(xml.name() == "archive") {
                 xml.readNext();
                 archive = (xml.text()).toInt();
                 qDebug()<<"archive"<<archive<<"\n";
             }
 
-            // We've found text
+
             if(xml.name() == "texte") {
                 xml.readNext(); text=xml.text().toString();
                 qDebug()<<"texte="<<text<<"\n";
             }
         }
-        // ...and next...
+
         xml.readNext();
     }
     qDebug()<<"ajout Article "<<identificateur<<"\n";
@@ -269,36 +228,35 @@ void NotesManager::loadTask(QXmlStreamReader &xml){
 
     QXmlStreamAttributes attributes = xml.attributes();
     xml.readNext();
-    //We're going to loop over the things because the order might change.
-    //We'll continue the loop until we hit an EndElement named article.
+
     while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "Task")) {
         if(xml.tokenType() == QXmlStreamReader::StartElement) {
-            // We've found identificteur.
+
             if(xml.name() == "id") {
                 xml.readNext(); identificateur=xml.text().toInt();
                 qDebug()<<"id="<<identificateur<<"\n";
             }
 
-            // We've found titre.
+
             if(xml.name() == "title") {
                 xml.readNext(); titre=xml.text().toString();
                 qDebug()<<"titre="<<titre<<"\n";
             }
-            // We've found date creation
+
             if(xml.name() == "dateCreation") {
                 xml.readNext();
                 dateC=xml.text().toString();
                 qDebug()<<"date creation"<<dateC<<"\n";
             }
 
-            // We've found date de derniere modif
+
             if(xml.name() == "dateModif") {
                 xml.readNext();
                 dateM=xml.text().toString();
                 qDebug()<<"date de derniere modif"<<dateM<<"\n";
             }
 
-            // We've found Archive
+
             if(xml.name() == "archive") {
                 xml.readNext();
                 archive = (xml.text()).toInt();
@@ -306,43 +264,45 @@ void NotesManager::loadTask(QXmlStreamReader &xml){
             }
 
 
-            // We've found dateModif
+
             if(xml.name() == "dateModif") {
                 xml.readNext();
                 dateM=xml.text().toString();
                 qDebug()<<"date de derniere modif"<<dateM<<"\n";
             }
 
-            // We've found action
+
             if(xml.name() == "action") {
                 xml.readNext(); action=xml.text().toString();
                 qDebug()<<"action="<<action<<"\n";
             }
-            // We've priority
+
             if(xml.name() == "priorite") {
                 xml.readNext();
                 priority=(xml.text().toInt());
                 qDebug()<<"priorite"<<priority<<"\n";
             }
-            // We've found deadline
+
             if(xml.name() == "deadline") {
                 xml.readNext();
                 deadline=xml.text().toString();
                 qDebug()<<"deadline"<<deadline<<"\n";
             }
 
-            // We've found etat
+
             if(xml.name() == "etat") {
                 xml.readNext();
                 status=xml.text().toString();
                 qDebug()<<"etat"<<status<<"\n";
             }
         }
-        // ...and next...
+
         xml.readNext();
     }
-    qDebug()<<"ajout task "<<identificateur<<"\n";
-    Note *taskLoaded = new Task(identificateur.toInt(),titre,QDate::fromString(dateC),QDate::fromString(dateM),archive.toInt(),action,priority.toInt(),QDate::fromString(deadline),toState(status) );
+
+    Note *taskLoaded = new Task(identificateur.toInt(),titre,
+                                QDate::fromString(dateC),QDate::fromString(dateM),archive.toInt(),action,priority.toInt(),
+                                QDate::fromString(deadline),toState(status) );
     taskLoaded->setId();
     addNote(taskLoaded);
 }
@@ -360,29 +320,28 @@ void NotesManager::loadMultimedia(QXmlStreamReader &xml, QString type){
 
     QXmlStreamAttributes attributes = xml.attributes();
     xml.readNext();
-    //We're going to loop over the things because the order might change.
-    //We'll continue the loop until we hit an EndElement named article.
+
     while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == type)) {
         if(xml.tokenType() == QXmlStreamReader::StartElement) {
-            // We've found identificteur.
+
             if(xml.name() == "id") {
                 xml.readNext(); identificateur=xml.text().toInt();
                 qDebug()<<"id="<<identificateur<<"\n";
             }
 
-            // We've found titre.
+
             if(xml.name() == "title") {
                 xml.readNext(); titre=xml.text().toString();
                 qDebug()<<"titre="<<titre<<"\n";
             }
-            // We've found date creation
+
             if(xml.name() == "dateCreation") {
                 xml.readNext();
                 dateC=xml.text().toString();
                 qDebug()<<"date creation"<<dateC<<"\n";
             }
 
-            // We've found date de derniere modif
+
             if(xml.name() == "dateModif") {
                 xml.readNext();
                 dateM=xml.text().toString();
@@ -390,7 +349,7 @@ void NotesManager::loadMultimedia(QXmlStreamReader &xml, QString type){
             }
 
 
-            // We've found Archive
+
             if(xml.name() == "archive") {
                 xml.readNext();
                 archive = xml.text().toInt();
@@ -398,7 +357,6 @@ void NotesManager::loadMultimedia(QXmlStreamReader &xml, QString type){
             }
 
 
-            // We've found description
             if(xml.name() == "description") {
 
                 xml.readNext(); description=xml.text().toString();
@@ -406,14 +364,14 @@ void NotesManager::loadMultimedia(QXmlStreamReader &xml, QString type){
             }
 
 
-            // We've found image
+
             if(xml.name() == "image") {
 
                 xml.readNext(); image=xml.text().toString();
                 qDebug()<<"image="<<image<<"\n";
             }
         }
-        // ...and next...
+
 
         xml.readNext();
     }
@@ -421,7 +379,8 @@ void NotesManager::loadMultimedia(QXmlStreamReader &xml, QString type){
     if(type=="Image")
     {
         qDebug()<<"ajout Image "<<identificateur<<"\n";
-        Note *imageLoaded = new Image(identificateur.toInt(),titre,QDate::fromString(dateC),QDate::fromString(dateM),archive.toInt(),description,image);
+        Note *imageLoaded = new Image(identificateur.toInt(),titre,QDate::fromString(dateC),
+                                      QDate::fromString(dateM),archive.toInt(),description,image);
         imageLoaded->setId();
         addNote(imageLoaded);
     }
@@ -429,7 +388,8 @@ void NotesManager::loadMultimedia(QXmlStreamReader &xml, QString type){
     if (type=="Audio")
     {
         qDebug()<<"ajout Audio "<<identificateur<<"\n";
-        Note *audioLoaded = new Audio(identificateur.toInt(),titre,QDate::fromString(dateC),QDate::fromString(dateM),archive.toInt(),description,image);
+        Note *audioLoaded = new Audio(identificateur.toInt(),titre,QDate::fromString(dateC),
+                                      QDate::fromString(dateM),archive.toInt(),description,image);
         audioLoaded->setId();
         addNote(audioLoaded);
     }
@@ -437,22 +397,14 @@ void NotesManager::loadMultimedia(QXmlStreamReader &xml, QString type){
     if (type=="Video")
     {
         qDebug()<<"ajout Video "<<identificateur<<"\n";
-        Note *videoLoaded = new Video(identificateur.toInt(),titre,QDate::fromString(dateC),QDate::fromString(dateM),archive.toInt(),description,image);
+        Note *videoLoaded = new Video(identificateur.toInt(),titre,QDate::fromString(dateC),
+                                      QDate::fromString(dateM),archive.toInt(),description,image);
         videoLoaded->setId();
         addNote(videoLoaded);
     }
 
 
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -507,11 +459,6 @@ void RelationsManager::chercherCouple(Note*n){
 }
 
 
-
-
-/**********************************************
- **                 RELATION MANAGER          **
- ***********************************************/
 
 void RelationsManager::saveRelation() const {
 
@@ -683,11 +630,9 @@ void RelationsManager::loadCouple(QXmlStreamReader &xml,Relation* r){
 
 
 
-
-
 /**********************************************
- **                 CORBEILLE                **
- ***********************************************/
+***                 CORBEILLE                **
+***********************************************/
 
 
 void Corbeille::addNoteCorbeille(Note* n){
@@ -737,8 +682,6 @@ void Corbeille::deleteAll(){
 }
 
 void Corbeille::supprimerNote(unsigned int id){
-    /*if (nbNote == 1 || id == nbNote-1 ) notesSuppr[--nbNote] = nullptr;
-    else{*/
 
 
     for (unsigned int i =0; i<nbNote;i++){

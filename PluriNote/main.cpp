@@ -11,7 +11,7 @@
 #include "mainwindow.h"
 #include <QDebug>
 #include <QFileDialog>
-
+#include <QSettings>
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
@@ -20,20 +20,18 @@ int main(int argc, char *argv[]) {
     NotesManager::Register("Audio", new Audio);
     NotesManager::Register("Video", new Video);
     NotesManager::Register("Image", new Image);
+    QSettings settings("loickwpj","pluriNote");
+    settings.setValue("viderCorbeilleAuto",false);
+
+
 
     QString fichier = QFileDialog::getOpenFileName();
     NotesManager::getInstance().setFilename(fichier);
     NotesManager::getInstance().load();
 
-    //qDebug()<<"on est maintenant là";
-
     QString fichierRelation = QFileDialog::getOpenFileName();
     RelationsManager::getInstance().setFilename(fichierRelation);
     RelationsManager::getInstance().loadRelations();
-
-    //QString fichierReference = QFileDialog::getOpenFileName();
-    //Reference::getInstance()->loadRef(fichierReference);
-
 
     mainWindow* mw = mainWindow::getInstance();
     mw->show();

@@ -3,7 +3,6 @@
 //#include "couple.h"
 //#include "manager.h"
 #include "coupleediteur.h"
-#include <QFile>
 
 
 
@@ -46,6 +45,26 @@ public:
 
     virtual ~BaseRelation() {}
 
+
+    ///ITERATOR
+    class iterator{
+        friend class BaseRelation;
+        friend class Relation;
+        friend class Reference;
+        Couple** currentN;
+
+        iterator(Couple**n): currentN(n){}
+
+    public:
+        bool operator!=(iterator it) const {return currentN != it.currentN;}
+        Couple& value() const {return **currentN;}
+        iterator& operator++() {currentN++; return *this;}
+
+    };
+
+    iterator begin() const{ return iterator(couples); }
+    iterator end() const{return iterator(couples + nbCouple);}
+
 };
 
 
@@ -59,8 +78,8 @@ public:
     Relation(const QString & d, const QString& t) : BaseRelation(t,d), oriented(true) {}
     ///rajout d'un constructeur
     Relation(const QString & d, const QString& t, bool o) : BaseRelation(t,d), oriented(o) {}
-    bool getOriented() const {return oriented ;}
     void setOriented(){oriented= !oriented;}
+    bool getOriented() const {return oriented ;}
     ~Relation() {/*for (unsigned int i=0; i<nbCouple;i++) delete couples[i]; delete [] couples;*/}
 
 
@@ -92,11 +111,7 @@ private:
     static Reference* instance;
 
     Reference() : BaseRelation("Ensemble des notes référérençant d'autres notes via la notation \{id}","Référence") {}
-    ~Reference() {
-        /*
-         * for (unsigned int i=0; i<nbCouple; i++) delete couples[i];
-        delete [] couples;*/
-    }
+    ~Reference() {}
 
 
 
@@ -105,30 +120,13 @@ public:
     static void libererInstance();
     void chercherReference();
     void addCoupleReference(Note&,int);
+    void chercherCouple(Note*n);
+    bool checkIfInReference(Note*);
+
     //void saveRef();
     //void loadRef(QString f);
     //void loadCouple(QXmlStreamReader& xml);
 
-
-    bool checkIfInReference(Note*);
-
-
-    /// Class iterator
-    class iterator{
-        friend class Reference;
-        Couple** currentN;
-
-        iterator(Couple**n): currentN(n){}
-
-    public:
-        bool operator!=(iterator it) const {return currentN != it.currentN;}
-        Couple& value() const {return **currentN;}
-        iterator& operator++() {currentN++; return *this;}
-
-    };
-
-    iterator begin() const{ return iterator(couples); }
-    iterator end() const{return iterator(couples + nbCouple);}
 
 };
 

@@ -3,6 +3,7 @@
 
 #include "note.h"
 
+
 template<class T> class Singleton{
 
     T& operator= (const T&) {}
@@ -24,9 +25,10 @@ public:
     virtual ~Singleton() {}
     static T& getInstance();
     static void removeInstance();
+
 };
 
-//Définition variable static
+///DEFINITION VARIABLE STATIC
 template<class T> typename Singleton<T>::Handler Singleton<T>::handler = Singleton<T>::Handler();
 
 
